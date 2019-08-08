@@ -198,6 +198,7 @@ h1 .year {
 }
 
 h3 {
+    margin-left: 0;
     font: 14px Arial, Helvetica, sans-serif;
     margin-bottom: 1px;
     line-height: 1.8
@@ -2423,6 +2424,7 @@ a {
 
 .resourceTitle {
     /*background-color: white;*/
+    background:transparent;
     color: #f7097a;
     border-color: #afa4a4;
     border-bottom: 1px solid;
