@@ -1,52 +1,64 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import home from '../components/home'
-import subject from "../components/subject";
-import search from '../components/search'
-import celebrity from '../components/celebrity'
-import tag from '../components/tag'
-import chart from '../components/chart'
-import people from '../components/people'
+import VueRouter from 'vue-router'
+import Home from '../views/Home.vue'
 
-Vue.use(Router);
+// view
+import subject from '../views/Subject'
+import Login from '../views/Login'
+import NeedLogin from '../views/NeedLogin'
+import about from '../views/About'
 
-export default new Router({
-  mode: 'history',
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: home
-    },
-    {
-      path: '/subject/:movieId',
-      name: 'subject',
-      component: subject
-    },
-    {
-      path: '/subject_search',
-      name: 'search',
-      component: search
-    },
-    {
-      path: '/celebrity/:actorId',
-      name: 'celebrity',
-      component: celebrity
-    },
-    {
-      path:'/tag/:tagName',
-      name:'tag',
-      component:tag
-    },
-    {
-      path:'/chart',
-      name:'chart',
-      component:chart
-    },
-    {
-      path:'/people/:userId',
-      name:'people',
-      component:people
+Vue.use(VueRouter)
+
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
+  {
+    path: '/subject/:id',
+    component: subject
+  },
+  {
+    path: '/about/:id',
+    component: about
+  },
+  {
+    path: '/login',
+    component: Login
+  },
+  {
+    path: '/need_login',
+    component: NeedLogin,
+    meta: {
+      requireAuth: true
     }
-  ]
+  }
+]
+
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
 })
+
+// 切换路由执行
+router.beforeEach((to, from, next) => {
+  // 当前路由需要token
+  if (to.matched.some(r => r.meta.requireAuth)) {
+    // 已登录
+    if (localStorage.token) {
+      next()
+    } else {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    }
+  } else {
+    next()
+  }
+})
+
+export default router

@@ -1,0 +1,50 @@
+{
+    "code": 200,
+    "msg": "成功",
+    "data": {
+        "topic": {
+            "id": 19573889,
+            "urlZhihuTopic": "https://www.zhihu.com/topic/19573889",
+            "idMovieDouban": 1291561,
+            "urlMovieDouban": "https://movie.douban.com/subject/1291561",
+            "nameZh": "千与千寻",
+            "zhihuScore": 8.5,
+            "zhihuVote": 20,
+            "maoyanScore": 9.3
+        },
+        "questionList": [
+            {
+                "id": 20629377,
+                "urlZhihuQuestion": "https://www.zhihu.com/question/20629377",
+                "idMovieDouban": 1291561,
+                "urlMovieDouban": "https://movie.douban.com/subject/1291561",
+                "nameZh": "宫崎骏的《千与千寻》好看在哪里？",
+                "answerNum": 0
+            },
+            {
+                "id": 30935009,
+                "urlZhihuQuestion": "https://www.zhihu.com/question/30935009",
+                "idMovieDouban": 1291561,
+                "urlMovieDouban": "https://movie.douban.com/subject/1291561",
+                "nameZh": "动画《千与千寻》中千寻是怎样在最后的部分认出那些猪里边没有她父母的？",
+                "answerNum": 0
+            },
+            {
+                "id": 33526585,
+                "urlZhihuQuestion": "https://www.zhihu.com/question/33526585",
+                "idMovieDouban": 1291561,
+                "urlMovieDouban": "https://movie.douban.com/subject/1291561",
+                "nameZh": "动画《千与千寻》最后结局实际上是白龙死了吗？",
+                "answerNum": 0
+            },
+            {
+                "id": 42296371,
+                "urlZhihuQuestion": "https://www.zhihu.com/question/42296371",
+                "idMovieDouban": 1291561,
+                "urlMovieDouban": "https://movie.douban.com/subject/1291561",
+                "nameZh": "《千与千寻》这部电影到底讲的什么？（论好电影的“设计原则”）",
+                "answerNum": 1
+            }
+        ]
+    }
+}

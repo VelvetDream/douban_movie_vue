@@ -1,0 +1,474 @@
+{
+    "code": 200,
+    "msg": "成功",
+    "data": {
+        "base": {
+            "id": 4873,
+            "urlMovieScene": "https://-----------------4873",
+            "idMovieDouban": 26728669,
+            "urlMovieDouban": "https://movie.douban.com/subject/26728669",
+            "nameZh": "风中有朵雨做的云",
+            "nameEn": "The Shadow Play",
+            "startYear": 2018,
+            "description": "多年前，娄烨在为《浮城迷事》勘景的时候曾考虑过广州，但最终选择了武汉，因为他觉得广州更适合一个改革开放背景的故事，于是等来了一场“风雨云”。\n本片取材自羊城多年动荡不安的城中村——冼村拆迁事迹，片中的唐奕杰死于谋杀，而真实事件中的“百亿村官”仍在外逃，冼村人民则在影片拍摄两年后终于如愿等来了摇珠换房仪式，镜头下的凌乱废墟正在现实里一点点更新迭代。\n为了符合年代背景，剧组拍摄了很多独具广州记忆的地点，比如艳芳照相馆、天河机店（2018年底关门）、市二宫艺苑等，片中的“天河公安”及“精神病院”是在广州与佛山顺德边界的紫坭糖厂，如今是新兴创意园区；片头发现尸体的地方便是与紫坭糖厂一河之隔的顺德水道岸边。\n杨家栋在父亲朋友老A帮助下逃到香港，自然有了深水埗与深圳关口的场景，但老A扮演者陈冠希所有镜头均被去除。\n姜紫成与杨家栋打斗的高架停车场、唐奕杰松岗西路的住处、化装舞会及连阿云台湾坐台的地方由于环境条件不明显，暂无法确定；唐奕杰强奸连阿云的歌哥KTV已搬迁装修，故不在此录入；姜紫成、林慧与小诺一起去的“三亚”，取景是惠州巽寮湾，但在片中没有明显体现，只是在字幕中提及，故在此说明。",
+            "urlMap": "http://cache.fotoplace.cc/mocation/staticmap/8eafea7d5e0d4f1d9cce7c09c8420e7f.png"
+        },
+        "sceneList": [
+            {
+                "base": {
+                    "id": 316891,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20447,
+                    "nameZh": "林慧结婚摔倒",
+                    "happenTime": 1005
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316893,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20448,
+                    "nameZh": "紫金集团路演",
+                    "happenTime": 1758
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316898,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20453,
+                    "nameZh": "慧鸣酒楼",
+                    "happenTime": 1804
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316901,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20456,
+                    "nameZh": "唐奕杰接受采访",
+                    "happenTime": 1797
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316902,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20457,
+                    "nameZh": "迎宾馆采访",
+                    "happenTime": 1632
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316904,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20459,
+                    "nameZh": "城中村",
+                    "happenTime": 207
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316909,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20462,
+                    "nameZh": "杨家栋探父经过的桥",
+                    "happenTime": 2567
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316912,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20463,
+                    "nameZh": "杨家栋接到王秘书电话",
+                    "happenTime": 2655
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316914,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20465,
+                    "nameZh": "绿林甜品",
+                    "happenTime": 3930
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316916,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20466,
+                    "nameZh": "天星小轮码头",
+                    "happenTime": 7032
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316919,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20467,
+                    "nameZh": "林慧生日舞会",
+                    "happenTime": 900
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316920,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20470,
+                    "nameZh": "杨家栋父亲住的养老院",
+                    "happenTime": 2594
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316922,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20471,
+                    "nameZh": "杨家栋跟踪小诺",
+                    "happenTime": 7076
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316924,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20473,
+                    "nameZh": "小诺谈话天台&真相事务所",
+                    "happenTime": 1176
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316939,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20477,
+                    "nameZh": "片头工厂/精神病院/天河公安",
+                    "happenTime": 103
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316942,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20479,
+                    "nameZh": "小情侣发现尸体",
+                    "happenTime": 121
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316944,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20481,
+                    "nameZh": "抛尸地点",
+                    "happenTime": 6359
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316945,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20482,
+                    "nameZh": "林辰峰私家侦探社",
+                    "happenTime": 2349
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316947,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20484,
+                    "nameZh": "连阿云流产",
+                    "happenTime": 3626
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316948,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20485,
+                    "nameZh": "紫金置业大厦",
+                    "happenTime": 1865
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316949,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20487,
+                    "nameZh": "cos派对酒吧",
+                    "happenTime": 4161
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316951,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20489,
+                    "nameZh": "杨家栋命林慧坐副驾驶",
+                    "happenTime": 2815
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316952,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20490,
+                    "nameZh": "杨家栋偷装监视器",
+                    "happenTime": 5230
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316954,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20492,
+                    "nameZh": "林慧阿云车内争斗",
+                    "happenTime": 4923
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316955,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20493,
+                    "nameZh": "林慧冒雨找阿云",
+                    "happenTime": 4786
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316960,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20496,
+                    "nameZh": "香港街头",
+                    "happenTime": 3841
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316961,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20497,
+                    "nameZh": "香港街头",
+                    "happenTime": 3846
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316962,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20498,
+                    "nameZh": "林慧找到阿云的路边",
+                    "happenTime": 4845
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316963,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20499,
+                    "nameZh": "紫金私密会所",
+                    "happenTime": 3044
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316964,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20500,
+                    "nameZh": "杨家栋香港藏身地",
+                    "happenTime": 3886
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316965,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20501,
+                    "nameZh": "老A杨家栋见面的茶餐厅",
+                    "happenTime": 3943
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316966,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20502,
+                    "nameZh": "杨家栋与小诺开房",
+                    "happenTime": 4376
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316968,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20414,
+                    "nameZh": "杨家栋离港返穗",
+                    "happenTime": 5218
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 316970,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20505,
+                    "nameZh": "小诺约杨家栋的游戏机房",
+                    "happenTime": 2451
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            },
+            {
+                "base": {
+                    "id": 317002,
+                    "idMovieScene": 4873,
+                    "idPlaceScene": 20537,
+                    "nameZh": "林慧的不在场证明",
+                    "happenTime": 6013
+                },
+                "place": {
+                    "base": null,
+                    "imageList": null
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "code": 200,
+    "msg": "成功",
+    "data": {
+        "id": "tt0245429",
+        "urlMovieImdb": "https://www.imdb.com/title/tt0245429",
+        "idTypeVideo": 2,
+        "typeVideo": "电影",
+        "nameEn": "Spirited Away",
+        "startYear": 2001,
+        "isAdult": 0,
+        "nameOrigin": "Sen to Chihiro no kamikakushi",
+        "runtime": 125,
+        "urlPoster": "https://m.media-amazon.com/images/M/",
+        "idMovieDouban": 1291561,
+        "summary": null
+    }
+}

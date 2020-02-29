@@ -1,10 +1,12 @@
-# 项目地址
-
-<https://movie.doubans.com>
+<div align="center">
+<h1>
+ 豆瓣电影Plus前端 - Vue
+</h1>
+<a href=""><img src="https://img.shields.io/badge/license-GPL%20(%3E%3D%202)-blue" alt="license"></a>
+<a href=""><img src="https://img.shields.io/badge/language-JavaScript-green.svg" alt="language"></a>
+</div>
 
 ---
 
-此仓库仅用于 [douban_movie](<https://github.com/humingk/douban_movie>) 项目中前端Vue部分代码存放和测试
-
-前端代码**过于凌乱**毫无参考价值可言
+## V2.0版本开发中，V1.0版本查看分支[V1.0](https://github.com/humingk/douban_movie_vue/tree/v1.0)
 

@@ -1,33 +1,19 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
+import App from './App.vue'
 import router from './router'
+import store from './store'
+import vuex from 'vuex'
+import api from './request/api'
 
-// // axios
-// import axios from 'axios'
-// import VueAxios from 'vue-axios'
-// Vue.use(VueAxios,axios);
+Vue.use(vuex)
+Vue.config.productionTip = false
 
-// jsonp
-import VueJsonp from 'vue-jsonp'
-Vue.use(VueJsonp);
+// api挂载到原型
+Vue.prototype.$api = api
 
-// 瀑布流加载数据
-import infiniteScroll from 'vue-infinite-scroll';
-Vue.use(infiniteScroll);
-
-Vue.config.productionTip = false;
-// element-ui
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(ElementUI);
-/* eslint-disable no-new */
 new Vue({
-  el: '#app',
   router,
-  components: {
-    "App":App
-  },
-  template: "<App/>"
-});
+  // store实例注入到所有子组件
+  store,
+  render: h => h(App)
+}).$mount('#app')

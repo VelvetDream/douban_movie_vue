@@ -1,0 +1,194 @@
+{
+    "code": 200,
+    "msg": "成功",
+    "data": [
+        {
+            "base": {
+                "id": 1001156,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1001156",
+                "idCelebrityImdb": "",
+                "urlCelebrityImdb": "https://www.imdb.com/name/",
+                "nameZh": "宫本信子",
+                "nameOrigin": "",
+                "sex": "",
+                "birthDate": "1970-01-01",
+                "urlPortrait": "https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p0.webp",
+                "summary": null
+            },
+            "aliasList": []
+        },
+        {
+            "base": {
+                "id": 1001269,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1001269",
+                "idCelebrityImdb": "tt1185734",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm1185734",
+                "nameZh": "宫迫博之",
+                "nameOrigin": "Hiroyuki Miyasako",
+                "sex": "男",
+                "birthDate": "1970-01-01",
+                "urlPortrait": "https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p2571.webp",
+                "summary": null
+            },
+            "aliasList": [
+                {
+                    "nameAlias": "Ameagari Kesshitai",
+                    "isNikename": 0
+                }
+            ]
+        },
+        {
+            "base": {
+                "id": 1002603,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1002603",
+                "idCelebrityImdb": "tt1181962",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm1181962",
+                "nameZh": "宫尾登美子",
+                "nameOrigin": "Tomiko Miyao",
+                "sex": "",
+                "birthDate": "1970-01-01",
+                "urlPortrait": "https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p1361523403.webp",
+                "summary": null
+            },
+            "aliasList": []
+        },
+        {
+            "base": {
+                "id": 1003191,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1003191",
+                "idCelebrityImdb": "tt0594356",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0594356",
+                "nameZh": "宫井绘里奈",
+                "nameOrigin": "Erina Miyai",
+                "sex": "女",
+                "birthDate": "1969-12-25",
+                "urlPortrait": "https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p1354030475.webp",
+                "summary": null
+            },
+            "aliasList": [
+                {
+                    "nameAlias": "宮井えりな",
+                    "isNikename": 0
+                }
+            ]
+        },
+        {
+            "base": {
+                "id": 1004356,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1004356",
+                "idCelebrityImdb": "tt0594344",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0594344",
+                "nameZh": "宫城真里子",
+                "nameOrigin": "Mariko Miyagi",
+                "sex": "女",
+                "birthDate": "1969-12-16",
+                "urlPortrait": "https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p1457172716.webp",
+                "summary": null
+            },
+            "aliasList": [
+                {
+                    "nameAlias": "宮城まり子",
+                    "isNikename": 0
+                }
+            ]
+        },
+        {
+            "base": {
+                "id": 1005112,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1005112",
+                "idCelebrityImdb": "tt2066439",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm2066439",
+                "nameZh": "宫崎吾朗",
+                "nameOrigin": "Goro Miyazaki",
+                "sex": "男",
+                "birthDate": "1969-12-31",
+                "urlPortrait": "https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p36541.webp",
+                "summary": null
+            },
+            "aliasList": []
+        },
+        {
+            "base": {
+                "id": 1008227,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1008227",
+                "idCelebrityImdb": "tt0594465",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0594465",
+                "nameZh": "宫下顺子",
+                "nameOrigin": "Junko Miyashita",
+                "sex": "女",
+                "birthDate": "1969-12-24",
+                "urlPortrait": "https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p19325.webp",
+                "summary": null
+            },
+            "aliasList": [
+                {
+                    "nameAlias": "金沢英子",
+                    "isNikename": 0
+                }
+            ]
+        },
+        {
+            "base": {
+                "id": 1012784,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1012784",
+                "idCelebrityImdb": "tt1077107",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm1077107",
+                "nameZh": "宫藤官九郎",
+                "nameOrigin": "Kankurô Kudô",
+                "sex": "男",
+                "birthDate": "1970-01-01",
+                "urlPortrait": "https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p1407078088.webp",
+                "summary": null
+            },
+            "aliasList": [
+                {
+                    "nameAlias": "Kudokan",
+                    "isNikename": 1
+                },
+                {
+                    "nameAlias": "Shunichiro Kudo",
+                    "isNikename": 0
+                }
+            ]
+        },
+        {
+            "base": {
+                "id": 1015573,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1015573",
+                "idCelebrityImdb": "tt0594323",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0594323",
+                "nameZh": "宫部美雪",
+                "nameOrigin": "Miyuki Miyabe",
+                "sex": "女",
+                "birthDate": "1969-12-29",
+                "urlPortrait": "https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p35509.webp",
+                "summary": null
+            },
+            "aliasList": [
+                {
+                    "nameAlias": "Miyuki Miyabe",
+                    "isNikename": 0
+                },
+                {
+                    "nameAlias": "宮部みゆき",
+                    "isNikename": 0
+                }
+            ]
+        },
+        {
+            "base": {
+                "id": 1016212,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1016212",
+                "idCelebrityImdb": "",
+                "urlCelebrityImdb": "https://www.imdb.com/name/",
+                "nameZh": "宫泽和史",
+                "nameOrigin": "",
+                "sex": "",
+                "birthDate": "1970-01-01",
+                "urlPortrait": "https://img1.doubanio.com/view/celebrity/s_ratio_celebrity/public/p0.webp",
+                "summary": null
+            },
+            "aliasList": []
+        }
+    ]
+}

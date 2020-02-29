@@ -1,0 +1,140 @@
+{
+    "code": 200,
+    "msg": "成功",
+    "data": {
+        "base": {
+            "id": "tt0245429",
+            "urlMovieImdb": "https://www.imdb.com/title/tt0245429",
+            "idTypeVideo": 2,
+            "typeVideo": "电影",
+            "nameEn": "Spirited Away",
+            "startYear": 2001,
+            "isAdult": 0,
+            "nameOrigin": "Sen to Chihiro no kamikakushi",
+            "runtime": 125,
+            "urlPoster": "https://m.media-amazon.com/images/M/",
+            "idMovieDouban": 1291561,
+            "summary": null
+        },
+        "rate": {
+            "idMovieImdb": "tt0245429",
+            "imdbScore": 8.6,
+            "imdbVote": 578248,
+            "tomatoScore": 0.0,
+            "mtcScore": 0.0
+        },
+        "typeList": [],
+        "celebrityList": [
+            {
+                "idCelebrityImdb": "nm0005124",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0005124",
+                "idMovieImdb": "https://www.imdb.com/title/tt0245429",
+                "idCelebrityDouban": 1013917,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1013917",
+                "nameEn": "John Lasseter",
+                "birthYear": 1957,
+                "idProfession": 12,
+                "profession": "制片人"
+            },
+            {
+                "idCelebrityImdb": "nm0153738",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0153738",
+                "idMovieImdb": "https://www.imdb.com/title/tt0245429",
+                "idCelebrityDouban": 1022643,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1022643",
+                "nameEn": "Daveigh Chase",
+                "birthYear": 1990,
+                "idProfession": 6,
+                "profession": "女演员"
+            },
+            {
+                "idCelebrityImdb": "nm0259689",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0259689",
+                "idMovieImdb": "https://www.imdb.com/title/tt0245429",
+                "idCelebrityDouban": 0,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/0",
+                "nameEn": "Donald W. Ernst",
+                "birthYear": 1934,
+                "idProfession": 12,
+                "profession": "制片人"
+            },
+            {
+                "idCelebrityImdb": "nm0383708",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0383708",
+                "idMovieImdb": "https://www.imdb.com/title/tt0245429",
+                "idCelebrityDouban": 1023337,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1023337",
+                "nameEn": "Rumi Hiiragi",
+                "birthYear": 1987,
+                "idProfession": 6,
+                "profession": "女演员"
+            },
+            {
+                "idCelebrityImdb": "nm0386749",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0386749",
+                "idMovieImdb": "https://www.imdb.com/title/tt0245429",
+                "idCelebrityDouban": 1035647,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1035647",
+                "nameEn": "Joe Hisaishi",
+                "birthYear": 1950,
+                "idProfession": 10,
+                "profession": "作曲家"
+            },
+            {
+                "idCelebrityImdb": "nm0594503",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0594503",
+                "idMovieImdb": "https://www.imdb.com/title/tt0245429",
+                "idCelebrityDouban": 1054439,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1054439",
+                "nameEn": "Hayao Miyazaki",
+                "birthYear": 1941,
+                "idProfession": 2,
+                "profession": "导演"
+            },
+            {
+                "idCelebrityImdb": "nm0645777",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0645777",
+                "idMovieImdb": "https://www.imdb.com/title/tt0245429",
+                "idCelebrityDouban": 0,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/0",
+                "nameEn": "Atsushi Okui",
+                "birthYear": 0,
+                "idProfession": 9,
+                "profession": "摄影师"
+            },
+            {
+                "idCelebrityImdb": "nm0687189",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0687189",
+                "idMovieImdb": "https://www.imdb.com/title/tt0245429",
+                "idCelebrityDouban": 1007040,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1007040",
+                "nameEn": "Suzanne Pleshette",
+                "birthYear": 1937,
+                "idProfession": 6,
+                "profession": "女演员"
+            },
+            {
+                "idCelebrityImdb": "nm0840699",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0840699",
+                "idMovieImdb": "https://www.imdb.com/title/tt0245429",
+                "idCelebrityDouban": 1023868,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1023868",
+                "nameEn": "Toshio Suzuki",
+                "birthYear": 1948,
+                "idProfession": 12,
+                "profession": "制片人"
+            },
+            {
+                "idCelebrityImdb": "nm0997115",
+                "urlCelebrityImdb": "https://www.imdb.com/name/nm0997115",
+                "idMovieImdb": "https://www.imdb.com/title/tt0245429",
+                "idCelebrityDouban": 1005438,
+                "urlCelebrityDouban": "https://movie.douban.com/celebrity/1005438",
+                "nameEn": "Miyu Irino",
+                "birthYear": 1988,
+                "idProfession": 5,
+                "profession": "男演员"
+            }
+        ]
+    }
+}
