@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import elementUi from 'element-ui'
 
 // view
+import Home from '../views/Home.vue'
 import subject from '../views/Subject'
 import Login from '../views/Login'
 import NeedLogin from '../views/NeedLogin'
@@ -41,24 +42,6 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
-
-// 切换路由执行
-router.beforeEach((to, from, next) => {
-  // 当前路由需要token
-  if (to.matched.some(r => r.meta.requireAuth)) {
-    // 已登录
-    if (localStorage.token) {
-      next()
-    } else {
-      next({
-        path: '/login',
-        query: { redirect: to.fullPath }
-      })
-    }
-  } else {
-    next()
-  }
 })
 
 export default router

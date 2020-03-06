@@ -2,41 +2,9 @@
  * 封装的axios实例
  */
 import axios from 'axios'
-import router from '../router'
-
-/**
- * 跳转登录页
- * 携带当前页面路由，登录后返回当前页面
- */
-const toLogin = () => {
-  router.replace({
-    path: '/login',
-    query: {
-      redirect: router.currentRoute.fullPath
-    }
-  })
-}
-
-/**
- * 请求失败后的错误统一处理
-  * @param {*} code 请求失败的状态码
-  * @param {*} msg 错误信息
-  */
-const errorHandle = (code, msg) => {
-  switch (code) {
-    // 认证失败
-    case 401:
-      toLogin()
-      break
-      // 服务器拒绝提供服务
-    case 403:
-      //  清除token
-      localStorage.removeItem('token')
-      break
-    default:
-      console.log(msg)
-  }
-}
+import store from '../store'
+// 单独引入element ui
+import { Notification } from 'element-ui'
 
 // 创建axios实例，超时10s
 var instance = axios.create({ timeout: 10000 })
@@ -48,8 +16,11 @@ instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlenco
  */
 instance.interceptors.request.use(
   config => {
-    // 设置请求头token
-    config.headers.Authorization = localStorage.getItem('token')
+    const token = localStorage.getItem('token')
+    // 如果当前用户已登录,每次请求都加上token,不管需不需要
+    if (token) {
+      config.headers.Authorization = 'Bearer ' + token
+    }
     return config
   },
   error => {
@@ -58,20 +29,110 @@ instance.interceptors.request.use(
 )
 
 /**
- * axiuos 响应拦截器
+ * axios 响应拦截器
  */
 instance.interceptors.response.use(
-  // 成功
-  res => res.status === 200 ? Promise.resolve(res) : Promise.reject(res),
-  // 失败
+  // 对应axios的then
+  res => {
+    // 请求成功
+    if (res.status === 200) {
+      // 返回正确
+      if (res.data.code === 200) {
+        return Promise.resolve(res.data.data)
+      } else {
+        errorHandle(res.data.code, res.data.msg)
+        return Promise.reject(res.data)
+      }
+    } else {
+      errorHandle(res.status, res.statusText)
+      return Promise.reject(res)
+    }
+  },
+  // 对应axios的catch
   error => {
     const res = error.response
-    // 错误处理
+    // 错误提醒
     if (res) {
-      errorHandle(res.status, res.data.msg)
-      return Promise.reject(res)
+      errorHandle(res.status, res.data)
+      return Promise.reject(error)
     }
     return Promise.reject(error)
   })
+
+/**
+ * 请求失败后的错误统一处理
+  * @param {*} code 请求失败的状态码
+  * @param {*} msg 错误信息
+  */
+const errorHandle = (code, msg) => {
+  // 提示标题
+  let title = ''
+  // 提示类型
+  let type = 'error'
+  // 提示显示时间 /ms
+  let duration = 2000
+  // 提示显示位置
+  const position = 'bottom-right'
+  // 提示能否关闭
+  let showClose = true
+  // 错误类型
+  switch (code) {
+    case 1004:
+      title = '此邮箱/豆瓣ID已被注册'
+      type = 'warning'
+      duration = 5000
+      break
+    case 1003:
+      title = '此用户无权限'
+      break
+    case 1002:
+      title = '无此用户'
+      break
+    case 1001:
+      title = '请求参数错误'
+      break
+    case 400:
+      title = '客户端错误'
+      break
+    case 404:
+      title = '请求失败'
+      break
+    case 403:
+      title = '请勿重复请求'
+      type = 'warning'
+      duration = 10000
+      showClose = false
+      // 清除当前登录用户信息
+      store.dispatch('clearUserInfo')
+      break
+    case 500:
+    case 503:
+      title = '服务器错误'
+      break
+    default:
+      title = '请求失败'
+  }
+  // 错误提醒
+  if (type === 'error') {
+    Notification.error({
+      title: title,
+      message: msg,
+      type: type,
+      duration: duration,
+      position: position,
+      showClose: showClose
+    })
+  } else if (type === 'warning') {
+    Notification.warning({
+      title: title,
+      message: msg,
+      type: type,
+      duration: duration,
+      position: position,
+      showClose: showClose
+    })
+  }
+  console.log(msg)
+}
 
 export default instance
