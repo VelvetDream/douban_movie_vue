@@ -14,6 +14,15 @@ const user = {
     return myAxios.post(domain.plus + '/user/login', qs.stringify(params))
   },
   /**
+   * 用户注册
+   *
+   * @param {*} params email password
+   * @returns
+   */
+  userRegister (params) {
+    return myAxios.post(domain.plus + '/user/register', qs.stringify(params))
+  },
+  /**
    * 用户token续期
    *
    * @param {*} params refreshToken

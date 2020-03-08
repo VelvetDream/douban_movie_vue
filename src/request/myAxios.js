@@ -6,8 +6,8 @@ import store from '../store'
 // 单独引入element ui
 import { Notification } from 'element-ui'
 
-// 创建axios实例，超时10s
-var instance = axios.create({ timeout: 10000 })
+// 创建axios实例，超时5s
+var instance = axios.create({ timeout: 5000 })
 // axios的post请求的默认请求头
 instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
@@ -16,10 +16,10 @@ instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlenco
  */
 instance.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('token')
-    // 如果当前用户已登录,每次请求都加上token,不管需不需要
-    if (token) {
-      config.headers.Authorization = 'Bearer ' + token
+    const userInfo = store.state.userInfo
+    // 如果当前用户已登录,每次请求都加上token
+    if (userInfo && userInfo.access_token) {
+      config.headers.Authorization = 'Bearer ' + userInfo.access_token
     }
     return config
   },
@@ -40,6 +40,7 @@ instance.interceptors.response.use(
       if (res.data.code === 200) {
         return Promise.resolve(res.data.data)
       } else {
+        // 请求成功,返回错误
         errorHandle(res.data.code, res.data.msg)
         return Promise.reject(res.data)
       }
@@ -50,11 +51,16 @@ instance.interceptors.response.use(
   },
   // 对应axios的catch
   error => {
-    const res = error.response
-    // 错误提醒
-    if (res) {
-      errorHandle(res.status, res.data)
-      return Promise.reject(error)
+    // 请求超时
+    if (error.code === 'ECONNABORTED') {
+      errorHandle(408, '服务器网络异常,将稍后再试')
+    } else {
+      const res = error.response
+      if (res) {
+        errorHandle(res.status, res.statusText)
+      } else {
+        errorHandle(500, '请联系管理员')
+      }
     }
     return Promise.reject(error)
   })
@@ -78,7 +84,7 @@ const errorHandle = (code, msg) => {
   // 错误类型
   switch (code) {
     case 1004:
-      title = '此邮箱/豆瓣ID已被注册'
+      title = '重复注册'
       type = 'warning'
       duration = 5000
       break
@@ -103,7 +109,12 @@ const errorHandle = (code, msg) => {
       duration = 10000
       showClose = false
       // 清除当前登录用户信息
-      store.dispatch('clearUserInfo')
+      store.dispatch('clear', 'userInfo')
+      // 重新登录
+      store.dispatch('updatePopups', 'isLogining')
+      break
+    case 408:
+      title = '请求超时'
       break
     case 500:
     case 503:

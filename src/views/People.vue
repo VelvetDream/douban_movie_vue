@@ -1,12 +1,11 @@
 <template>
-  <div id="login">
-    正在开发中...敬请期待...
-    <div></div>
+  <div id="people-view">
+    用户页面
   </div>
 </template>
 <script>
 export default {
-  name: 'Login',
+  name: 'people-view',
   data () {
     return {
     }

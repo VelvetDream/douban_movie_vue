@@ -1,13 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import elementUi from 'element-ui'
 
 // view
 import Home from '../views/Home.vue'
-import subject from '../views/Subject'
-import Login from '../views/Login'
-import NeedLogin from '../views/NeedLogin'
-import about from '../views/About'
+import Subject from '../views/Subject'
+import People from '../views/People'
 
 Vue.use(VueRouter)
 
@@ -18,20 +15,12 @@ const routes = [
     component: Home
   },
   {
-    path: '/subject/:id',
-    component: subject
+    path: '/subject/:movieId',
+    component: Subject
   },
   {
-    path: '/about/:id',
-    component: about
-  },
-  {
-    path: '/login',
-    component: Login
-  },
-  {
-    path: '/need_login',
-    component: NeedLogin,
+    path: '/people/:userId',
+    component: People,
     meta: {
       requireAuth: true
     }
