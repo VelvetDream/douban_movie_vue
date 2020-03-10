@@ -83,6 +83,9 @@ const errorHandle = (code, msg) => {
   let showClose = true
   // 错误类型
   switch (code) {
+    case 1006:
+      duration = 1
+      break
     case 1004:
       title = '重复注册'
       type = 'warning'

@@ -64,7 +64,7 @@ export default {
       this.serverError = null
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.$api.user.userLogin({
+          this.$api.people.login({
             email: this.loginForm.email,
             password: this.loginForm.password
           }).then(res => {

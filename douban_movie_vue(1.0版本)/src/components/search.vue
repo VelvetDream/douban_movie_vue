@@ -82,239 +82,237 @@
   </div>
 </template>
 <script>
-  import axios from 'axios';
-  import {
-    url_ssm_base, url_vue_base, url_douban, url_api_douban, apikey_api_douban
-  } from '../config';
+import axios from 'axios'
+import {
+  url_ssm_base, url_vue_base, url_douban, url_api_douban, apikey_api_douban
+} from '../config'
 
-  export default {
-    name: "search",
-    data() {
-      return {
-        url_douban: url_douban,
-        url_vue_base: url_vue_base,
-        busy: true,
-        subTitle: " - Plus - 搜索",
-        apiResult: {},
-        sResult: [],
-        // 目前已收到的电影条数
-        start: 0,
-        // 设置每次最多收到电影条数
-        count: 10,
-        // 是否加载到底了
-        isOver: false,
-        // 搜索不到电影提示
-        noMovie: "",
-        // 确定搜索失败提示时间
-        noMovieTime: 2000,
-      }
-    },
-    created: function () {
-      // 设置标题
-      document.title = this.$route.query.search_text + this.subTitle;
-      // 第一次加载数据
-      // this.getSearchResult(this.$route.query.search_text, this.start, this.count);
-      // 定时器 是否搜到电影
-      this.isMovieSearched(this.$route.query.search_text);
+export default {
+  name: 'search',
+  data () {
+    return {
+      url_douban: url_douban,
+      url_vue_base: url_vue_base,
+      busy: true,
+      subTitle: ' - Plus - 搜索',
+      apiResult: {},
+      sResult: [],
+      // 目前已收到的电影条数
+      start: 0,
+      // 设置每次最多收到电影条数
+      count: 10,
+      // 是否加载到底了
+      isOver: false,
+      // 搜索不到电影提示
+      noMovie: '',
+      // 确定搜索失败提示时间
+      noMovieTime: 2000
+    }
+  },
+  created: function () {
+    // 设置标题
+    document.title = this.$route.query.search_text + this.subTitle
+    // 第一次加载数据
+    // this.getSearchResult(this.$route.query.search_text, this.start, this.count);
+    // 定时器 是否搜到电影
+    this.isMovieSearched(this.$route.query.search_text)
 
-      // 服务器端和API端切换须知：
-      // 1. img
-      // 2. created
-      // 3. loadMore
+    // 服务器端和API端切换须知：
+    // 1. img
+    // 2. created
+    // 3. loadMore
 
-      // 从api加载数据
-      // 搜索api暂时凉凉 20190512
-      // this.getApiSearch(this.$route.query.search_text, this.start, this.count);
+    // 从api加载数据
+    // 搜索api暂时凉凉 20190512
+    // this.getApiSearch(this.$route.query.search_text, this.start, this.count);
 
-      // 从服务器加载数据
-      this.getSearchResult(this.$route.query.search_text,this.start,this.count);
-    },
-    methods: {
+    // 从服务器加载数据
+    this.getSearchResult(this.$route.query.search_text, this.start, this.count)
+  },
+  methods: {
 
-      // 服务器获取搜索结果 start - end
-      getSearchResult: function (keyword, start, count) {
-        axios.get(url_ssm_base + "/subject_search", {
-          params: {
-            search_text: keyword,
-            start: start,
-            count: count
-          }
-        }).then(response => {
-          console.log("search result :");
-          console.log(response);
-          if (response.data && response.data.code && response.data.message) {
-            if (response.data.code == 200 && response.data.message == "success" && response.data.data) {
-              this.sResult.push({
-                start: this.start,
-                data: response.data.data
-              });
-              //----------------懒加载start
-              this.start = this.start + this.count;
-              // 非第一次加载数据
-              if (start != 0) {
-                // 如果此次收到电影个数小于count,表示最后一次数据
-                if (response.data.data.length < this.count) {
-                  // 禁止滚动
-                  this.busy = true;
-                  // 加载到底
-                  this.isOver = true;
-                }
-                //服务器还有数据
-                else {
-                  // 允许滚动
-                  this.busy = false;
-                }
+    // 服务器获取搜索结果 start - end
+    getSearchResult: function (keyword, start, count) {
+      axios.get(url_ssm_base + '/subject_search', {
+        params: {
+          search_text: keyword,
+          start: start,
+          count: count
+        }
+      }).then(response => {
+        console.log('search result :')
+        console.log(response)
+        if (response.data && response.data.code && response.data.message) {
+          if (response.data.code == 200 && response.data.message == 'success' && response.data.data) {
+            this.sResult.push({
+              start: this.start,
+              data: response.data.data
+            })
+            // ----------------懒加载start
+            this.start = this.start + this.count
+            // 非第一次加载数据
+            if (start != 0) {
+              // 如果此次收到电影个数小于count,表示最后一次数据
+              if (response.data.data.length < this.count) {
+                // 禁止滚动
+                this.busy = true
+                // 加载到底
+                this.isOver = true
               }
-              // 第一次加载数据
+              // 服务器还有数据
               else {
-                // 第一次加载后，允许滚动
-                this.busy = false;
+                // 允许滚动
+                this.busy = false
               }
-              //----------------懒加载end
-            } else {
-              console.log("get search result fail...(server error)");
             }
+            // 第一次加载数据
+            else {
+              // 第一次加载后，允许滚动
+              this.busy = false
+            }
+            // ----------------懒加载end
           } else {
-            console.log("get search result fail...(connect error)");
+            console.log('get search result fail...(server error)')
           }
-        }).catch(error => {
-          console.log("get search result fail...");
-          console.log(error);
-        });
-      },
+        } else {
+          console.log('get search result fail...(connect error)')
+        }
+      }).catch(error => {
+        console.log('get search result fail...')
+        console.log(error)
+      })
+    },
 
-      // API 搜索结果 start count
-      getApiSearch: function (keyword, start, count) {
-        this.$jsonp(url_api_douban + "/v2/movie/search?q=" + keyword + "&start=" + start + "&count=" + count+"&apikey="+apikey_api_douban).then(response => {
-            if (response.subjects && response.subjects.length != 0) {
-              let movies = response.subjects;
-              console.log("douban movie search:");
-              console.log(response);
-              this.apiResult = response;
+    // API 搜索结果 start count
+    getApiSearch: function (keyword, start, count) {
+      this.$jsonp(url_api_douban + '/v2/movie/search?q=' + keyword + '&start=' + start + '&count=' + count + '&apikey=' + apikey_api_douban).then(response => {
+        if (response.subjects && response.subjects.length != 0) {
+          const movies = response.subjects
+          console.log('douban movie search:')
+          console.log(response)
+          this.apiResult = response
 
-              let data = [];
-              for (let i = 0; i < movies.length; i++) {
-                let movie = movies[i];
-                let directors = [];
-                let leadingactors = [];
-                let types = [];
+          const data = []
+          for (let i = 0; i < movies.length; i++) {
+            const movie = movies[i]
+            const directors = []
+            const leadingactors = []
+            const types = []
 
-                if (movie.directors && movie.directors.length != 0) {
-                  for (let j = 0; j < movie.directors.length; j++) {
-                    directors.push({
-                      name: movie.directors[j].name
-                    });
-                  }
-                }
-                if (movie.casts && movie.casts.length != 0) {
-                  for (let j = 0; j < movie.casts.length; j++) {
-                    leadingactors.push({
-                      name: movie.casts[j].name
-                    });
-                  }
-                }
-                if (movie.genres && movie.genres.length != 0) {
-                  for (let j = 0; j < movie.genres.length; j++) {
-                    types.push({
-                      typeName: movie.genres[j]
-                    });
-                  }
-                }
-
-                data.push({
-                  movieId: movie.id,
-                  name: movie.title,
-                  rate: movie.rating ? movie.rating.average : "",
-                  year: movie.year ? movie.year : "",
-                  alias: movie.original_title ? movie.original_title : "",
-                  image: movie.images ? movie.images.large : "",
-                  directors: directors,
-                  leadingactors: leadingactors,
-                  types: types
-                });
+            if (movie.directors && movie.directors.length != 0) {
+              for (let j = 0; j < movie.directors.length; j++) {
+                directors.push({
+                  name: movie.directors[j].name
+                })
               }
-              this.sResult.push({
-                start: this.start,
-                data: data
-              });
-              //----------------懒加载start
-              this.start = this.start + this.count;
-              // 非第一次加载数据
-              if (start != 0) {
-                // 如果此次收到电影个数小于count,表示最后一次数据
-                if (response.subjects && response.subjects.length < this.count) {
-                  // 禁止滚动
-                  this.busy = true;
-                  // 加载到底
-                  this.isOver = true;
-                }
-                //服务器还有数据
-                else {
-                  // 允许滚动
-                  this.busy = false;
-                }
+            }
+            if (movie.casts && movie.casts.length != 0) {
+              for (let j = 0; j < movie.casts.length; j++) {
+                leadingactors.push({
+                  name: movie.casts[j].name
+                })
               }
-              // 第一次加载数据
-              else {
-                // 第一次加载后，允许滚动
-                this.busy = false;
+            }
+            if (movie.genres && movie.genres.length != 0) {
+              for (let j = 0; j < movie.genres.length; j++) {
+                types.push({
+                  typeName: movie.genres[j]
+                })
               }
-              //----------------懒加载end
-            } else {
-              console.log("get douban movie search fail...(server error)");
+            }
+
+            data.push({
+              movieId: movie.id,
+              name: movie.title,
+              rate: movie.rating ? movie.rating.average : '',
+              year: movie.year ? movie.year : '',
+              alias: movie.original_title ? movie.original_title : '',
+              image: movie.images ? movie.images.large : '',
+              directors: directors,
+              leadingactors: leadingactors,
+              types: types
+            })
+          }
+          this.sResult.push({
+            start: this.start,
+            data: data
+          })
+          // ----------------懒加载start
+          this.start = this.start + this.count
+          // 非第一次加载数据
+          if (start != 0) {
+            // 如果此次收到电影个数小于count,表示最后一次数据
+            if (response.subjects && response.subjects.length < this.count) {
+              // 禁止滚动
+              this.busy = true
+              // 加载到底
+              this.isOver = true
+            }
+            // 服务器还有数据
+            else {
+              // 允许滚动
+              this.busy = false
             }
           }
-        ).catch(error => {
-          console.log("get douban movie search fail...");
-          console.log(error);
-        });
-      },
-
-      // 连续加载
-      loadMore: function () {
-        if (!this.isOver) {
-          this.busy = true;
-          // 延迟，以防止滚动条滚动的时候频繁地请求数据
-          setTimeout(load => {
-            // this.getApiSearch(this.$route.query.search_text, this.start, this.count);
-            this.getSearchResult(this.$route.query.search_text, this.start, this.count);
-            this.busy = false;
-          }, 500);
+          // 第一次加载数据
+          else {
+            // 第一次加载后，允许滚动
+            this.busy = false
+          }
+          // ----------------懒加载end
+        } else {
+          console.log('get douban movie search fail...(server error)')
         }
       }
-      ,
+      ).catch(error => {
+        console.log('get douban movie search fail...')
+        console.log(error)
+      })
+    },
 
-      // 搜索不到电影提示
-      isMovieSearched: function (keyword) {
-        setTimeout(no => {
-          if (this.sResult.length == 0) {
-            this.noMovie =
+    // 连续加载
+    loadMore: function () {
+      if (!this.isOver) {
+        this.busy = true
+        // 延迟，以防止滚动条滚动的时候频繁地请求数据
+        setTimeout(load => {
+          // this.getApiSearch(this.$route.query.search_text, this.start, this.count);
+          this.getSearchResult(this.$route.query.search_text, this.start, this.count)
+          this.busy = false
+        }, 500)
+      }
+    },
+
+    // 搜索不到电影提示
+    isMovieSearched: function (keyword) {
+      setTimeout(no => {
+        if (this.sResult.length == 0) {
+          this.noMovie =
               `搜索不到你想找的电影<br>
                            请尝试其他关键字<br>
                          或
-                         <a href="` + url_douban + `/subject_search?search_text=` + keyword + `">
+                         <a href="` + url_douban + '/subject_search?search_text=' + keyword + `">
                          点击此处
                          </a>
-                         跳转到豆瓣电影搜索...`;
-          }
-        }, this.noMovieTime);
-      }
-      ,
-
-      // 评分图标
-      getRateType: function (rate) {
-        if (rate <= 10 && rate > 8) {
-          return 'allstar40';
-        } else if (rate <= 8 && rate > 6) {
-          return 'allstar30';
-        } else if (rate <= 6 && rate > 4) {
-          return 'allstar20';
-        } else if (rate <= 4 && rate > 2) {
-          return 'allstar10';
+                         跳转到豆瓣电影搜索...`
         }
-      }
+      }, this.noMovieTime)
     },
+
+    // 评分图标
+    getRateType: function (rate) {
+      if (rate <= 10 && rate > 8) {
+        return 'allstar40'
+      } else if (rate <= 8 && rate > 6) {
+        return 'allstar30'
+      } else if (rate <= 6 && rate > 4) {
+        return 'allstar20'
+      } else if (rate <= 4 && rate > 2) {
+        return 'allstar10'
+      }
+    }
   }
+}
 </script>
 <style>
   @import "../../static/douban/css/search.css";

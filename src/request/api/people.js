@@ -10,7 +10,7 @@ const user = {
    * @param {*} params email password
    * @returns
    */
-  userLogin (params) {
+  login (params) {
     return myAxios.post(domain.plus + '/user/login', qs.stringify(params))
   },
   /**
@@ -19,7 +19,7 @@ const user = {
    * @param {*} params email password
    * @returns
    */
-  userRegister (params) {
+  register (params) {
     return myAxios.post(domain.plus + '/user/register', qs.stringify(params))
   },
   /**
@@ -28,7 +28,7 @@ const user = {
    * @param {*} params refreshToken
    * @returns
    */
-  userRenew (params) {
+  renew (params) {
     return myAxios.post(domain.plus + '/user/renew', qs.stringify(params))
   }
 }

@@ -1,13 +1,10 @@
 <template>
-<div id='home-view'>
-  <a href="http://localhost:8080/people/humingk">需要登录页面</a>
-</div>
+  <div id="home-view"></div>
 </template>
 <script>
 export default {
-  name: 'home-view'
-}
+  name: "home-view"
+};
 </script>
 <style>
-
 </style>

@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Subject from '../views/Subject'
 import People from '../views/People'
+import Celebrity from '../views/Celebrity'
 
 Vue.use(VueRouter)
 
@@ -17,6 +18,10 @@ const routes = [
   {
     path: '/subject/:movieId',
     component: Subject
+  },
+  {
+    path: '/celebrity/:celebrityId',
+    component: Celebrity
   },
   {
     path: '/people/:userId',

@@ -7,7 +7,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 
 module.exports = {
   //  项目路径
-  publicPath: process.env.NODE_ENV === 'pro' ? '/' : '',
+  publicPath: process.env.NODE_ENV === 'pro' ? '' : '',
   // 输出文件目录
   outputDir: 'dist',
   // 放置生成的静态资源目录,相对于outputDir
@@ -27,6 +27,10 @@ module.exports = {
     open: true,
     // 热更新
     hotOnly: true
+  },
+  chainWebpack: config => {
+    // 修复HMR
+    config.resolve.symlinks(true)
   },
   // 调整 webpack 配置
   configureWebpack: config => {
