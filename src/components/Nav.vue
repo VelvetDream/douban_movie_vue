@@ -2,22 +2,107 @@
   <div id="nav-component">
     <div class="nav-left" />
     <div class="bar">
-      <div class="bar-left" />
-      <el-image class="logo" src="/image/logo.png" />
+      <a class="logo" href="/" target="_blank">
+        <img src="/image/logo.png" />
+      </a>
       <div class="bar-center">
         <el-autocomplete
+          :debounce="0"
           :fetch-suggestions="searchTipsAsync"
           @select="handSelect"
-          class="search-tips"
-          placeholder="请输入电影名、影人名"
+          class="search"
+          highlight-first-item
+          placeholder="你可以选择搜索 豆瓣电影、豆瓣影人、背景音乐、电影场景、拍摄地点"
           v-model="keyword"
         >
-          <el-select></el-select>
-          <template slot-scope="{ item }">
-            <div>
-              <img :src="item.base.urlPoster" />
-              <span>{{ item.base.id }}</span>
-              <span>{{ item.base.nameZh }}</span>
+          <el-select class="search-select" placeholder="电影" slot="prepend" v-model="searchSelect">
+            <el-option label="电影" value="movie"></el-option>
+            <el-option label="影人" value="celebrity"></el-option>
+            <el-option label="音乐" value="music"></el-option>
+            <el-option label="场景" value="scene"></el-option>
+            <el-option label="地点" value="place"></el-option>
+          </el-select>
+          <el-button @click="searchPage" icon="el-icon-search" slot="append"></el-button>
+          <template slot-scope="{ item }" style="padding">
+            <div class="search-tips" v-if="searchSelect==='movie' && item.base">
+              <el-image :src="item.base.urlPoster" class="poster" fit="fill" lazy>
+                <div class="image-slot" slot="error">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <div class="content">
+                <div class="title">
+                  <span class="name-zh">{{ item.base.nameZh }}&nbsp;({{ item.base.startYear }})</span>
+                  <span class="rate" v-if="item.rate">
+                    {{ Number.isInteger(item.rate.score)?item.rate.score+".0":item.rate.score }}
+                    <el-image class="rate-from" fit="cover" src="/image/douban.ico" />
+                  </span>
+                </div>
+                <div class="description">
+                  <span>{{ item.base.nameOrigin }}</span>
+                  <span
+                    :key="i"
+                    class="alias"
+                    v-for="(alias, i) in item.aliasList"
+                  >&nbsp;/&nbsp;{{alias}}</span>
+                  <span v-if="item.base.summary">=>&nbsp;{{item.base.summary}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="search-tips" v-if="searchSelect==='celebrity' && item.base">
+              <el-image :src="item.base.urlPortrait" class="poster" fit="fill" lazy>
+                <div class="image-slot" slot="error">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <div class="content">
+                <div class="title">
+                  <span
+                    class="name-zh"
+                  >{{ item.base.nameZh }}&nbsp;{{ item.base.birthDate?"("+/\d{4}/.exec(item.base.birthDate)+")":"" }}</span>
+                </div>
+                <div class="description">
+                  <span>{{ item.base.nameOrigin }}</span>
+                  <span
+                    :key="i"
+                    class="alias"
+                    v-for="(alias, i) in item.aliasList"
+                  >&nbsp;/&nbsp;{{alias.isNikename===1?alias.nameAlias+'(昵称)':alias.nameAlias}}</span>
+                  <span v-if="item.aliasList.length===0">{{item.base.summary}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="search-tips" v-if="searchSelect==='scene' && item.length!==0">
+              <el-image :src="item.urlMap" class="poster" fit="fill" lazy>
+                <div class="image-slot" slot="error">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <div class="content">
+                <div class="title">
+                  <span class="name-zh">{{ item.nameZh }}&nbsp;({{ item.startYear }})</span>
+                </div>
+                <div class="description">
+                  <span>{{ item.nameEn }}</span>
+                  <span>{{item.description}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="search-tips" v-if="searchSelect==='place' && item.length!==0">
+              <el-image :src="item.urlPoster" class="poster" fit="fill" lazy>
+                <div class="image-slot" slot="error">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <div class="content">
+                <div class="title">
+                  <span class="name-zh">{{ item.nameZh }}{{item.areaZh===""?"":" ("+item.areaZh+")"}}</span>
+                </div>
+                <div class="description">
+                  <span>{{item.addressZh}}</span>
+                  <span v-if="item.description!==''">=> &nbsp;{{ item.description }}</span>
+                </div>
+              </div>
             </div>
           </template>
         </el-autocomplete>
@@ -26,7 +111,7 @@
             :href="item.url"
             :key="index"
             :underline="false"
-            class="nav-item"
+            class="nav-items"
             target="_blank"
             type="primary"
             v-for="(item, index) in navItems"
@@ -34,7 +119,7 @@
           <el-link
             :href="'/people/'+personalCenter"
             :underline="false"
-            class="nav-item"
+            class="nav-items"
             target="_blank"
             type="primary"
             v-if="this.userInfo"
@@ -42,16 +127,37 @@
           <el-link
             :underline="false"
             @click="login"
-            class="nav-item"
+            class="nav-items"
             target="_blank"
             type="primary"
             v-if="!this.userInfo"
           >登录/注册</el-link>
         </div>
       </div>
-      <div class="bar-right" />
     </div>
-    <div class="github"></div>
+    <div class="github">
+      <a
+        aria-label="View source on GitHub"
+        class="github-corner"
+        href="https://github.com/humingk"
+        target="_blank"
+      >
+        <svg aria-hidden="true" class="github-svg" height="80" viewBox="0 0 250 250" width="80">
+          <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z" />
+          <path
+            class="octo-arm"
+            d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+            fill="currentColor"
+            style="transform-origin: 130px 106px;"
+          />
+          <path
+            class="octo-body"
+            d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+            fill="currentColor"
+          />
+        </svg>
+      </a>
+    </div>
   </div>
 </template>
 <script>
@@ -61,12 +167,12 @@ export default {
   name: 'nav-component',
   data() {
     return {
+      // 搜索选择器
+      searchSelect: 'movie',
       offset: 0,
       limit: 10,
-      // 搜索框关键字
+      // 当前搜索框关键字
       keyword: '',
-      // 搜索提示列表
-      tips: [],
       // 导航栏
       navItems: [
         {
@@ -82,34 +188,86 @@ export default {
           url: '/tag'
         },
         {
-          name: '网易云音乐',
-          url: '/netease'
+          name: '背景音乐',
+          url: '/music'
         },
         {
-          name: '场景',
+          name: '电影场景',
           url: '/scene'
+        },
+        {
+          name: '拍摄地点',
+          url: '/place'
         }
       ]
     }
   },
   methods: {
-    // 异步搜索提示
+    // 搜索提示
     searchTipsAsync(keyword, callback) {
       if (keyword.trim() !== '') {
-        this.$api.search
-          .doubanTips({
-            keyword: keyword,
-            offset: this.offset,
-            limit: this.limit
-          })
-          .then(res => {
-            callback(res.movieList)
-          })
+        const params = {
+          keyword: keyword,
+          offset: this.offset,
+          limit: this.limit
+        }
+        switch (this.searchSelect) {
+          case 'movie':
+            this.$api.search.movieDoubanTips(params).then(res => {
+              callback(res)
+            })
+            break
+          case 'celebrity':
+            this.$api.search.celebrityDoubanTips(params).then(res => {
+              callback(res)
+            })
+            break
+          case 'music':
+            callback([])
+            break
+          case 'scene':
+            this.$api.search.movieSceneTips(params).then(res => {
+              callback(res)
+            })
+            break
+          case 'place':
+            this.$api.search.placeSceneTips(params).then(res => {
+              callback(res)
+            })
+            break
+          default:
+            break
+        }
       }
     },
-    handSelect(item) {
-      console.log(item)
+    // 跳转到搜索页面
+    searchPage() {
+      if (this.keyword !== '') {
+        window.open('/movie/subject_search?search_text=' + this.keyword)
+      }
     },
+    // 跳转到选定条目
+    handSelect(item) {
+      switch (this.searchSelect) {
+        case 'movie':
+          window.open('/subject/' + item.base.id)
+          break
+        case 'celebrity':
+          window.open('/celebrity/' + item.base.id)
+          break
+        case 'music':
+          break
+        case 'scene':
+          window.open('/scene/' + item.id)
+          break
+        case 'place':
+          window.open('/place/' + item.id)
+          break
+        default:
+          break
+      }
+    },
+    // 登录
     login() {
       this.updatePopups({ key: 'isLogining', value: true })
     },
@@ -131,6 +289,7 @@ export default {
 }
 </script>
 <style>
+/* 布局 --------------------------------------- */
 #nav-component {
   width: 100%;
   height: 100%;
@@ -139,7 +298,7 @@ export default {
 }
 /* nav-component 左 中 右 */
 .nav-left {
-  flex: 0 0 80px;
+  flex: 0 0 10%;
   background-color: mediumspringgreen;
 }
 .bar {
@@ -150,17 +309,19 @@ export default {
   margin-top: 8px;
 }
 .github {
-  flex: 0 0 80px;
+  flex: 0 0 10%;
   background-color: mediumspringgreen;
 }
+
 /* bar 左 中 右 */
-.bar-left {
-  flex: 0 0 80px;
-  background-color: darkgoldenrod;
-}
 .logo {
-  flex: 0 0 300px;
-  margin: 10px 10px 10px 10px;
+  display: flex;
+  flex: 0 0 250px;
+  margin: 10px;
+}
+.logo img {
+  flex: auto;
+  margin: 5px;
 }
 .bar-center {
   flex: 1;
@@ -170,16 +331,14 @@ export default {
   align-items: center;
   justify-content: center;
 }
-.bar-right {
-  flex: 0 0 80px;
-  background-color: darkgoldenrod;
-}
 /* bar-center 上 下 */
-.search-tips {
-  flex: 1;
+.search {
+  /* flex: 1; */
   width: 100%;
-  margin: 10px 0 0 0;
+  display: flex;
+  margin: 15px 0 8px 0;
 }
+
 .router {
   flex: 20px;
   width: 100%;
@@ -187,10 +346,141 @@ export default {
   align-items: center;
   justify-content: center;
 }
-/* search-tips 排列 */
-
-/* router 排列 */
-.nav-item {
+/* search  */
+.search-select {
   flex: auto;
+  width: 75px;
+  color: #409eff;
+  font-weight: bold;
+}
+.search-tips {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 80px;
+  width: 100%;
+  line-height: normal;
+  white-space: pre-wrap;
+}
+/* router row排列 */
+.nav-items {
+  flex: auto;
+  font-weight: bold;
+}
+
+/* search tips 左 右 */
+.search-tips .poster {
+  width: 60px;
+  height: 80px;
+}
+.search-tips .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 0;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+/* poster */
+.search-tips .poster .el-icon-picture-outline {
+  width: 60px;
+  height: 80px;
+}
+/* content 上 下*/
+.search-tips .title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.search-tips .description {
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+  overflow: hidden;
+  margin-bottom: 2px;
+}
+/* title 左 右 */
+.search-tips .title .name-zh {
+  font-size: 20px;
+}
+.search-tips .title .rate {
+  font-size: 20px;
+  color: magenta;
+}
+.search-tips .title .rate .rate-from {
+  width: 15px;
+  height: 15px;
+}
+/* des */
+.search-tips .description span {
+  font-size: 15px;
+}
+
+/* 其他样式 --------------------------------------- */
+/* github */
+.github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+@keyframes octocat-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    transform: rotate(-25deg);
+  }
+  40%,
+  80% {
+    transform: rotate(10deg);
+  }
+}
+@media (max-width: 500px) {
+  .github-corner:hover .octo-arm {
+    animation: none;
+  }
+  .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+}
+.github-svg {
+  fill: #70b7fd;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  border: 0;
+  right: 0;
+}
+.el-input-group__prepend {
+  border-radius: 30px 0 0 30px;
+}
+.el-input-group__prepend div.el-select .el-input__inner,
+.el-input-group__prepend div.el-select:hover .el-input__inner {
+  font-weight: bold;
+}
+.el-select-dropdown__item.selected {
+  font-weight: bold;
+}
+.el-select-dropdown__item {
+  font-weight: bold;
+}
+.el-input-group__append {
+  border-radius: 0 30px 30px 0;
+}
+.el-autocomplete-suggestion {
+  background-color: cornsilk;
+}
+/* ul 下拉框 */
+.el-autocomplete-suggestion__wrap.el-scrollbar__wrap {
+  max-height: 448px;
+}
+/* li 选项 */
+.el-scrollbar__view.el-autocomplete-suggestion__list li {
+  padding: 2px 5px;
+  color: #3c3e42;
+}
+.el-autocomplete-suggestion li.highlighted,
+.el-autocomplete-suggestion li:hover {
+  background-color: #67c23a;
 }
 </style>

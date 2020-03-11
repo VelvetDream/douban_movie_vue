@@ -7,11 +7,9 @@
     </div>
     <div class="main">
       <div class="center">
-        <div class="left" />
         <div class="content">
           <router-view />
         </div>
-        <div class="right" />
       </div>
       <div class="footer" />
     </div>
@@ -19,11 +17,11 @@
 </template>
 
 <script>
-import loginComponent from "./components/Login";
-import registerComponent from "./components/Register";
-import navComponent from "./components/Nav";
+import loginComponent from './components/Login'
+import registerComponent from './components/Register'
+import navComponent from './components/Nav'
 export default {
-  name: "App",
+  name: 'App',
   components: {
     loginComponent,
     registerComponent,
@@ -33,24 +31,24 @@ export default {
     return {
       // reject引入执行,重载当前路由
       reload: this.reload
-    };
+    }
   },
   data() {
     return {
       // 当前路由是否显示
       isRouterAlive: true
-    };
+    }
   },
   methods: {
     // 刷新当前路由
     reload() {
-      this.isRouterAlive = false;
+      this.isRouterAlive = false
       this.$nextTick(function() {
-        this.isRouterAlive = true;
-      });
+        this.isRouterAlive = true
+      })
     }
   }
-};
+}
 </script>
 
 <style>
@@ -61,7 +59,7 @@ body {
   width: 100%;
   height: 100%;
   /*  */
-  min-height: 1000px;
+  min-height: 2000px;
 }
 #app {
   width: 100%;
@@ -71,7 +69,7 @@ body {
 }
 /* app 上 下 */
 .header {
-  flex: 0 0 80px;
+  flex: 0 0 100px;
   background: #f39322;
   display: flex;
 }
@@ -87,22 +85,17 @@ body {
   display: flex;
 }
 .footer {
-  flex: 0 0 100px;
+  /* flex: 0 0 100px; */
+  flex: 0 0 20%;
   background: #c7262f;
   display: flex;
 }
 /* center 左 中 右 */
-.left {
-  flex: 0 0 160px;
-  background: #02a899;
-}
 .content {
   flex: 1;
   background: #fee064;
   display: flex;
-}
-.right {
-  flex: 0 0 160px;
-  background: #02a899;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 </style>

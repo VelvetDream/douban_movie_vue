@@ -6,11 +6,11 @@ import Home from '../views/Home.vue'
 import Subject from '../views/Subject'
 import People from '../views/People'
 import Celebrity from '../views/Celebrity'
+import Scene from '../views/Scene'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'Home',
     component: Home
@@ -22,6 +22,10 @@ const routes = [
   {
     path: '/celebrity/:celebrityId',
     component: Celebrity
+  },
+  {
+    path: '/scene/:movieId',
+    component: Scene
   },
   {
     path: '/people/:userId',
