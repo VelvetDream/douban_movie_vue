@@ -12,15 +12,17 @@
           @select="handSelect"
           class="search"
           highlight-first-item
-          placeholder="你可以选择搜索 豆瓣电影、豆瓣影人、背景音乐、电影场景、拍摄地点"
+          placeholder="豆瓣电影、豆瓣影人、电影场景、拍摄地点、电影配乐、电影歌单、原声大碟"
           v-model="keyword"
         >
           <el-select class="search-select" placeholder="电影" slot="prepend" v-model="searchSelect">
             <el-option label="电影" value="movie"></el-option>
             <el-option label="影人" value="celebrity"></el-option>
-            <el-option label="音乐" value="music"></el-option>
             <el-option label="场景" value="scene"></el-option>
             <el-option label="地点" value="place"></el-option>
+            <el-option label="配乐" value="song"></el-option>
+            <el-option label="歌单" value="playlist"></el-option>
+            <el-option label="原声" value="album"></el-option>
           </el-select>
           <el-button @click="searchPage" icon="el-icon-search" slot="append"></el-button>
           <template slot-scope="{ item }" style="padding">
@@ -32,7 +34,10 @@
               </el-image>
               <div class="content">
                 <div class="title">
-                  <span class="name-zh">{{ item.base.nameZh }}&nbsp;({{ item.base.startYear }})</span>
+                  <span class="name-zh">
+                    <span>{{ item.base.nameZh }}</span>
+                    {{item.base.startYear?" ("+item.base.startYear+")":"" }}
+                  </span>
                   <span class="rate" v-if="item.rate">
                     {{ Number.isInteger(item.rate.score)?item.rate.score+".0":item.rate.score }}
                     <el-image class="rate-from" fit="cover" src="/image/douban.ico" />
@@ -40,12 +45,8 @@
                 </div>
                 <div class="description">
                   <span>{{ item.base.nameOrigin }}</span>
-                  <span
-                    :key="i"
-                    class="alias"
-                    v-for="(alias, i) in item.aliasList"
-                  >&nbsp;/&nbsp;{{alias}}</span>
-                  <span v-if="item.base.summary">=>&nbsp;{{item.base.summary}}</span>
+                  <span :key="i" class="alias" v-for="(alias, i) in item.aliasList">{{" / "+alias}}</span>
+                  <span v-if="item.base.summary">{{"=> "+item.base.summary}}</span>
                 </div>
               </div>
             </div>
@@ -57,9 +58,13 @@
               </el-image>
               <div class="content">
                 <div class="title">
-                  <span
-                    class="name-zh"
-                  >{{ item.base.nameZh }}&nbsp;{{ item.base.birthDate?"("+/\d{4}/.exec(item.base.birthDate)+")":"" }}</span>
+                  <span class="name-zh">
+                    <span>{{ item.base.nameZh }}</span>
+                    {{ item.base.birthDate?" ("+/\d{4}/.exec(item.base.birthDate)+")":"" }}
+                  </span>
+                  <span class="rate">
+                    <el-image class="rate-from" fit="cover" src="/image/douban.ico" />
+                  </span>
                 </div>
                 <div class="description">
                   <span>{{ item.base.nameOrigin }}</span>
@@ -67,7 +72,7 @@
                     :key="i"
                     class="alias"
                     v-for="(alias, i) in item.aliasList"
-                  >&nbsp;/&nbsp;{{alias.isNikename===1?alias.nameAlias+'(昵称)':alias.nameAlias}}</span>
+                  >{{" / "+alias.isNikename===1?alias.nameAlias+'(昵称)':alias.nameAlias}}</span>
                   <span v-if="item.aliasList.length===0">{{item.base.summary}}</span>
                 </div>
               </div>
@@ -80,11 +85,17 @@
               </el-image>
               <div class="content">
                 <div class="title">
-                  <span class="name-zh">{{ item.nameZh }}&nbsp;({{ item.startYear }})</span>
+                  <span class="name-zh">
+                    <span>{{ item.nameZh }}</span>
+                    {{item.startYear?" ("+item.startYear+")":""}}
+                  </span>
+                  <span class="rate">
+                    <el-image class="rate-from" fit="cover" src="/image/mocation.ico" />
+                  </span>
                 </div>
                 <div class="description">
                   <span>{{ item.nameEn }}</span>
-                  <span>{{item.description}}</span>
+                  <span>{{item.description?"=> "+item.description:""}}</span>
                 </div>
               </div>
             </div>
@@ -96,11 +107,104 @@
               </el-image>
               <div class="content">
                 <div class="title">
-                  <span class="name-zh">{{ item.nameZh }}{{item.areaZh===""?"":" ("+item.areaZh+")"}}</span>
+                  <span class="name-zh">
+                    <span>{{ item.nameZh }}</span>
+                    {{item.areaZh===""?"":" ("+item.areaZh+")"}}
+                  </span>
+                  <span class="rate">
+                    <el-image class="rate-from" fit="cover" src="/image/mocation.ico" />
+                  </span>
                 </div>
                 <div class="description">
                   <span>{{item.addressZh}}</span>
-                  <span v-if="item.description!==''">=> &nbsp;{{ item.description }}</span>
+                  <span v-if="item.description!==''">{{ "=> "+item.description }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="search-tips" v-if="searchSelect==='song' && item.length!==0">
+              <el-image
+                :src="item.artists[0].img1v1Url+'?param=60y80'"
+                class="poster"
+                fit="fill"
+                lazy
+                v-if="item.artists && item.artists.length!==0"
+              >
+                <div class="image-slot" slot="error">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <div class="content">
+                <div class="title">
+                  <span class="name-zh">
+                    <span>{{item.name }}</span>
+                    {{ item.album?" ["+item.album.name+"]":"" }}
+                  </span>
+                  <span class="rate">
+                    <el-image class="rate-from" fit="cover" src="/image/netease.ico" />
+                    <el-image
+                      class="rate-from"
+                      fit="cover"
+                      src="/image/netease_mv.ico"
+                      v-if="item.mvid!==0"
+                    />
+                  </span>
+                </div>
+                <div class="description">
+                  <span :key="i+'11'" class="alias" v-for="(a, i) in item.alias">{{" / "+a}}</span>
+                  <span
+                    :key="i+'22'"
+                    class="alias"
+                    v-for="(alias, i) in item.artists"
+                  >{{" / "+alias.name}}</span>
+                  <span v-if="item.album && item.album.artist">{{" / "+item.album.artist.name}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="search-tips" v-if="searchSelect==='playlist' && item.length!==0">
+              <el-image :src="item.coverImgUrl+'?param=60y80'" class="poster" fit="fill" lazy>
+                <div class="image-slot" slot="error">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <div class="content">
+                <div class="title">
+                  <span class="name-zh">
+                    <span>{{item.name }}</span>
+                  </span>
+                  <span class="rate" v-if="item.playCount">
+                    {{item.playCount&lt;1000?item.playCount:parseInt(item.playCount/1000)+'k'}}
+                    <el-image class="rate-from" fit="cover" src="/image/netease.ico" />
+                  </span>
+                </div>
+                <div class="description">
+                  <span v-if="!item.description && item.track">{{item.track.name}}</span>
+                  <span>{{item.description?"=> "+item.description:""}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="search-tips" v-if="searchSelect==='album' && item.length!==0">
+              <el-image :src="item.picUrl+'?param=60y80'" class="poster" fit="fill" lazy>
+                <div class="image-slot" slot="error">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <div class="content">
+                <div class="title">
+                  <span class="name-zh">
+                    <span>{{item.name }}</span>
+                    {{item.artist?" ("+item.artist.name+")":""}}
+                  </span>
+                  <span class="rate">
+                    <el-image class="rate-from" fit="cover" src="/image/netease.ico" />
+                  </span>
+                </div>
+                <div class="description">
+                  <span>{{item.type}}</span>
+                  <span
+                    :key="indexKey+'key1'"
+                    v-for="(i, indexKey) in item.artists"
+                  >{{" / "+i.name}}</span>
+                  <span>{{item.description?"=> "+item.description:""}}</span>
                 </div>
               </div>
             </div>
@@ -142,7 +246,7 @@
         href="https://github.com/humingk"
         target="_blank"
       >
-        <svg aria-hidden="true" class="github-svg" height="80" viewBox="0 0 250 250" width="80">
+        <svg aria-hidden="true" class="github-svg" height="100" viewBox="0 0 250 250" width="100">
           <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z" />
           <path
             class="octo-arm"
@@ -170,7 +274,7 @@ export default {
       // 搜索选择器
       searchSelect: 'movie',
       offset: 0,
-      limit: 10,
+      limit: 15,
       // 当前搜索框关键字
       keyword: '',
       // 导航栏
@@ -180,24 +284,28 @@ export default {
           url: '/'
         },
         {
-          name: '排行榜',
-          url: '/chart'
-        },
-        {
           name: '分类',
           url: '/tag'
         },
         {
-          name: '背景音乐',
-          url: '/music'
-        },
-        {
-          name: '电影场景',
+          name: '场景',
           url: '/scene'
         },
         {
-          name: '拍摄地点',
+          name: '地点',
           url: '/place'
+        },
+        {
+          name: '配乐',
+          url: '/song'
+        },
+        {
+          name: '歌单',
+          url: '/playlist'
+        },
+        {
+          name: '原声',
+          url: '/album'
         }
       ]
     }
@@ -222,9 +330,6 @@ export default {
               callback(res)
             })
             break
-          case 'music':
-            callback([])
-            break
           case 'scene':
             this.$api.search.movieSceneTips(params).then(res => {
               callback(res)
@@ -233,6 +338,27 @@ export default {
           case 'place':
             this.$api.search.placeSceneTips(params).then(res => {
               callback(res)
+            })
+            break
+          case 'song':
+            params['keywords'] = keyword
+            params['type'] = 1
+            this.$api.search.neteaseMusicTips(params).then(res => {
+              callback(res.songs)
+            })
+            break
+          case 'playlist':
+            params['keywords'] = keyword
+            params['type'] = 1000
+            this.$api.search.neteaseMusicTips(params).then(res => {
+              callback(res.playlists)
+            })
+            break
+          case 'album':
+            params['keywords'] = keyword
+            params['type'] = 10
+            this.$api.search.neteaseMusicTips(params).then(res => {
+              callback(res.albums)
             })
             break
           default:
@@ -255,13 +381,20 @@ export default {
         case 'celebrity':
           window.open('/celebrity/' + item.base.id)
           break
-        case 'music':
-          break
         case 'scene':
           window.open('/scene/' + item.id)
           break
         case 'place':
           window.open('/place/' + item.id)
+          break
+        case 'song':
+          window.open('https://music.163.com/#/song?id=' + item.id)
+          break
+        case 'playlist':
+          window.open('https://music.163.com/#/playlist?id=' + item.id)
+          break
+        case 'album':
+          window.open('https://music.163.com/#/album?id=' + item.id)
           break
         default:
           break
@@ -299,18 +432,18 @@ export default {
 /* nav-component 左 中 右 */
 .nav-left {
   flex: 0 0 10%;
-  background-color: mediumspringgreen;
+  /* background-color: mediumspringgreen; */
 }
 .bar {
   flex: 1;
-  background-color: goldenrod;
+  /* background-color: goldenrod; */
   flex-direction: row;
   display: flex;
   margin-top: 8px;
 }
 .github {
   flex: 0 0 10%;
-  background-color: mediumspringgreen;
+  /* background-color: mediumspringgreen; */
 }
 
 /* bar 左 中 右 */
@@ -321,13 +454,15 @@ export default {
 }
 .logo img {
   flex: auto;
-  margin: 5px;
+  /* margin: 5px; */
+  width: 200px;
+  object-fit: fill;
 }
 .bar-center {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: gainsboro;
+  /* background-color: gainsboro; */
   align-items: center;
   justify-content: center;
 }
@@ -359,12 +494,13 @@ export default {
   flex: 1;
   height: 80px;
   width: 100%;
-  line-height: normal;
+  line-height: 25px;
   white-space: pre-wrap;
 }
 /* router row排列 */
 .nav-items {
   flex: auto;
+  font-size: 16px;
   font-weight: bold;
 }
 
@@ -391,6 +527,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  flex-flow: nowrap;
 }
 .search-tips .description {
   display: flex;
@@ -401,15 +538,21 @@ export default {
 }
 /* title 左 右 */
 .search-tips .title .name-zh {
-  font-size: 20px;
+  font-size: 16px;
 }
+.search-tips .title .name-zh span {
+  color: magenta;
+  font-size: 18px;
+  font-weight: 500;
+}
+
 .search-tips .title .rate {
   font-size: 20px;
   color: magenta;
 }
 .search-tips .title .rate .rate-from {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
 }
 /* des */
 .search-tips .description span {

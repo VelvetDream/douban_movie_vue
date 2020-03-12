@@ -47,6 +47,17 @@ const search = {
       params: params
     })
   },
+  /**
+   * 网易云音乐搜索提示
+   *
+   * @param {*} params keyword:关键字 offset limit type:1-单曲 10-专辑 1000-歌单
+   * @returns
+   */
+  neteaseMusicTips(params) {
+    return myAxios.get(domain.plus + '/music/search', {
+      params: params
+    })
+  },
 }
 
 export default search

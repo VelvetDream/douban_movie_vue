@@ -4,10 +4,14 @@
 import axios from 'axios'
 import store from '../store'
 // 单独引入element ui
-import { Notification } from 'element-ui'
+import {
+  Notification
+} from 'element-ui'
 
 // 创建axios实例，超时5s
-var instance = axios.create({ timeout: 5000 })
+var instance = axios.create({
+  timeout: 5000
+})
 // axios的post请求的默认请求头
 instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
@@ -38,7 +42,16 @@ instance.interceptors.response.use(
     if (res.status === 200) {
       // 返回正确
       if (res.data.code === 200) {
-        return Promise.resolve(res.data.data)
+        if (res.data.data) {
+          // 自定义结果集
+          return Promise.resolve(res.data.data)
+        } else if (res.data.result) {
+          // 网易云音乐结果集
+          return Promise.resolve(res.data.result)
+        } else {
+          // 其他
+          return Promise.resolve(res.data)
+        }
       } else {
         // 请求成功,返回错误
         errorHandle(res.data.code, res.data.msg)
@@ -67,9 +80,9 @@ instance.interceptors.response.use(
 
 /**
  * 请求失败后的错误统一处理
-  * @param {*} code 请求失败的状态码
-  * @param {*} msg 错误信息
-  */
+ * @param {*} code 请求失败的状态码
+ * @param {*} msg 错误信息
+ */
 const errorHandle = (code, msg) => {
   // 提示标题
   let title = ''

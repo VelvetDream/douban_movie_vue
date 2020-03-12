@@ -16,7 +16,11 @@ export default new Vuex.Store({
       isLogining: false,
       // 是否注册
       isRegistering: false
-    }
+    },
+    // 默认页面背景图片列表
+    defaultBgList: [],
+    // 特定页面背景图片列表
+    specialBgList: []
   },
   getters,
   mutations,
