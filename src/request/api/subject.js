@@ -11,8 +11,10 @@ const movie = {
    * @param {*} params id: 豆瓣电影ID
    * @returns
    */
-  movieDetails (params) {
-    return myAxios.get(domain.plus + '/movie/details', { params: params })
+  movieDetails(params) {
+    return myAxios.get(domain.plus + '/movie/details', {
+      params: params
+    })
   },
   /**
    * 基础场景相关
@@ -20,8 +22,10 @@ const movie = {
    * @param {*} params id: 豆瓣电影ID
    * @returns
    */
-  sceneBases (params) {
-    return myAxios.get(domain.plus + '/scene/fotoplace/bases', { params: params })
+  sceneBases(params) {
+    return myAxios.get(domain.plus + '/scene/fotoplace/bases', {
+      params: params
+    })
   },
   /**
    * 知乎相关
@@ -29,8 +33,10 @@ const movie = {
    * @param {*} params id: 豆瓣电影ID
    * @returns
    */
-  zhihuBases (params) {
-    return myAxios.get(domain.plus + '/movie/zhihu/bases', { params: params })
+  zhihuBases(params) {
+    return myAxios.get(domain.plus + '/movie/zhihu/bases', {
+      params: params
+    })
   },
   /**
    * 资源相关
@@ -38,8 +44,10 @@ const movie = {
    * @param {*} params id: 豆瓣电影ID
    * @returns
    */
-  resourceBases (params) {
-    return myAxios.get(domain.plus + '/movie/resource/bases', { params: params })
+  resourceBases(params) {
+    return myAxios.get(domain.plus + '/movie/resource/bases', {
+      params: params
+    })
   },
   /**
    *  豆瓣电影API v2
@@ -47,8 +55,8 @@ const movie = {
    * @param {*} id: 豆瓣电影ID
    * @returns
    */
-  doubanApiDetails (id) {
-    return myJsonp(domain.douban + '/movie/subject/' + id + apikey.douban)
+  doubanApiDetails(id) {
+    return myJsonp(domain.doubanV2 + '/movie/subject/' + id + apikey.doubanV2)
   }
 }
 

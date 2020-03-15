@@ -3,6 +3,7 @@ import Vue from 'vue'
 import vuex from 'vuex'
 import elementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import animate from 'animate.css'
 // 自定义组件
 import App from './App.vue'
 import api from './request/api'
@@ -12,6 +13,7 @@ import router from './router'
 // 第三方组件全局注册
 Vue.use(vuex)
 Vue.use(elementUi)
+Vue.use(animate)
 
 // 开发环境控制台相关
 Vue.config.productionTip = process.env.NODE_ENV !== 'pro'
@@ -27,11 +29,17 @@ router.beforeEach((to, from, next) => {
     if (store.state.userInfo) {
       next()
     } else if (localStorage.getItem('userInfo')) {
-      store.dispatch('update', { key: 'userInfo', value: localStorage.getItem('userInfo') })
+      store.dispatch('update', {
+        key: 'userInfo',
+        value: localStorage.getItem('userInfo')
+      })
       next()
     } else {
       // 需要登录
-      store.dispatch('updatePopups', { key: 'isLogining', value: true })
+      store.dispatch('updatePopups', {
+        key: 'isLogining',
+        value: true
+      })
     }
   } else {
     next()

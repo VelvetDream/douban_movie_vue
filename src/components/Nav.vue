@@ -1,7 +1,7 @@
 <template>
   <div id="nav-component">
     <div class="nav-left" />
-    <div class="bar">
+    <div class="bar animated flipInX">
       <a class="logo" href="/" target="_blank">
         <img src="/image/logo.png" />
       </a>
@@ -12,7 +12,8 @@
           @select="handSelect"
           class="search"
           highlight-first-item
-          placeholder="豆瓣电影、豆瓣影人、电影场景、拍摄地点、电影配乐、电影歌单、原声大碟"
+          placeholder="豆瓣电影  丨  豆瓣影人  丨  电影场景  丨  拍摄地点  丨  电影配乐  丨  电影歌单  丨  原声大碟"
+          trigger-on-focus
           v-model="keyword"
         >
           <el-select class="search-select" placeholder="电影" slot="prepend" v-model="searchSelect">
@@ -239,7 +240,7 @@
         </div>
       </div>
     </div>
-    <div class="github">
+    <div class="github animated bounceInDown">
       <a
         aria-label="View source on GitHub"
         class="github-corner"
@@ -266,9 +267,11 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
+import domain from '../request/domain'
 
 export default {
   name: 'nav-component',
+
   data() {
     return {
       // 搜索选择器
@@ -388,13 +391,13 @@ export default {
           window.open('/place/' + item.id)
           break
         case 'song':
-          window.open('https://music.163.com/#/song?id=' + item.id)
+          window.open(domain.neteaseMusic + '/#/song?id=' + item.id)
           break
         case 'playlist':
-          window.open('https://music.163.com/#/playlist?id=' + item.id)
+          window.open(domain.neteaseMusic + '/#/playlist?id=' + item.id)
           break
         case 'album':
-          window.open('https://music.163.com/#/album?id=' + item.id)
+          window.open(domain.neteaseMusic + '/#/album?id=' + item.id)
           break
         default:
           break
@@ -408,7 +411,7 @@ export default {
   },
   computed: {
     // 个人中心
-    personalCenter: function() {
+    personalCenter() {
       if (this.userInfo) {
         return this.userInfo.userId
       } else {
@@ -432,25 +435,24 @@ export default {
 /* nav-component 左 中 右 */
 .nav-left {
   flex: 0 0 10%;
-  /* background-color: mediumspringgreen; */
 }
 .bar {
   flex: 1;
-  /* background-color: goldenrod; */
   flex-direction: row;
   display: flex;
-  margin-top: 8px;
+  margin-top: 15px;
+  border-radius: 10px;
+  /* background-color: rgba(255, 255, 255, 0.6); */
+  background-color: rgba(255, 255, 255, 0);
 }
 .github {
   flex: 0 0 10%;
-  /* background-color: mediumspringgreen; */
 }
-
 /* bar 左 中 右 */
 .logo {
   display: flex;
   flex: 0 0 250px;
-  margin: 10px;
+  margin: 15px 10px;
 }
 .logo img {
   flex: auto;
@@ -471,7 +473,7 @@ export default {
   /* flex: 1; */
   width: 100%;
   display: flex;
-  margin: 15px 0 8px 0;
+  margin: 16px 0 8px 0;
 }
 
 .router {
@@ -560,6 +562,12 @@ export default {
 }
 
 /* 其他样式 --------------------------------------- */
+.el-link.el-link--primary {
+  color: #054ebd;
+}
+.el-link.el-link--primary:hover {
+  color: #f31919;
+}
 /* github */
 .github-corner:hover .octo-arm {
   animation: octocat-wave 560ms ease-in-out;
@@ -587,12 +595,14 @@ export default {
   }
 }
 .github-svg {
-  fill: #70b7fd;
-  color: #fff;
-  position: absolute;
+  /* fill: #409eff; */
+  fill: rgba(64, 158, 255, 0);
+  /* color: #fff; */
+  color: rgba(64, 158, 255, 1);
+  position: fixed;
   top: 0;
   border: 0;
-  right: 0;
+  right: 19px;
 }
 .el-input-group__prepend {
   border-radius: 30px 0 0 30px;
@@ -600,9 +610,25 @@ export default {
 .el-input-group__prepend div.el-select .el-input__inner,
 .el-input-group__prepend div.el-select:hover .el-input__inner {
   font-weight: bold;
+  color: #054ebd;
 }
 .el-select-dropdown__item.selected {
   font-weight: bold;
+  color: #054ebd;
+}
+.el-select .el-input .el-select__caret {
+  color: #054ebd;
+  font-size: 14px;
+  font-weight: bold;
+}
+input::-webkit-input-placeholder {
+  color: red;
+}
+input::-moz-input-placeholder {
+  color: red;
+}
+input::-ms-input-placeholder {
+  color: red;
 }
 .el-select-dropdown__item {
   font-weight: bold;
@@ -611,19 +637,20 @@ export default {
   border-radius: 0 30px 30px 0;
 }
 .el-autocomplete-suggestion {
-  background-color: cornsilk;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 /* ul 下拉框 */
 .el-autocomplete-suggestion__wrap.el-scrollbar__wrap {
-  max-height: 448px;
+  max-height: 485px;
 }
 /* li 选项 */
 .el-scrollbar__view.el-autocomplete-suggestion__list li {
-  padding: 2px 5px;
-  color: #3c3e42;
+  padding: 5px;
+  color: #0b0c0c;
+  border: 1px solid snow;
 }
 .el-autocomplete-suggestion li.highlighted,
 .el-autocomplete-suggestion li:hover {
-  background-color: #67c23a;
+  background-color: #2e8def73;
 }
 </style>

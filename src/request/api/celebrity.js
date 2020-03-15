@@ -30,7 +30,7 @@ const celebrity = {
    * @returns
    */
   doubanApiDetails (id) {
-    return myJsonp(domain.douban + '/movie/celebrity/' + id + apikey.douban)
+    return myJsonp(domain.doubanV2 + '/movie/celebrity/' + id + apikey.douban)
   }
 }
 
