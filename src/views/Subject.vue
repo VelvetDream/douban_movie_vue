@@ -1,18 +1,22 @@
 <template>
-  <div movieId="subject-view">
-    <doubanBaseComponent :bases="this.doubanBases" />
-    <rateRadarComponent :rateList="this.rateList" v-if="this.rateList.length>2" />
+  <div id="subject-view">
+    <div class="subject-left">
+      <doubanBaseComponent :bases="this.doubanBases" />
+    </div>
+    <div class="subject-right">
+      <rateComponent :rateList="this.rateList" v-if="this.rateList.length!==0" />
+    </div>
   </div>
 </template>
 <script>
 import doubanBaseComponent from '../components/movie/DoubanBase'
-import rateRadarComponent from '../components/movie/RateRadar'
+import rateComponent from '../components/movie/Rate'
 import domain from '../request/domain'
 export default {
   name: 'subject-view',
   components: {
     doubanBaseComponent,
-    rateRadarComponent
+    rateComponent
   },
   data() {
     return {
@@ -82,13 +86,14 @@ export default {
                 type: '豆瓣',
                 score: rate.score,
                 vote: rate.vote,
-                color: '#ffac2d',
+                // color: '#ffac2d',
+                color: '#d68509',
                 url:
                   domain.doubanMovie +
                   '/subject/' +
                   this.movieId +
                   '/collections',
-                des: ``
+                des: `国内目前最大的影迷聚集地`
               })
             }
             break
@@ -100,7 +105,7 @@ export default {
                 vote: rate.imdbVote,
                 color: '#00a2e8',
                 url: domain.imdb + '/title/' + this.movieDetails.imdb.id + '/',
-                des: `更加全面的互联网电影数据库`
+                des: `更全面的互联网电影数据库`
               })
             }
             if (rate.tomatoScore !== 0) {
@@ -125,7 +130,7 @@ export default {
                 domain.tomato +
                 '/m/' +
                 this.movieDetails.imdb.base.nameEn.replace(/\s/, '_'),
-              des: `烂番茄的新鲜度来源于其认证影评人的评价,若好评超过60%,则认为新鲜,否则为腐烂`
+              des: `新鲜度来自认证影评人评价`
             })
             if (rate.mtcScore !== 0) {
               // this.rateList.push({
@@ -144,12 +149,12 @@ export default {
               type: 'MTC',
               score: 9.6,
               vote: 0,
-              color: '#22b14c',
+              color: '#6c3',
               url:
                 domain.tomato +
                 '/movie/' +
                 this.movieDetails.imdb.base.nameEn.replace(/\s/, '-'),
-              des: `Metacritic以专业影评人的评价为主`
+              des: `主要收集专业影评人的评价`
             })
             break
           case 'zhihus':
@@ -171,7 +176,7 @@ export default {
                 vote: 0,
                 color: '#e53329',
                 url: domain.maoyan + '/query?kw=' + rate.nameZh,
-                des: `普通观众买票观看后的评分`
+                des: `普通观众买票观影后的评价`
               })
             }
             break
@@ -188,4 +193,19 @@ export default {
   }
 }
 </script>
-<style></style>
+<style>
+#subject-view {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+/* subject 左 右 */
+.subject-left {
+  display: flex;
+  flex: 0 0 70%;
+}
+.subject-right {
+  display: flex;
+  flex: 0 0 30%;
+}
+</style>

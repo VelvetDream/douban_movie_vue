@@ -111,6 +111,22 @@ body::-webkit-scrollbar {
   flex: 0 0 12%;
   background-color: rgba(255, 255, 255, 0.2);
   display: flex;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.01),
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.09),
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.21),
+    rgba(255, 255, 255, 0.24),
+    rgba(255, 255, 255, 0.27),
+    rgba(255, 255, 255, 0.29),
+    rgba(255, 255, 255, 0.3)
+  );
 }
 /* center 左 中 右 */
 .content {

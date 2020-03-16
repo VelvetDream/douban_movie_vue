@@ -1,12 +1,17 @@
 <template>
   <div id="background-component">
     <div class="pull animated bounceInDown">
-      <img :class="pullStyle" :src="'/image/pull_'+pullOnOff+'.png'" @click="changeBg" />
+      <img
+        :class="pullStyle"
+        :src="'/image/background/pull_'+pullOnOff+'.png'"
+        @click="changeBg"
+        @mouseenter="changeBg"
+      />
     </div>
     <div id="bg-color" />
     <div :class="opacityColorBg" id="bg-img-color" />
     <transition name="fade">
-      <div id="bg" v-show="nowBgList.length!==0 && !changingBg">
+      <div id="bg" v-show="nowBgList.length!==0 && !isChangingBg">
         <img :class="BlurBg" :src="nowBgList[nowBgId]" />
       </div>
     </transition>
@@ -23,7 +28,7 @@ export default {
       // 背景切换时间间隔 /s 第一次以后减去2s
       turnBgSecond: 8,
       // 是否正在切换背景
-      changingBg: false,
+      isChangingBg: false,
       // 切换背景计时器
       turnBgTimer: null,
       // 切换毛样式
@@ -44,13 +49,13 @@ export default {
     // 轮流切换背景
     turnBg() {
       if (this.nowBgList.length !== 0 && this.nowBgList.length !== 1) {
-        this.changingBg = true
+        this.isChangingBg = true
         setTimeout(() => {
           // nowId++
           this.nowBgId + 1 >= this.nowBgList.length
             ? (this.nowBgId = 0)
             : this.nowBgId++
-          this.changingBg = false
+          this.isChangingBg = false
           // 切换锚已打开
           if (this.pullOnOff === 'on') {
             // 切换锚归位
@@ -61,7 +66,7 @@ export default {
     },
     // 手动切换背景
     changeBg() {
-      if (!this.changingBg) {
+      if (!this.isChangingBg) {
         // 切换锚未打开
         if (this.pullOnOff === 'off') {
           // 取消自动轮换

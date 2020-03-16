@@ -2,7 +2,7 @@
   <div id="nav-component">
     <div class="nav-left" />
     <div class="bar animated flipInX">
-      <a class="logo" href="/" target="_blank">
+      <a :class="'logo '+logoOverStyle" @mouseenter="logoOver" href="/" target="_blank">
         <img src="/image/logo.png" />
       </a>
       <div class="bar-center">
@@ -11,7 +11,6 @@
           :fetch-suggestions="searchTipsAsync"
           @select="handSelect"
           class="search"
-          highlight-first-item
           placeholder="豆瓣电影  丨  豆瓣影人  丨  电影场景  丨  拍摄地点  丨  电影配乐  丨  电影歌单  丨  原声大碟"
           trigger-on-focus
           v-model="keyword"
@@ -141,11 +140,11 @@
                     {{ item.album?" ["+item.album.name+"]":"" }}
                   </span>
                   <span class="rate">
-                    <el-image class="rate-from" fit="cover" src="/image/netease.ico" />
+                    <el-image class="rate-from" fit="cover" src="/image/netease/netease.ico" />
                     <el-image
                       class="rate-from"
                       fit="cover"
-                      src="/image/netease_mv.ico"
+                      src="/image/netease/netease_mv.ico"
                       v-if="item.mvid!==0"
                     />
                   </span>
@@ -174,7 +173,7 @@
                   </span>
                   <span class="rate" v-if="item.playCount">
                     {{item.playCount&lt;1000?item.playCount:parseInt(item.playCount/1000)+'k'}}
-                    <el-image class="rate-from" fit="cover" src="/image/netease.ico" />
+                    <el-image class="rate-from" fit="cover" src="/image/netease/netease.ico" />
                   </span>
                 </div>
                 <div class="description">
@@ -196,7 +195,7 @@
                     {{item.artist?" ("+item.artist.name+")":""}}
                   </span>
                   <span class="rate">
-                    <el-image class="rate-from" fit="cover" src="/image/netease.ico" />
+                    <el-image class="rate-from" fit="cover" src="/image/netease/netease.ico" />
                   </span>
                 </div>
                 <div class="description">
@@ -280,6 +279,8 @@ export default {
       limit: 15,
       // 当前搜索框关键字
       keyword: '',
+      logoOverStyle: '',
+      isLogoOver: false,
       // 导航栏
       navItems: [
         {
@@ -316,6 +317,7 @@ export default {
   methods: {
     // 搜索提示
     searchTipsAsync(keyword, callback) {
+      keyword = keyword || ''
       if (keyword.trim() !== '') {
         const params = {
           keyword: keyword,
@@ -407,6 +409,16 @@ export default {
     login() {
       this.updatePopups({ key: 'isLogining', value: true })
     },
+    logoOver() {
+      if (!this.isLogoOver) {
+        this.isLogoOver = true
+        this.logoOverStyle = 'animated tada'
+        setTimeout(() => {
+          this.logoOverStyle = ''
+          this.isLogoOver = false
+        }, 1500)
+      }
+    },
     ...mapActions(['update', 'updatePopups'])
   },
   computed: {
@@ -452,7 +464,7 @@ export default {
 .logo {
   display: flex;
   flex: 0 0 250px;
-  margin: 15px 10px;
+  margin: 15px 10px 15px 0px;
 }
 .logo img {
   flex: auto;
@@ -543,14 +555,14 @@ export default {
   font-size: 16px;
 }
 .search-tips .title .name-zh span {
-  color: magenta;
+  color: #000;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .search-tips .title .rate {
   font-size: 20px;
-  color: magenta;
+  color: #f31919;
 }
 .search-tips .title .rate .rate-from {
   width: 18px;
@@ -598,7 +610,8 @@ export default {
   /* fill: #409eff; */
   fill: rgba(64, 158, 255, 0);
   /* color: #fff; */
-  color: rgba(64, 158, 255, 1);
+  /* color: rgba(64, 158, 255, 1); */
+  color: #054ebd;
   position: fixed;
   top: 0;
   border: 0;
@@ -612,6 +625,14 @@ export default {
   font-weight: bold;
   color: #054ebd;
 }
+.el-input-group__append,
+.el-input-group__prepend {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover {
+  background-color: rgba(255, 255, 255, 0.95);
+}
 .el-select-dropdown__item.selected {
   font-weight: bold;
   color: #054ebd;
@@ -621,15 +642,6 @@ export default {
   font-size: 14px;
   font-weight: bold;
 }
-input::-webkit-input-placeholder {
-  color: red;
-}
-input::-moz-input-placeholder {
-  color: red;
-}
-input::-ms-input-placeholder {
-  color: red;
-}
 .el-select-dropdown__item {
   font-weight: bold;
 }
@@ -637,20 +649,55 @@ input::-ms-input-placeholder {
   border-radius: 0 30px 30px 0;
 }
 .el-autocomplete-suggestion {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 /* ul 下拉框 */
 .el-autocomplete-suggestion__wrap.el-scrollbar__wrap {
-  max-height: 485px;
+  max-height: 470px;
+}
+.el-select-dropdown {
+  background-color: rgba(255, 255, 255, 0.8);
 }
 /* li 选项 */
-.el-scrollbar__view.el-autocomplete-suggestion__list li {
+.el-scrollbar__view.el-autocomplete-suggestion__list li + li {
   padding: 5px;
   color: #0b0c0c;
-  border: 1px solid snow;
+  border-bottom: 1px solid snow;
 }
 .el-autocomplete-suggestion li.highlighted,
 .el-autocomplete-suggestion li:hover {
-  background-color: #2e8def73;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+.el-autocomplete-suggestion li {
+  padding: 0;
+}
+/* padding: 0 20px; */
+/* input color */
+.el-input__inner {
+  color: #000;
+  font-weight: bold;
+  /* border: 1px solid #dcdfe6; */
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+/* input placeHolder */
+.el-input__inner::placeholder {
+  color: #606266;
+  font-weight: bold;
+}
+.el-input__inner::-webkit-input-placeholder {
+  /* WebKit browsers 适配谷歌 */
+  color: #606266;
+  font-weight: bold;
+}
+.el-input__inner::-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 适配火狐 */
+  color: #606266;
+  font-weight: bold;
+}
+.el-input__inner::-ms-input-placeholder {
+  /* Internet Explorer 10+  适配ie*/
+  color: #606266;
+  font-weight: bold;
 }
 </style>
