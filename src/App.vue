@@ -8,14 +8,10 @@
       <navComponent />
     </div>
     <div class="main">
-      <div class="center">
-        <div class="content">
-          <router-view />
-        </div>
-      </div>
-      <div class="bg-enjoy" />
-      <div class="footer" />
+      <router-view />
     </div>
+    <div class="enjoy" />
+    <div class="footer" />
   </div>
 </template>
 
@@ -61,56 +57,38 @@ export default {
 </script>
 
 <style>
-html {
-  margin: 0 0;
-  padding: 0 0;
-  overflow: -moz-hidden-unscrollable;
-  width: 100%;
-  height: 100%;
-}
+html,
 body {
   margin: 0 0;
   padding: 0 0;
-  -ms-overflow-style: none;
   width: 100%;
   height: 100%;
-  width: calc(100vw + 18px);
-  overflow: auto;
+  /* min-height: 1000px; */
 }
-body::-webkit-scrollbar {
-  display: none;
-}
+/* 页面布局--------------- */
 #app {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-
-/* app 上 下 */
-.header {
-  flex: 0 0 110px;
-  display: flex;
-  border-radius: 8px;
-}
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-/* main 上 中 下 */
-.center {
-  flex: 1;
+/* app */
+#app .header {
+  flex: 0 0 120px;
+  flex-grow: 0;
   display: flex;
 }
-.bg-enjoy {
-  flex: 0 0 800px;
-  display: flex;
+#app .main {
+  flex: 0 0 auto;
+  width: 1024px;
+  margin: auto;
 }
-.footer {
-  flex: 0 0 12%;
+#app .enjoy {
+  flex: 0 0 500px;
+}
+#app .footer {
+  flex: 0 0 120px;
   background-color: rgba(255, 255, 255, 0.2);
-  display: flex;
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0.01),
@@ -128,11 +106,13 @@ body::-webkit-scrollbar {
     rgba(255, 255, 255, 0.3)
   );
 }
-/* center 左 中 右 */
-.content {
-  flex: 1;
-  display: flex;
-  margin-left: 10%;
-  margin-right: 10%;
+/* 其他样式---------------- */
+/* 隐藏滚轮 */
+body::-webkit-scrollbar {
+  display: none;
+}
+body {
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
 }
 </style>

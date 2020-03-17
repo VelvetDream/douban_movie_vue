@@ -1,6 +1,6 @@
 <template>
   <div id="nav-component">
-    <div class="nav-left" />
+    <div class="left" />
     <div class="bar animated flipInX">
       <a :class="'logo '+logoOverStyle" @mouseenter="logoOver" href="/" target="_blank">
         <img src="/image/logo.png" />
@@ -239,14 +239,21 @@
         </div>
       </div>
     </div>
-    <div class="github animated bounceInDown">
+    <div class="right animated bounceInDown">
       <a
         aria-label="View source on GitHub"
         class="github-corner"
         href="https://github.com/humingk"
         target="_blank"
       >
-        <svg aria-hidden="true" class="github-svg" height="100" viewBox="0 0 250 250" width="100">
+        <svg
+          :class="'github-svg '+githubOverClass"
+          @mouseenter="githubOver"
+          aria-hidden="true"
+          height="120"
+          viewBox="0 0 250 250"
+          width="128"
+        >
           <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z" />
           <path
             class="octo-arm"
@@ -281,6 +288,8 @@ export default {
       keyword: '',
       logoOverStyle: '',
       isLogoOver: false,
+      githubOverClass: '',
+      isGithubOver: false,
       // 导航栏
       navItems: [
         {
@@ -419,6 +428,16 @@ export default {
         }, 1500)
       }
     },
+    githubOver() {
+      if (!this.isGithubOver) {
+        this.isGithubOver = true
+        this.githubOverClass = 'animated heartBeat'
+        setTimeout(() => {
+          this.githubOverClass = ''
+          this.isGithubOver = false
+        }, 800)
+      }
+    },
     ...mapActions(['update', 'updatePopups'])
   },
   computed: {
@@ -444,55 +463,50 @@ export default {
   display: flex;
   flex-direction: row;
 }
-/* nav-component 左 中 右 */
-.nav-left {
-  flex: 0 0 10%;
+
+/* nav-component */
+#nav-component .left {
+  flex: 0 0 128px;
 }
 .bar {
-  flex: 1;
+  flex: 1 0 auto;
   flex-direction: row;
   display: flex;
-  margin-top: 15px;
-  border-radius: 10px;
-  /* background-color: rgba(255, 255, 255, 0.6); */
+  margin-top: 20px;
+  margin-bottom: 10px;
   background-color: rgba(255, 255, 255, 0);
 }
-.github {
-  flex: 0 0 10%;
+#nav-component .right {
+  flex: 0 0 128px;
 }
-/* bar 左 中 右 */
-.logo {
-  display: flex;
+/* bar */
+.bar .logo {
   flex: 0 0 250px;
-  margin: 15px 10px 15px 0px;
 }
-.logo img {
-  flex: auto;
-  /* margin: 5px; */
-  width: 200px;
-  object-fit: fill;
-}
-.bar-center {
-  flex: 1;
+.bar .bar-center {
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
-  /* background-color: gainsboro; */
-  align-items: center;
-  justify-content: center;
+  margin-left: 10px;
+  margin-right: 10px;
 }
-/* bar-center 上 下 */
-.search {
-  /* flex: 1; */
-  width: 100%;
-  display: flex;
-  margin: 16px 0 8px 0;
+/* log */
+.bar .logo img {
+  width: 250px;
+  height: 80px;
 }
 
+/* bar-center */
+.search {
+  flex: 0 0 40px;
+  margin-top: 8px;
+}
 .router {
-  flex: 20px;
-  width: 100%;
+  flex: 0 0 24px;
+  margin-top: 8px;
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
 }
 /* search  */
@@ -574,6 +588,7 @@ export default {
 }
 
 /* 其他样式 --------------------------------------- */
+
 .el-link.el-link--primary {
   color: #054ebd;
 }
@@ -607,15 +622,9 @@ export default {
   }
 }
 .github-svg {
-  /* fill: #409eff; */
   fill: rgba(64, 158, 255, 0);
-  /* color: #fff; */
-  /* color: rgba(64, 158, 255, 1); */
   color: #054ebd;
   position: fixed;
-  top: 0;
-  border: 0;
-  right: 19px;
 }
 .el-input-group__prepend {
   border-radius: 30px 0 0 30px;

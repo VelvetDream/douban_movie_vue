@@ -1,21 +1,24 @@
 <template>
-  <div id="subject-view">
-    <div class="subject-left">
-      <doubanBaseComponent :bases="this.doubanBases" />
+  <div id="subject-view" v-show="movieDetails">
+    <div class="detail">
+      <div class="left">
+        <baseComponent :bases="this.bases" />
+      </div>
+      <div class="right">
+        <rateComponent :rateList="this.rateList" v-if="this.rateList.length!==0" />
+      </div>
     </div>
-    <div class="subject-right">
-      <rateComponent :rateList="this.rateList" v-if="this.rateList.length!==0" />
-    </div>
+    <div class="celebrity"></div>
   </div>
 </template>
 <script>
-import doubanBaseComponent from '../components/movie/DoubanBase'
+import baseComponent from '../components/movie/Base'
 import rateComponent from '../components/movie/Rate'
 import domain from '../request/domain'
 export default {
   name: 'subject-view',
   components: {
-    doubanBaseComponent,
+    baseComponent,
     rateComponent
   },
   data() {
@@ -34,7 +37,7 @@ export default {
       doubanApiDetails: null,
       // ---------
       // 组件prop数据
-      doubanBases: null,
+      bases: null,
       rateList: []
     }
   },
@@ -46,7 +49,7 @@ export default {
       if (this.movieId) {
         this.$api.subject.movieDetails({ id: this.movieId }).then(res => {
           this.movieDetails = res
-          this.parseDoubanMovieBases(this.movieDetails.douban)
+          this.parseDoubanMovieBases(this.movieDetails)
           this.parseRate(this.movieDetails.douban.rate, 'douban')
           this.parseRate(this.movieDetails.imdb.rate, 'imdbs')
         })
@@ -66,14 +69,17 @@ export default {
         // })
       }
     },
-    // 解析豆瓣电影基础信息
-    parseDoubanMovieBases(bases) {
-      this.doubanBases = {
-        base: bases.base,
-        aliasList: bases.aliasList,
-        typeList: bases.typeList,
-        tagList: bases.tagList,
-        celebrityList: bases.celebrityList
+    // 解析电影基础信息
+    parseDoubanMovieBases(movieDetails) {
+      this.bases = {
+        douban: {
+          base: movieDetails.douban.base,
+          aliasList: movieDetails.douban.aliasList,
+          typeList: movieDetails.douban.typeList,
+          tagList: movieDetails.douban.tagList,
+          celebrityList: movieDetails.douban.celebrityList
+        },
+        imdb: movieDetails.imdb
       }
     },
     // 解析评分
@@ -195,17 +201,30 @@ export default {
 </script>
 <style>
 #subject-view {
-  display: flex;
   width: 100%;
   height: 100%;
-}
-/* subject 左 右 */
-.subject-left {
   display: flex;
-  flex: 0 0 70%;
+  flex-direction: column;
 }
-.subject-right {
+/* subject */
+#subject-view .detail {
+  flex: 0 0 300px;
   display: flex;
-  flex: 0 0 30%;
+  flex-direction: row;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+#subject-view .celebrity {
+  flex: 0 0 200px;
+}
+/* detail */
+#subject-view .detail .left {
+  flex: 1 0 auto;
+  padding-right: 10px;
+  border-right: 2px solid rgba(255, 255, 255, 0.2);
+}
+#subject-view .detail .right {
+  flex: 0 0 300px;
+  padding-left: 10px;
 }
 </style>

@@ -1,7 +1,7 @@
 /** 域名统一管理 */
 const domain = {
   // plus后端网关
-  plus: process.env.NODE_ENV === 'pro' ? 'http://localhost:8081/v2' : 'http://localhost:8081/v2',
+  plus: process.env.NODE_ENV === 'pro' ? 'http://localhost:8081/v2' : 'http://localhost:8080/v2',
   // 豆瓣电影v2
   doubanV2: 'https://api.douban.com/v2',
   // 豆瓣电影官网
@@ -17,7 +17,7 @@ const domain = {
   // 知乎官网
   zhihu: 'https://www.zhihu.com',
   // 猫眼官网
-  maoyan:'https://maoyan.com'
+  maoyan: 'https://maoyan.com'
 }
 
 export default domain

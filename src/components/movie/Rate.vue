@@ -326,7 +326,7 @@ export default {
 .rate-list {
   width: 100%;
   height: 100%;
-  margin-top: 45px;
+  padding-top: 45px;
 }
 /* 星星种类 */
 .star-base {
