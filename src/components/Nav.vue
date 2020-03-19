@@ -26,7 +26,7 @@
           </el-select>
           <el-button @click="searchPage" icon="el-icon-search" slot="append"></el-button>
           <template slot-scope="{ item }" style="padding">
-            <div class="search-tips" v-if="searchSelect==='movie' && item.base">
+            <div class="search-tips" v-show="searchSelect==='movie' && item.base">
               <el-image :src="item.base.urlPoster" class="poster" fit="fill" lazy>
                 <div class="image-slot" slot="error">
                   <i class="el-icon-picture-outline"></i>
@@ -38,7 +38,7 @@
                     <span>{{ item.base.nameZh }}</span>
                     {{item.base.startYear?" ("+item.base.startYear+")":"" }}
                   </span>
-                  <span class="rate" v-if="item.rate">
+                  <span class="rate" v-show="item.rate">
                     {{ Number.isInteger(item.rate.score)?item.rate.score+".0":item.rate.score }}
                     <el-image class="rate-from" fit="cover" src="/image/douban.ico" />
                   </span>
@@ -46,7 +46,7 @@
                 <div class="description">
                   <span>{{ item.base.nameOrigin }}</span>
                   <span :key="i" class="alias" v-for="(alias, i) in item.aliasList">{{" / "+alias}}</span>
-                  <span v-if="item.base.summary">{{"=> "+item.base.summary}}</span>
+                  <span v-show="item.base.summary">{{"=> "+item.base.summary}}</span>
                 </div>
               </div>
             </div>

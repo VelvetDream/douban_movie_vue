@@ -1,6 +1,16 @@
 <template>
-  <div @mouseenter="isChangeRateView=true" @mouseleave="isChangeRateView=false" id="rate-component">
-    <el-button @click="changeRateView" class="change-rate" type="text" v-if="isChangeRateView">点击切换</el-button>
+  <div
+    @mouseenter="isChangeRateView=true"
+    @mouseleave="isChangeRateView=false"
+    id="rate-component"
+    v-show="rateList.length!==0"
+  >
+    <el-button
+      @click="changeRateView"
+      class="change-rate"
+      type="text"
+      v-show="isChangeRateView"
+    >点击切换</el-button>
     <div :class="rateRadarClass" @click="changeRateView" id="rate-radar" v-show="isRadarNow"></div>
     <div
       :class="'rate-list '+rateListClass"
@@ -22,7 +32,9 @@ require('echarts/lib/component/toolbox')
 
 export default {
   name: 'rate-component',
-  props: ['rateList'],
+  props: {
+    rateList: Array
+  },
   data() {
     return {
       // 切换按钮是否可见
@@ -33,21 +45,7 @@ export default {
       rateListClass: ''
     }
   },
-  mounted() {
-    this.rateList.length <= 2
-      ? (this.isRadarNow = false)
-      : (this.isRadarNow = true)
-    this.getRateRadar()
-  },
-  watch: {
-    // 动态更新评分列表
-    rateList() {
-      this.rateList.length <= 2
-        ? (this.isRadarNow = false)
-        : (this.isRadarNow = true)
-      this.getRateRadar()
-    }
-  },
+  mounted() {},
   methods: {
     // 评分雷达
     getRateRadar() {
@@ -279,6 +277,17 @@ export default {
       return result + `</table>`
     }
   },
+  watch: {
+    // 若prop中的ratelist变化则会重新渲染此组件
+    rateList() {
+      if (this.rateList.length !== 0) {
+        // 重新绘制雷达图
+        this.getRateRadar()
+        // 默认显示选择
+        this.isRadarNow = this.rateList.length > 2
+      }
+    }
+  },
   computed: {
     // 雷达图的指示器，用来指定雷达图中的多个变量（维度）
     indicatorList() {
@@ -306,7 +315,6 @@ export default {
 </script>
 <style>
 #rate-component {
-  /* background-color: rgba(255, 255, 255, 0); */
   width: 300px;
   height: 300px;
   border-radius: 10px;
@@ -320,12 +328,12 @@ export default {
   z-index: 3;
 }
 #rate-radar {
-  width: 100%;
-  height: 100%;
+  width: 300px;
+  height: 300px;
 }
 .rate-list {
-  width: 100%;
-  height: 100%;
+  width: 300px;
+  height: 300px;
   padding-top: 45px;
 }
 /* 星星种类 */

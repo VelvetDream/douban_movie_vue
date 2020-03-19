@@ -1,19 +1,16 @@
 <template>
-  <div id="">
-
-  </div>
+  <div id></div>
 </template>
 <script>
 export default {
   name: '',
-  data () {
-    return {
-
-    }
+  data() {
+    return {}
   },
-  methods: {
-  },
-  computed: {}
+  mounted() {},
+  methods: {},
+  computed: {},
+  watch: {}
 }
 </script>
 <style>

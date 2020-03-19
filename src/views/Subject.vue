@@ -5,21 +5,25 @@
         <baseComponent :bases="this.bases" />
       </div>
       <div class="right">
-        <rateComponent :rateList="this.rateList" v-if="this.rateList.length!==0" />
+        <rateComponent :rateList="this.rateList" v-show="this.rateList.length!==0" />
       </div>
     </div>
-    <div class="celebrity"></div>
+    <div class="celebrity-list">
+      <celebrityComponent :celebrityList="this.celebrityList" />
+    </div>
   </div>
 </template>
 <script>
 import baseComponent from '../components/movie/Base'
 import rateComponent from '../components/movie/Rate'
+import celebrityComponent from '../components/movie/Celebrity'
 import domain from '../request/domain'
 export default {
   name: 'subject-view',
   components: {
     baseComponent,
-    rateComponent
+    rateComponent,
+    celebrityComponent
   },
   data() {
     return {
@@ -38,7 +42,8 @@ export default {
       // ---------
       // 组件prop数据
       bases: null,
-      rateList: []
+      rateList: [],
+      celebrityList: []
     }
   },
   created() {},
@@ -50,6 +55,7 @@ export default {
         this.$api.subject.movieDetails({ id: this.movieId }).then(res => {
           this.movieDetails = res
           this.parseDoubanMovieBases(this.movieDetails)
+          this.parseDoubanCelebrityList(this.movieDetails)
           this.parseRate(this.movieDetails.douban.rate, 'douban')
           this.parseRate(this.movieDetails.imdb.rate, 'imdbs')
         })
@@ -81,6 +87,10 @@ export default {
         },
         imdb: movieDetails.imdb
       }
+    },
+    // 解析豆瓣影人列表信息
+    parseDoubanCelebrityList(movieDetails) {
+      this.celebrityList = movieDetails.douban.celebrityList
     },
     // 解析评分
     parseRate(rate, type) {
@@ -119,7 +129,7 @@ export default {
               //   type: '烂番茄',
               //   score: rate.tomatoScore,
               //   vote: 0,
-              //   color: '#fa3008',
+              // color: rate.tomatoScore > 6 ? '#fa3008' : '#09c754',
               //   url:
               //     domain.tomato +
               //     '/m/' +
@@ -143,7 +153,12 @@ export default {
               //   type: 'MTC',
               //   score: rate.mtcScore,
               //   vote: 0,
-              //   color: '#22b14c',
+              //             color:
+              // rate.mtcScore >= 8
+              //   ? '#6c3'
+              //   : rate.mtcScore > 4
+              //   ? '#fc3'
+              //   : '#f00',
               //   url:
               //     domain.tomato +
               //     '/movie/' +
@@ -214,12 +229,17 @@ export default {
   padding-bottom: 10px;
   border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
-#subject-view .celebrity {
-  flex: 0 0 200px;
+#subject-view .celebrity-list {
+  flex: 0 0 150px;
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 /* detail */
 #subject-view .detail .left {
-  flex: 1 0 auto;
+  flex: 1 0 714px;
   padding-right: 10px;
   border-right: 2px solid rgba(255, 255, 255, 0.2);
 }
