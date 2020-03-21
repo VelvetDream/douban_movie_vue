@@ -2,7 +2,7 @@
   <div
     @mouseenter="isChangeRateView=true"
     @mouseleave="isChangeRateView=false"
-    id="rate-component"
+    id="movie-rate-component"
     v-show="rateList.length!==0"
   >
     <el-button
@@ -31,7 +31,7 @@ require('echarts/lib/component/tooltip')
 require('echarts/lib/component/toolbox')
 
 export default {
-  name: 'rate-component',
+  name: 'movie-rate-component',
   props: {
     rateList: Array
   },
@@ -314,12 +314,12 @@ export default {
 }
 </script>
 <style>
-#rate-component {
+#movie-rate-component {
   width: 300px;
   height: 300px;
   border-radius: 10px;
 }
-#rate-component .change-rate {
+#movie-rate-component .change-rate {
   float: right;
   font-weight: bold;
   font-size: 16px;

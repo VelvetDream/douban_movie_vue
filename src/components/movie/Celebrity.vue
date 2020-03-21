@@ -1,5 +1,5 @@
 <template>
-  <div id="celebrity-component" v-if="celebrityList.length!==0">
+  <div id="movie-celebrity-component" v-if="celebrityList.length!==0">
     <div class="celebrity-list-prev" slot="button-prev">
       <svg viewBox="0 0 27 44" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 22L22 0l2.1 2.1L4.2 22l19.9 19.9L22 44 0 22z" fill="rgba(255, 255, 255, 0.5)" />
@@ -28,7 +28,7 @@ import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
-  name: 'celebrity-component',
+  name: 'movie-celebrity-component',
   components: {
     swiper,
     swiperSlide
@@ -88,7 +88,7 @@ export default {
 }
 </script>
 <style>
-#celebrity-component {
+#movie-celebrity-component {
   width: 100%;
   height: 100%;
   display: flex;
@@ -97,7 +97,7 @@ export default {
   align-items: center;
 }
 /* celebrity 左右 */
-#celebrity-component .celebrity-list-prev,
+#movie-celebrity-component .celebrity-list-prev,
 .celebrity-list-next {
   flex: 0 0 27px;
   height: 44px;
@@ -109,7 +109,7 @@ export default {
 .celebrity-list-next {
   margin-left: 10px;
 }
-#celebrity-component .swiper {
+#movie-celebrity-component .swiper {
   flex: 1;
   height: 130px;
   display: flex;
@@ -119,7 +119,7 @@ export default {
   border-radius: 5% / 100%;
 }
 /* slide */
-#celebrity-component .swiper .swiper-slide {
+#movie-celebrity-component .swiper .swiper-slide {
   width: 100px;
   height: 130px;
   background-color: rgba(255, 255, 255, 0);

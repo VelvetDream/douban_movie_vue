@@ -357,22 +357,24 @@ export default {
           case 'song':
             params['keywords'] = keyword
             params['type'] = 1
-            this.$api.search.neteaseMusicTips(params).then(res => {
-              callback(res.songs)
+            this.$api.music.neteaseMusicTips(params).then(res => {
+              callback(res.result.songCount !== 0 ? res.result.songs : [])
             })
             break
           case 'playlist':
             params['keywords'] = keyword
             params['type'] = 1000
-            this.$api.search.neteaseMusicTips(params).then(res => {
-              callback(res.playlists)
+            this.$api.music.neteaseMusicTips(params).then(res => {
+              callback(
+                res.result.playlistCount !== 0 ? res.result.playlists : []
+              )
             })
             break
           case 'album':
             params['keywords'] = keyword
             params['type'] = 10
-            this.$api.search.neteaseMusicTips(params).then(res => {
-              callback(res.albums)
+            this.$api.music.neteaseMusicTips(params).then(res => {
+              callback(res.result.albumCount !== 0 ? res.result.albums : [])
             })
             break
           default:

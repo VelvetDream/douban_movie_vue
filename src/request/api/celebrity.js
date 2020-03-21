@@ -14,15 +14,6 @@ const celebrity = {
   celebrityDetails (params) {
     return myAxios.get(domain.plus + '/celebrity/details', { params: params })
   },
-  // /**
-  //  * 基础场景相关
-  //  *
-  //  * @param {*} params id: 豆瓣影人ID
-  //  * @returns
-  //  */
-  // sceneBases (params) {
-  //   // return myAxios.get(domain.plus + '/scene/fotoplace/bases', { params: params })
-  // },
   /**
    *  豆瓣电影API v2
    *

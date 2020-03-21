@@ -17,17 +17,6 @@ const movie = {
     })
   },
   /**
-   * 基础场景相关
-   *
-   * @param {*} params id: 豆瓣电影ID
-   * @returns
-   */
-  sceneBases(params) {
-    return myAxios.get(domain.plus + '/scene/fotoplace/bases', {
-      params: params
-    })
-  },
-  /**
    * 知乎相关
    *
    * @param {*} params id: 豆瓣电影ID

@@ -106,7 +106,7 @@ export default {
       this.serverError = null
       this.$refs.registerForm.validate(valid => {
         if (valid) {
-          this.$api.people
+          this.$api.user
             .register({
               email: this.registerForm.email,
               password: this.registerForm.password

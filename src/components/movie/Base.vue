@@ -3,7 +3,7 @@
     @click="changeBaseView"
     @mouseenter="isChangeBaseView=true"
     @mouseleave="isChangeBaseView=false"
-    id="base-component"
+    id="movie-base-component"
     v-if="bases"
   >
     <div :class="doubanClass" id="douban" v-show="isDoubanView">
@@ -198,7 +198,7 @@
 </template>
 <script>
 export default {
-  name: 'base-component',
+  name: 'movie-base-component',
   props: ['bases'],
   data() {
     return {
@@ -308,19 +308,19 @@ export default {
 }
 </script>
 <style>
-#base-component {
+#movie-base-component {
   width: 100%;
   height: 300px;
 }
-/* base-component切换 */
-#base-component #douban,
+/* movie-base-component切换 */
+#movie-base-component #douban,
 #imdb {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-/* base-component */
+/* movie-base-component*/
 .title {
   flex: 0 0 50px;
   display: flex;

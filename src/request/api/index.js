@@ -1,13 +1,17 @@
 /** api统一接口 */
 
-import subject from './subject'
+import movie from './movie'
 import celebrity from './celebrity'
-import people from './people'
+import user from './user'
 import search from './search'
+import music from './music'
+import scene from './scene'
 
 export default {
-  subject,
+  movie,
   celebrity,
-  people,
-  search
+  user,
+  search,
+  music,
+  scene
 }

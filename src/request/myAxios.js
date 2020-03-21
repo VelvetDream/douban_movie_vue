@@ -43,11 +43,8 @@ instance.interceptors.response.use(
       // 返回正确
       if (res.data.code === 200) {
         if (res.data.data) {
-          // 自定义结果集
+          // 后端API自定义结果集
           return Promise.resolve(res.data.data)
-        } else if (res.data.result) {
-          // 网易云音乐结果集
-          return Promise.resolve(res.data.result)
         } else {
           // 其他
           return Promise.resolve(res.data)

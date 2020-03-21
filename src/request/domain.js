@@ -2,6 +2,8 @@
 const domain = {
   // plus后端网关
   plus: process.env.NODE_ENV === 'pro' ? 'http://localhost:8081/v2' : 'http://localhost:8080/v2',
+  // neteaseMusicApi
+  neteaseMusicApi: 'http://localhost:10102',
   // 豆瓣电影v2
   doubanV2: 'https://api.douban.com/v2',
   // 豆瓣电影官网
