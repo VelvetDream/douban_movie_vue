@@ -20,7 +20,7 @@
 	import movieBaseComponent from '../components/movie/Base'
 	import movieRateComponent from '../components/movie/Rate'
 	import movieCelebrityComponent from '../components/movie/Celebrity'
-	import movieMusicComponent from '../components/movie/music'
+	import movieMusicComponent from '../components/movie/Music'
 	import domain from '../request/domain'
 
 	export default {
@@ -251,9 +251,6 @@
 		flex: 0 0 auto;
 		display: flex;
 		flex-direction: row;
-		padding-top: 10px;
-		padding-bottom: 10px;
-		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 	}
 
 	/* detail */
