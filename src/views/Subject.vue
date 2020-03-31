@@ -1,18 +1,27 @@
 <template>
-	<div id="subject-view" v-show="movieDetails">
-		<div class="detail">
-			<div class="left">
-				<movieBaseComponent :bases="bases"/>
+	<div :element-loading-text="randomMovieLine"
+			 element-loading-background="rgba(0, 0, 0, 0)"
+			 id="subject-view"
+			 v-loading.fullscreen.lock="isLoading">
+		<div :style="isDetailsOk?'border-bottom: 2px solid rgba(255, 255, 255, 0.2);':''" class="detail">
+			<div class="left" v-show="isDetailsOk">
+				<movie-base-component :bases="bases"/>
 			</div>
-			<div class="right">
-				<movieRateComponent :rateList="rateList" v-show="rateList.length!==0"/>
+			<div class="right" v-show="isDetailsOk">
+				<movie-rate-component :rate-list="rateList" v-show="rateList.length!==0"/>
 			</div>
 		</div>
-		<div class="celebrity-list">
-			<movieCelebrityComponent :celebrityList="celebrityList"/>
+		<div :style="isDetailsOk?'border-bottom: 2px solid rgba(255, 255, 255, 0.2);':''" class="celebrity-list">
+			<movie-celebrity-component :celebrity-list="celebrityList" v-show="isDetailsOk"/>
+		</div>
+		<div class="zhihu-base" v-if="zhihuBases && zhihuBases.questionList && zhihuBases.questionList.length!==0">
+			<movie-zhihu-component :zhihu-bases="zhihuBases"/>
+		</div>
+		<div class="resource-list" v-if="movieId">
+			<movie-resource-component :movie-id="parseInt(movieId)"/>
 		</div>
 		<div class="netease-music" v-if="movieDetails">
-			<movieMusicComponent :keyword="movieDetails.douban.base.nameZh"/>
+			<movie-music-component :keyword="movieDetails.douban.base.nameZh"/>
 		</div>
 	</div>
 </template>
@@ -21,7 +30,10 @@
 	import movieRateComponent from '../components/movie/Rate'
 	import movieCelebrityComponent from '../components/movie/Celebrity'
 	import movieMusicComponent from '../components/movie/Music'
+	import movieResourceComponent from '../components/movie/Resource'
+	import movieZhihuComponent from '../components/movie/Zhihu'
 	import domain from '../request/domain'
+	import {mapActions, mapState} from 'vuex'
 
 	export default {
 		name: 'subject-view',
@@ -29,10 +41,14 @@
 			movieBaseComponent,
 			movieRateComponent,
 			movieCelebrityComponent,
-			movieMusicComponent
+			movieResourceComponent,
+			movieMusicComponent,
+			movieZhihuComponent
 		},
 		data() {
 			return {
+				isDetailsOk: false,
+				isZhihuOk: false,
 				// 电影ID
 				movieId: null,
 				// 电影详情
@@ -41,8 +57,6 @@
 				sceneBases: null,
 				// 知乎基础
 				zhihuBases: null,
-				// 资源基础
-				resourceBases: null,
 				// 豆瓣电影API详情
 				doubanApiDetails: null,
 				// ---------
@@ -53,6 +67,22 @@
 			}
 		},
 		created() {
+		},
+		computed: {
+			isLoading() {
+				if (this.isDetailsOk && this.isZhihuOk) {
+					// 模糊背景
+					this.update({key: 'isBgClear', value: false})
+					return false
+				}
+				return true
+			},
+			...mapState({
+				// 随机电影台词
+				randomMovieLine: state => {
+					return state.movieLines[Math.floor(Math.random() * state.movieLines.length)]
+				}
+			})
 		},
 		methods: {
 			// 数据初始化
@@ -65,17 +95,21 @@
 						this.parseDoubanCelebrityList(this.movieDetails)
 						this.parseRate(this.movieDetails.douban.rate, 'douban')
 						this.parseRate(this.movieDetails.imdb.rate, 'imdbs')
-					})
-					// this.$api.movie.sceneBases({ id: this.movieId }).then(res => {
-					this.$api.scene.sceneBases({id: 26728669}).then(res => {
-						this.sceneBases = res
+						// this.isDetailsOk = true
+						setTimeout(() => {
+							this.isDetailsOk = true
+						}, 5000)
 					})
 					this.$api.movie.zhihuBases({id: this.movieId}).then(res => {
 						this.zhihuBases = res
 						this.parseRate(this.zhihuBases.topic, 'zhihus')
+						this.isZhihuOk = true
+					}).catch(error => {
+						this.isZhihuOk = true
 					})
-					this.$api.movie.resourceBases({id: this.movieId}).then(res => {
-						this.resourceBases = res
+					// this.$api.movie.sceneBases({ id: this.movieId }).then(res => {
+					this.$api.scene.sceneBases({id: 26728669}).then(res => {
+						this.sceneBases = res
 					})
 					// this.$api.movie.doubanApiDetails(this.movieId).then(res => {
 					//   this.doubanApiDetails = res
@@ -212,9 +246,9 @@
 							break
 					}
 				}
-			}
+			},
+			...mapActions(['update'])
 		},
-		computed: {},
 		filters: {},
 		mounted() {
 			this.init()
@@ -235,11 +269,27 @@
 		display: flex;
 		flex-direction: row;
 		padding-bottom: 10px;
-		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 	}
 
 	#subject-view .celebrity-list {
 		flex: 0 0 150px;
+		display: flex;
+		flex-direction: row;
+		padding-top: 10px;
+		padding-bottom: 12px;
+	}
+
+	#subject-view .resource-list {
+		flex: 0 0 auto;
+		display: flex;
+		flex-direction: row;
+		padding-top: 10px;
+		padding-bottom: 5px;
+		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+	}
+
+	#subject-view .zhihu-base {
+		flex: 0 0 auto;
 		display: flex;
 		flex-direction: row;
 		padding-top: 10px;

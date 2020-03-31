@@ -2,8 +2,10 @@
 	<div id="movie-music-component">
 		<div class="music-item" v-if="players.songList.length!==0 ">
 			<div :class="'comment '+commentSongClass">
-				<swiper :options="commentSwiperOption" class="swiper"
-								v-if="comments.hasOwnProperty(currentSongId)">
+				<swiper :options="commentSwiperOption" @mouseenter="stopSongSwiper()" @mouseleave="startSongSwiper()"
+								class="swiper"
+								ref="songSwiper" v-if="comments.hasOwnProperty(currentSongId)"
+				>
 					<swiper-slide :key="index" v-for="(item, index) in comments[currentSongId]">
 						<span class="content">{{item.content}}</span>
 						<span class="author">{{'———'+item.user.nickname}}</span>
@@ -16,7 +18,8 @@
 		</div>
 		<div class="music-item" v-if="players.playlistSongList.length!==0 ">
 			<div :class="'comment '+commentPlaylistClass">
-				<swiper :options="commentSwiperOption" class="swiper"
+				<swiper :options="commentSwiperOption" @mouseenter="stopPlaylistSwiper()" @mouseleave="startPlaylistSwiper()"
+								class="swiper" ref="playlistSwiper"
 								v-if="comments.hasOwnProperty(currentPlaylistSongId)">
 					<swiper-slide :key="index" v-for="(item, index) in comments[currentPlaylistSongId]">
 						<span class="content">{{item.content}}</span>
@@ -31,7 +34,8 @@
 		</div>
 		<div class="music-item" v-if="players.albumSongList.length!==0 ">
 			<div :class="'comment '+commentAlbumClass">
-				<swiper :options="commentSwiperOption" class="swiper"
+				<swiper :options="commentSwiperOption" @mouseenter="stopAlbumSwiper()" @mouseleave="startAlbumSwiper()"
+								class="swiper" ref="albumSwiper"
 								v-if="comments.hasOwnProperty(currentAlbumSongId)">
 					<swiper-slide :key="index" v-for="(item, index) in comments[currentAlbumSongId]">
 						<span class="content">{{item.content}}</span>
@@ -55,8 +59,9 @@
 
 	aPlayer.disableVersionBadge = true
 
+
 	export default {
-		name: 'movie-music-component',
+		name: 'movieMusicComponent',
 		components: {aPlayer, swiper, swiperSlide},
 		props: {
 			keyword: String
@@ -85,10 +90,17 @@
 				// 评论列表 id:{}
 				comments: {},
 				// comment 样式
-				commentSongClass: 'animated zoomIn',
-				commentPlaylistClass: 'animated zoomIn',
-				commentAlbumClass: 'animated zoomIn',
-
+				commentSongClass: '',
+				commentPlaylistClass: '',
+				commentAlbumClass: '',
+				// 是否正在获取评论
+				isGettingSongComent: false,
+				isGettingAlbumSongComent: false,
+				isGettingPlaylistSongComent: false,
+				// swiper
+				// songSwiper: null,
+				// albumSwiper: null,
+				// playlistSwiper: null,
 				// comment swiper
 				commentSwiperOption: {
 					// 起始图片
@@ -123,9 +135,9 @@
 					loop: true,
 					// 自动切换
 					autoplay: {
-						delay: 5000,
+						delay: 7000,
 						// 用户操作swiper之后，是否禁止autoplay。默认为true：停止
-						disableOnInteraction: true
+						disableOnInteraction: false
 					},
 					// 切换效果
 					effect: 'coverflow',
@@ -134,7 +146,18 @@
 				}
 			}
 		},
-		computed: {},
+		computed: {
+			// swiper
+			songSwiper() {
+				return this.$refs.songSwiper.swiper
+			},
+			albumSwiper() {
+				return this.$refs.albumSwiper.swiper
+			},
+			playlistSwiper() {
+				return this.$refs.playlistSwiper.swiper
+			},
+		},
 		watch: {},
 		mounted() {
 			this.initNeteaseMusic(this.keyword)
@@ -166,8 +189,6 @@
 								song.artists.length !== 0 ? song.artists[0].img1v1Url : null
 							))
 						})
-						// 初始化第一首歌曲评论
-						this.initSongCommentList(parseInt(res.result.songs[0].id), 'song', true)
 						//  定时刷新当前歌曲评论
 						this.commentFlush('song')
 					}
@@ -196,8 +217,6 @@
 											detailRes.album.picUrl
 										))
 									}
-									// 初始化第一首歌曲评论
-									this.initSongCommentList(parseInt(songList[0].id), 'album', true)
 									//  定时刷新当前歌曲评论
 									this.commentFlush('album')
 								}
@@ -229,8 +248,6 @@
 											detailRes.playlist.coverImgUrl
 										))
 									}
-									// 初始化第一首歌曲评论
-									this.initSongCommentList(parseInt(songList[0].id), 'playlist', true)
 									//  定时刷新当前歌曲评论
 									this.commentFlush('playlist')
 								}
@@ -242,100 +259,110 @@
 			// 定时刷新当前歌曲评论
 			commentFlush(ref) {
 				setInterval(() => {
-					const currentMusic = this.$refs[ref].currentMusic
-					if (currentMusic && currentMusic.src) {
-						const currentMusicId = this.parseIdFromUrl(currentMusic.src)
-						switch (ref) {
-							case 'song':
-								if (currentMusicId !== this.currentSongId) {
-									this.initSongCommentList(currentMusicId, ref, false)
-								}
-								break
-							case 'album':
-								if (currentMusicId !== this.currentAlbumSongId) {
-									this.initSongCommentList(currentMusicId, ref, false)
-								}
-								break
-							case 'playlist':
-								if (currentMusicId !== this.currentPlaylistSongId) {
-									this.initSongCommentList(currentMusicId, ref, false)
-								}
-								break
-							default:
-								break
+					if (this.$refs[ref]) {
+						const currentMusic = this.$refs[ref].currentMusic
+						if (currentMusic && currentMusic.src) {
+							const currentMusicId = this.parseIdFromUrl(currentMusic.src)
+							switch (ref) {
+								case 'song':
+									if (currentMusicId !== this.currentSongId) {
+										this.initSongCommentList(currentMusicId, ref)
+									}
+									break
+								case 'album':
+									if (currentMusicId !== this.currentAlbumSongId) {
+										this.initSongCommentList(currentMusicId, ref)
+									}
+									break
+								case 'playlist':
+									if (currentMusicId !== this.currentPlaylistSongId) {
+										this.initSongCommentList(currentMusicId, ref)
+									}
+									break
+								default:
+									break
+							}
 						}
 					}
 				}, this.commentFlushInterval)
 			},
 			// 初始化歌曲评论
-			async initSongCommentList(id, fromType, isFirst) {
-				// 未获取此歌曲的评论
-				if (!this.comments.hasOwnProperty(id)) {
-					// 获取歌曲热评
-					this.$api.music.neteaseMusicHotComment({
-						id: id,
-						type: 0,
-						offset: 0,
-						limit: this.nmCommentLimit
-					}).then(hotCommentRes => {
-						if (hotCommentRes.code === 200 && hotCommentRes.total !== 0 && hotCommentRes.hotComments.length !== 9) {
-							this.$set(this.comments, id, hotCommentRes.hotComments)
-							this.updateCommentDisplay(id, fromType, isFirst)
-						} else {
-							// 获取歌曲普通评论
-							this.$api.music.neteaseMusicSongComment({
-								id: id,
-								offset: 0,
-								limit: this.nmCommentLimit
-							}).then(commentRes => {
-								if (commentRes.code === 200 && commentRes.total !== 0 && commentRes.comments.length !== 0) {
-									this.$set(this.comments, id, commentRes.comments)
-									this.updateCommentDisplay(id, fromType, isFirst)
-								}
-							})
-						}
-					})
-				} else {
-					// 已获取此歌曲评论,直接更新
-					this.updateCommentDisplay(id, fromType, isFirst)
+			initSongCommentList(id, fromType) {
+				if (!this.isGettingComment(fromType)) {
+					this.preGetComment(fromType)
+					// 未获取此歌曲的评论
+					if (!this.comments.hasOwnProperty(id)) {
+						// 获取歌曲热评
+						this.$api.music.neteaseMusicHotComment({
+							id: id,
+							type: 0,
+							offset: 0,
+							limit: this.nmCommentLimit
+						}).then(hotCommentRes => {
+							if (hotCommentRes.code === 200 && hotCommentRes.total !== 0 && hotCommentRes.hotComments.length !== 9) {
+								this.$set(this.comments, id, hotCommentRes.hotComments)
+								this.updateCommentDisplay(id, fromType)
+								this.finishGetComment(fromType)
+							} else {
+								// 获取歌曲普通评论
+								this.$api.music.neteaseMusicSongComment({
+									id: id,
+									offset: 0,
+									limit: this.nmCommentLimit
+								}).then(commentRes => {
+									if (commentRes.code === 200 && commentRes.total !== 0 && commentRes.comments.length !== 0) {
+										this.$set(this.comments, id, commentRes.comments)
+										this.updateCommentDisplay(id, fromType)
+										this.finishGetComment(fromType)
+									}
+								}).catch(error => {
+									this.finishGetComment(fromType)
+								})
+							}
+						})
+					} else {
+						// 已获取此歌曲评论,直接更新
+						this.updateCommentDisplay(id, fromType)
+						this.finishGetComment(fromType)
+					}
 				}
 			},
 			// 更新展示评论列表ID
-			updateCommentDisplay(id, type, isFirst) {
+			updateCommentDisplay(id, type) {
 				switch (type) {
 					case 'song':
-						if (isFirst) {
-							this.currentSongId = id
+						if (this.currentSongId === 0) {
 							this.commentSongClass = "animated zoonIn"
+							this.currentSongId = id
 						} else {
 							this.commentSongClass = "animated zoomOut"
 							setTimeout(() => {
-								this.currentSongId = id
 								this.commentSongClass = "animated zoonIn"
+								this.currentSongId = id
 							}, 500)
 						}
 						break
 					case 'album':
-						if (isFirst) {
-							this.currentAlbumSongId = id
+						if (this.currentAlbumSongId === 0) {
 							this.commentAlbumClass = "animated zoonIn"
+							this.currentAlbumSongId = id
 						} else {
 							this.commentAlbumClass = "animated zoomOut"
 							setTimeout(() => {
-								this.currentAlbumSongId = id
 								this.commentAlbumClass = "animated zoonIn"
+								this.currentAlbumSongId = id
 							}, 500)
 						}
 						break
 					case 'playlist':
-						if (isFirst) {
-							this.currentPlaylistSongId = id
+						if (this.currentPlaylistSongId === 0) {
 							this.commentPlaylistClass = "animated zoonIn"
+							this.currentPlaylistSongId = id
 						} else {
 							this.commentPlaylistClass = "animated zoomOut"
 							setTimeout(() => {
-								this.currentPlaylistSongId = id
 								this.commentPlaylistClass = "animated zoonIn"
+								this.currentPlaylistSongId = id
 							}, 500)
 						}
 						break
@@ -360,6 +387,71 @@
 					return parseInt(res[1])
 				}
 				return 0
+			},
+			// 是否正在获取评论
+			isGettingComment(type) {
+				switch (type) {
+					case 'song':
+						return this.isGettingSongComent
+					case 'album':
+						return this.isGettingAlbumSongComent
+					case 'playlist':
+						return this.isGettingPlaylistSongComent
+					default:
+						return false
+				}
+			},
+			// 准备获取评论
+			preGetComment(type) {
+				switch (type) {
+					case 'song':
+						this.isGettingSongComent = true
+						break
+					case 'album':
+						this.isGettingAlbumSongComent = true
+						break
+					case 'playlist':
+						this.isGettingPlaylistSongComent = true
+						break
+					default:
+						break
+				}
+			},
+			// 结束获取评论
+			finishGetComment(type) {
+				switch (type) {
+					case 'song':
+						this.isGettingSongComent = false
+						break
+					case 'album':
+						this.isGettingAlbumSongComent = false
+						break
+					case 'playlist':
+						this.isGettingPlaylistSongComent = false
+						break
+					default:
+						break
+				}
+			},
+			// 停止自动轮换
+			stopSongSwiper() {
+				this.songSwiper.autoplay.stop()
+			},
+			stopAlbumSwiper() {
+				this.albumSwiper.autoplay.stop()
+			},
+			stopPlaylistSwiper() {
+				this.playlistSwiper.autoplay.stop()
+			},
+			// 开始自动轮换
+			startSongSwiper() {
+				this.songSwiper.autoplay.start()
+			},
+			startAlbumSwiper() {
+				this.albumSwiper.autoplay.start()
+			},
+			startPlaylistSwiper() {
+				this.playlistSwiper.autoplay.start()
 			},
 		},
 	}
@@ -424,11 +516,15 @@
 
 	.music-item .comment .swiper .swiper-slide .content {
 		padding-top: 20px;
+		font-weight: 500;
+		font-size: 16px;
 	}
 
 	.music-item .comment .swiper .swiper-slide .author {
 		align-self: flex-end;
 		padding-right: 15px;
+		font-size: 14px;
+		font-weight: 500;
 	}
 
 	/*	其他 */

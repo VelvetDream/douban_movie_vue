@@ -43,7 +43,34 @@
 				// 是否正在滚动等待
 				isScrolling: false,
 				// 是否正在底部
-				isButton: false
+				isBottom: false
+			}
+		},
+		computed: {
+			...mapState({
+				// 当前页面背景列表
+				nowBgList: state => {
+					// 优先采用特定页面背景列表
+					if (state.specialBgList.length !== 0) {
+						return state.specialBgList
+					} else {
+						return state.defaultBgList
+					}
+				},
+				// 背景图是否需要模糊
+				isBgClear: 'isBgClear'
+			})
+		},
+		watch: {
+			isBgClear() {
+				// 需要临时变清晰
+				if (this.isBgClear) {
+					this.turnClear()
+				}
+				// 需要变模糊
+				else {
+					this.turnBlur()
+				}
 			}
 		},
 		methods: {
@@ -104,34 +131,15 @@
 						// 接近底部
 						if (scrollTop + windowHeight > scrollHeight - 200) {
 							// 之前不在底部
-							if (!that.isButton) {
-								that.isButton = true
-								// 切换透明
-								that.BlurBg = 'animated fadeOut'
-								// 切换背景遮罩透明
-								that.opacityColorBg =
-									'bg-img-color-opacity-buttom animated fadeIn'
-								setTimeout(() => {
-									that.BlurBg = ''
-								}, 100)
-								setTimeout(() => {
-									that.opacityColorBg = 'bg-img-color-opacity-buttom'
-								}, 50)
+							if (!that.isBottom) {
+								that.isBottom = true
+								that.turnClear()
 							}
 						} else {
 							// 之前在底部
-							if (that.isButton) {
-								that.isButton = false
-								// 切换毛玻璃
-								that.BlurBg = 'blur animated fadeOut'
-								// 切换背景遮罩不透明
-								that.opacityColorBg = 'bg-img-color-opacity animated fadeIn'
-								setTimeout(() => {
-									that.BlurBg = 'blur'
-								}, 200)
-								setTimeout(() => {
-									that.opacityColorBg = 'bg-img-color-opacity'
-								}, 50)
+							if (that.isBottom) {
+								that.isBottom = false
+								that.turnBlur()
 							}
 						}
 					}
@@ -139,6 +147,33 @@
 						that.isScrolling = false
 					}, 2000)
 				}
+			},
+			// 背景清晰
+			turnClear() {
+				// 切换透明
+				this.BlurBg = 'animated fadeOut'
+				// 切换背景遮罩透明
+				this.opacityColorBg =
+					'bg-img-color-opacity-buttom animated fadeIn'
+				setTimeout(() => {
+					this.BlurBg = ''
+				}, 100)
+				setTimeout(() => {
+					this.opacityColorBg = 'bg-img-color-opacity-buttom'
+				}, 50)
+			},
+			// 背景模糊
+			turnBlur() {
+				// 切换毛玻璃
+				this.BlurBg = 'blur animated fadeOut'
+				// 切换背景遮罩不透明
+				this.opacityColorBg = 'bg-img-color-opacity animated fadeIn'
+				setTimeout(() => {
+					this.BlurBg = 'blur'
+				}, 200)
+				setTimeout(() => {
+					this.opacityColorBg = 'bg-img-color-opacity'
+				}, 50)
 			},
 			...mapActions(['update'])
 		},
@@ -162,20 +197,9 @@
 			]
 			this.update({key: 'defaultBgList', value: defaultBgList})
 			this.turnBgTimer = setInterval(this.turnBg, 1000 * this.turnBgSecond)
+			// 默认清晰,加载后需手动模糊
+			this.turnClear()
 		},
-		computed: {
-			...mapState({
-				// 当前页面背景列表
-				nowBgList: state => {
-					// 优先采用特定页面背景列表
-					if (state.specialBgList.length !== 0) {
-						return state.specialBgList
-					} else {
-						return state.defaultBgList
-					}
-				}
-			})
-		}
 	}
 </script>
 <style>
