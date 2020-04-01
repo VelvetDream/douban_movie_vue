@@ -127,6 +127,7 @@
 							this.classify.piracyList.push(resource)
 						}
 					})
+					this.$emit('updateIsResourceOk', true)
 				}
 			},
 		}

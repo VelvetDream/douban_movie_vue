@@ -1,25 +1,39 @@
 <template>
 	<div id="movie-music-component">
-		<div class="music-item" v-if="players.songList.length!==0 ">
-			<div :class="'comment '+commentSongClass">
-				<swiper :options="commentSwiperOption" @mouseenter="stopSongSwiper()" @mouseleave="startSongSwiper()"
-								class="swiper"
-								ref="songSwiper" v-if="comments.hasOwnProperty(currentSongId)"
-				>
-					<swiper-slide :key="index" v-for="(item, index) in comments[currentSongId]">
+		<div class="music-item border" v-if="players.songList.length!==0 ">
+			<div :element-loading-text="randomMovieLineShort()"
+					 class="comment"
+					 element-loading-background="rgba(0, 0, 0, 0)"
+					 v-loading="isGettingSongComent">
+				<swiper
+					:options="commentSwiperOption"
+					@mouseenter="stopSongSwiper()"
+					@mouseleave="startSongSwiper()"
+					class="swiper"
+					element-loading-background="rgba(0, 0, 0, 0)"
+					v-if="comments.hasOwnProperty(currentSongId)">
+					<swiper-slide :key="index" v-for="(item, index) in comments[currentSongId]" v-show="!isGettingSongComent">
 						<span class="content">{{item.content}}</span>
 						<span class="author">{{'———'+item.user.nickname}}</span>
 					</swiper-slide>
 				</swiper>
 			</div>
 			<div class="player">
-				<aPlayer :list="players.songList" :music="players.songList[0]" preload="none" ref="song"/>
+				<aPlayer :list="players.songList"
+								 :music="players.songList[0]"
+								 preload="none"
+								 ref="song"/>
 			</div>
 		</div>
-		<div class="music-item" v-if="players.playlistSongList.length!==0 ">
-			<div :class="'comment '+commentPlaylistClass">
-				<swiper :options="commentSwiperOption" @mouseenter="stopPlaylistSwiper()" @mouseleave="startPlaylistSwiper()"
-								class="swiper" ref="playlistSwiper"
+		<div class="music-item border" v-if="players.playlistSongList.length!==0 ">
+			<div :element-loading-text="randomMovieLineShort()"
+					 class="comment"
+					 element-loading-background="rgba(0, 0, 0, 0)"
+					 v-loading="isGettingPlaylistSongComent">
+				<swiper :options="commentSwiperOption"
+								@mouseenter="stopPlaylistSwiper()"
+								@mouseleave="startPlaylistSwiper()"
+								class="swiper"
 								v-if="comments.hasOwnProperty(currentPlaylistSongId)">
 					<swiper-slide :key="index" v-for="(item, index) in comments[currentPlaylistSongId]">
 						<span class="content">{{item.content}}</span>
@@ -28,14 +42,22 @@
 				</swiper>
 			</div>
 			<div class="player">
-				<aPlayer :list="players.playlistSongList" :music="players.playlistSongList[0]" preload="none" ref="playlist"
+				<aPlayer :list="players.playlistSongList"
+								 :music="players.playlistSongList[0]"
+								 preload="none"
+								 ref="playlist"
 								 repeat="repeat-all"/>
 			</div>
 		</div>
 		<div class="music-item" v-if="players.albumSongList.length!==0 ">
-			<div :class="'comment '+commentAlbumClass">
-				<swiper :options="commentSwiperOption" @mouseenter="stopAlbumSwiper()" @mouseleave="startAlbumSwiper()"
-								class="swiper" ref="albumSwiper"
+			<div :element-loading-text="randomMovieLineShort()"
+					 class="comment"
+					 element-loading-background="rgba(0, 0, 0, 0)"
+					 v-loading="isGettingAlbumSongComent">
+				<swiper :options="commentSwiperOption"
+								@mouseenter="stopAlbumSwiper()"
+								@mouseleave="startAlbumSwiper()"
+								class="swiper"
 								v-if="comments.hasOwnProperty(currentAlbumSongId)">
 					<swiper-slide :key="index" v-for="(item, index) in comments[currentAlbumSongId]">
 						<span class="content">{{item.content}}</span>
@@ -44,7 +66,10 @@
 				</swiper>
 			</div>
 			<div class="player">
-				<aPlayer :list="players.albumSongList" :music="players.albumSongList[0]" preload="none" ref="album"
+				<aPlayer :list="players.albumSongList"
+								 :music="players.albumSongList[0]"
+								 preload="none"
+								 ref="album"
 								 repeat="repeat-all"/>
 			</div>
 		</div>
@@ -54,20 +79,30 @@
 	import aPlayer from 'vue-aplayer'
 	import 'swiper/dist/css/swiper.css'
 	import {swiper, swiperSlide} from 'vue-awesome-swiper'
-
 	import domain from "../../request/domain";
+	import {mapState} from "vuex";
 
 	aPlayer.disableVersionBadge = true
-
-
 	export default {
 		name: 'movieMusicComponent',
-		components: {aPlayer, swiper, swiperSlide},
+		components: {
+			aPlayer,
+			swiper,
+			swiperSlide
+		},
 		props: {
 			keyword: String
 		},
 		data() {
 			return {
+				// 是否正在获取评论
+				isGettingSongComent: false,
+				isGettingAlbumSongComent: false,
+				isGettingPlaylistSongComent: false,
+				// player获取情况
+				isSongPlayerOk: false,
+				isAlbumPlayerOk: false,
+				isPlaylistPlayerOk: false,
 				// 网易云音乐 限制数
 				nmSongsLimit: 5,
 				nmPlaylistLimit: 1,
@@ -89,19 +124,7 @@
 				},
 				// 评论列表 id:{}
 				comments: {},
-				// comment 样式
-				commentSongClass: '',
-				commentPlaylistClass: '',
-				commentAlbumClass: '',
-				// 是否正在获取评论
-				isGettingSongComent: false,
-				isGettingAlbumSongComent: false,
-				isGettingPlaylistSongComent: false,
 				// swiper
-				// songSwiper: null,
-				// albumSwiper: null,
-				// playlistSwiper: null,
-				// comment swiper
 				commentSwiperOption: {
 					// 起始图片
 					// initialSlide: 2,
@@ -137,7 +160,7 @@
 					autoplay: {
 						delay: 7000,
 						// 用户操作swiper之后，是否禁止autoplay。默认为true：停止
-						disableOnInteraction: false
+						disableOnInteraction: true
 					},
 					// 切换效果
 					effect: 'coverflow',
@@ -147,16 +170,9 @@
 			}
 		},
 		computed: {
-			// swiper
-			songSwiper() {
-				return this.$refs.songSwiper.swiper
-			},
-			albumSwiper() {
-				return this.$refs.albumSwiper.swiper
-			},
-			playlistSwiper() {
-				return this.$refs.playlistSwiper.swiper
-			},
+			...mapState([
+				'movieLinesShort'
+			])
 		},
 		watch: {},
 		mounted() {
@@ -189,9 +205,14 @@
 								song.artists.length !== 0 ? song.artists[0].img1v1Url : null
 							))
 						})
+						this.isSongPlayerOk = true
+						this.updateIsNmOkNow()
 						//  定时刷新当前歌曲评论
 						this.commentFlush('song')
 					}
+				}).catch(error => {
+					this.isSongPlayerOk = true
+					this.updateIsNmOkNow()
 				})
 			},
 			// 初始化专辑
@@ -217,9 +238,14 @@
 											detailRes.album.picUrl
 										))
 									}
+									this.isAlbumPlayerOk = true
+									this.updateIsNmOkNow()
 									//  定时刷新当前歌曲评论
 									this.commentFlush('album')
 								}
+							}).catch(error => {
+								this.isAlbumPlayerOk = true
+								this.updateIsNmOkNow()
 							})
 						})
 					}
@@ -248,9 +274,14 @@
 											detailRes.playlist.coverImgUrl
 										))
 									}
+									this.isPlaylistPlayerOk = true
+									this.updateIsNmOkNow()
 									//  定时刷新当前歌曲评论
 									this.commentFlush('playlist')
 								}
+							}).catch(error => {
+								this.isPlaylistPlayerOk = true
+								this.updateIsNmOkNow()
 							})
 						})
 					}
@@ -331,40 +362,13 @@
 			updateCommentDisplay(id, type) {
 				switch (type) {
 					case 'song':
-						if (this.currentSongId === 0) {
-							this.commentSongClass = "animated zoonIn"
-							this.currentSongId = id
-						} else {
-							this.commentSongClass = "animated zoomOut"
-							setTimeout(() => {
-								this.commentSongClass = "animated zoonIn"
-								this.currentSongId = id
-							}, 500)
-						}
+						this.currentSongId = id
 						break
 					case 'album':
-						if (this.currentAlbumSongId === 0) {
-							this.commentAlbumClass = "animated zoonIn"
-							this.currentAlbumSongId = id
-						} else {
-							this.commentAlbumClass = "animated zoomOut"
-							setTimeout(() => {
-								this.commentAlbumClass = "animated zoonIn"
-								this.currentAlbumSongId = id
-							}, 500)
-						}
+						this.currentAlbumSongId = id
 						break
 					case 'playlist':
-						if (this.currentPlaylistSongId === 0) {
-							this.commentPlaylistClass = "animated zoonIn"
-							this.currentPlaylistSongId = id
-						} else {
-							this.commentPlaylistClass = "animated zoomOut"
-							setTimeout(() => {
-								this.commentPlaylistClass = "animated zoonIn"
-								this.currentPlaylistSongId = id
-							}, 500)
-						}
+						this.currentPlaylistSongId = id
 						break
 					default:
 						break
@@ -405,12 +409,15 @@
 			preGetComment(type) {
 				switch (type) {
 					case 'song':
+						this.currentSongId = 0
 						this.isGettingSongComent = true
 						break
 					case 'album':
+						this.currentAlbumSongId = 0
 						this.isGettingAlbumSongComent = true
 						break
 					case 'playlist':
+						this.currentPlaylistSongId = 0
 						this.isGettingPlaylistSongComent = true
 						break
 					default:
@@ -433,26 +440,16 @@
 						break
 				}
 			},
-			// 停止自动轮换
-			stopSongSwiper() {
-				this.songSwiper.autoplay.stop()
+			// 更新isNmOk
+			updateIsNmOkNow() {
+				if (!this.isLoading) {
+					this.$emit('updateIsNmOk', true)
+				}
 			},
-			stopAlbumSwiper() {
-				this.albumSwiper.autoplay.stop()
-			},
-			stopPlaylistSwiper() {
-				this.playlistSwiper.autoplay.stop()
-			},
-			// 开始自动轮换
-			startSongSwiper() {
-				this.songSwiper.autoplay.start()
-			},
-			startAlbumSwiper() {
-				this.albumSwiper.autoplay.start()
-			},
-			startPlaylistSwiper() {
-				this.playlistSwiper.autoplay.start()
-			},
+			// 随机电影台词
+			randomMovieLineShort() {
+				return this.movieLinesShort[Math.floor(Math.random() * this.movieLinesShort.length)]
+			}
 		},
 	}
 </script>
@@ -471,17 +468,25 @@
 		flex-direction: row;
 		padding-top: 12px;
 		padding-bottom: 10px;
+	}
+
+	#movie-music-component .music-item.border {
 		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 	}
 
 	#movie-music-component .music-item .comment {
 		flex: 1;
+		min-height: 232px;
 		padding-right: 10px;
 		border-right: 2px solid rgba(255, 255, 255, 0.2);
+		align-self: flex-start;
 	}
+
 
 	#movie-music-component .music-item .player {
 		flex: 0 0 300px;
+		max-width: 300px;
+		align-self: flex-end;
 	}
 
 	/*comment*/
@@ -563,5 +568,15 @@
 
 	.player .aplayer-list ol li.aplayer-list-light, .aplayer-list ol li:hover {
 		background: rgba(255, 255, 255, 0.6);
+	}
+
+	.el-loading-spinner .path {
+		stroke: #054ebd;
+	}
+
+	.el-loading-spinner .el-loading-text {
+		color: #054ebd;
+		font-size: 18px;
+		font-weight: 500;
 	}
 </style>

@@ -3,22 +3,31 @@
 		@mouseenter="isChangeRateView=true"
 		@mouseleave="isChangeRateView=false"
 		id="movie-rate-component"
-		v-show="rateList.length!==0"
-	>
+		v-show="rateList.length!==0">
 		<el-button
 			@click="changeRateView"
 			class="change-rate"
 			type="text"
-			v-show="isChangeRateView"
+			v-show="isChangeRateView && isRadarNow"
 		>点击切换
 		</el-button>
 		<div :class="rateRadarClass" @click="changeRateView" id="rate-radar" v-show="isRadarNow"></div>
 		<div
 			:class="'rate-list '+rateListClass"
+			:style="awardList.length===0?'padding-top:45px;':''"
 			@click="changeRateView"
-			v-html="this.rateDetail()"
-			v-show="!isRadarNow"
-		></div>
+			v-show="!isRadarNow">
+			<div v-html="this.rateDetail()"/>
+			<div class="award-list"
+					 v-show="awardList.length!==0">
+				<tr :key="index" v-for="(item,index) in awardList.slice(0,4)">
+					<td class="th">{{item.awardTh}}</td>
+					<td>{{item.nameZh}}</td>
+					<td>{{item.typeAward.split(" ").length===2?item.typeAward.split(" ")[1]:item.typeAward}}</td>
+					<td>{{item.typeAward.split(" ").length===2?item.typeAward.split(" ")[0]:""}}</td>
+				</tr>
+			</div>
+		</div>
 	</div>
 </template>
 <script>
@@ -34,7 +43,8 @@
 	export default {
 		name: 'movieRateComponent',
 		props: {
-			rateList: Array
+			rateList: Array,
+			awardList: Array
 		},
 		data() {
 			return {
@@ -62,7 +72,7 @@
 						// 雷达形状
 						shape: 'polygon',
 						// 半径
-						radius: '64%',
+						radius: '50%',
 						// 位置
 						center: ['50%', '50%'],
 						// 雷达图圈数设置
@@ -73,8 +83,8 @@
 							show: true,
 							color: '#000',
 							fontStyle: 'normal',
-							fontWeight: 'bold',
-							fontSize: 16
+							fontWeight: 700,
+							fontSize: 15
 						},
 						// 坐标轴的维度标签是否响应和触发鼠标事件
 						triggerEvent: true,
@@ -151,12 +161,12 @@
 									label: {
 										show: false,
 										// 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效
-										distance: 5,
+										distance: 0,
 										// 标签颜色
 										color: 'red',
 										fontStyle: 'normal',
 										fontWeight: 'bold',
-										fontSize: 15
+										fontSize: 16
 									},
 									// 折线拐点标志的样式设置
 									itemStyle: {
@@ -296,7 +306,7 @@
 				let indicatorList = []
 				this.rateList.forEach(rate => {
 					indicatorList.push({
-						name: rate.type,
+						name: rate.type + ' ' + rate.score,
 						max: 10,
 						min: 0,
 						color: rate.color
@@ -331,6 +341,29 @@
 		z-index: 3;
 	}
 
+	#movie-rate-component .award-list {
+		border-top: 2px solid rgba(255, 255, 255, 0.2);
+		padding-top: 8px;
+		max-width: 290px;
+		overflow: hidden;
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	#movie-rate-component .award-list tr {
+		height: 22px;
+	}
+
+	#movie-rate-component .award-list td {
+		padding-bottom: 3px;
+		padding-right: 6px;
+	}
+
+	#movie-rate-component .award-list .th {
+		color: rgba(243, 25, 25, 0.8);
+		font-weight: 800;
+	}
+
 	#rate-radar {
 		width: 300px;
 		height: 300px;
@@ -339,7 +372,6 @@
 	.rate-list {
 		width: 300px;
 		height: 300px;
-		padding-top: 45px;
 	}
 
 	/* 星星种类 */

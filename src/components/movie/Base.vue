@@ -315,6 +315,7 @@
 		height: 300px;
 	}
 
+
 	/* movie-base-component切换 */
 	#movie-base-component #douban,
 	#imdb {
@@ -401,6 +402,7 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		align-items: flex-end;
+		color: #2b2727;
 	}
 
 	/* msg 左右可换行 */
@@ -408,7 +410,6 @@
 	el-tooltip {
 		font-size: 14px;
 		font-weight: 600;
-		color: #2b2727;
 	}
 
 	/* 其他样式----------- */
@@ -426,4 +427,17 @@
 		align-self: flex-start;
 		margin-left: auto;
 	}
+
+	.base-msgbox .el-link {
+		color: #2b2727;
+	}
+
+	.el-link.is-underline:hover:after {
+		border-bottom: 0 solid #409EFF;
+	}
+
+	.el-link.el-link--default:hover {
+		color: #f31919;
+	}
+
 </style>

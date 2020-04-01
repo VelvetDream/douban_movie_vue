@@ -1,28 +1,47 @@
 <template>
-	<div :element-loading-text="randomMovieLine"
+	<div :element-loading-text="randomMovieLineLong"
 			 element-loading-background="rgba(0, 0, 0, 0)"
 			 id="subject-view"
 			 v-loading.fullscreen.lock="isLoading">
-		<div :style="isDetailsOk?'border-bottom: 2px solid rgba(255, 255, 255, 0.2);':''" class="detail">
+		<div :style="skeleton(isDetailsOk,300)" class="detail">
 			<div class="left" v-show="isDetailsOk">
 				<movie-base-component :bases="bases"/>
 			</div>
 			<div class="right" v-show="isDetailsOk">
-				<movie-rate-component :rate-list="rateList" v-show="rateList.length!==0"/>
+				<movie-rate-component
+					:award-list="movieDetails && movieDetails.douban && movieDetails.douban.awardList.length!==0?movieDetails.douban.awardList:[]"
+					:rate-list="rateList"
+					v-show="rateList.length!==0"/>
 			</div>
 		</div>
-		<div :style="isDetailsOk?'border-bottom: 2px solid rgba(255, 255, 255, 0.2);':''" class="celebrity-list">
-			<movie-celebrity-component :celebrity-list="celebrityList" v-show="isDetailsOk"/>
+		<div :style="skeleton(isDetailsOk,150)"
+				 class="celebrity-list">
+			<movie-celebrity-component :celebrity-list="celebrityList" v-if="isDetailsOk"/>
 		</div>
-		<div class="zhihu-base" v-if="zhihuBases && zhihuBases.questionList && zhihuBases.questionList.length!==0">
-			<movie-zhihu-component :zhihu-bases="zhihuBases"/>
+		<div :style="skeleton(isDetailsOk,100)"
+				 class="zhihu-base">
+			<movie-zhihu-component :update-is-nm-ok="updateIsNmOk"
+														 :zhihu-bases="zhihuBases"
+														 v-if="zhihuBases && zhihuBases.questionList && zhihuBases.questionList.length!==0"/>
 		</div>
-		<div class="resource-list" v-if="movieId">
-			<movie-resource-component :movie-id="parseInt(movieId)"/>
-		</div>
-		<div class="netease-music" v-if="movieDetails">
-			<movie-music-component :keyword="movieDetails.douban.base.nameZh"/>
-		</div>
+		<vue-lazy-component>
+			<div :element-loading-text="randomMovieLineShort()"
+					 :style="skeleton(isResourceOk,300)"
+					 class="resource-list"
+					 element-loading-background="rgba(0, 0, 0, 0)"
+					 v-loading="!isResourceOk">
+				<movie-resource-component :movie-id="parseInt(movieId)"
+																	@updateIsResourceOk="updateIsResourceOk"
+																	v-if="movieId"/>
+			</div>
+		</vue-lazy-component>
+		<vue-lazy-component>
+			<div :style="skeleton(isNmOk,830)" class="netease-music">
+				<movie-music-component :keyword="movieDetails.douban.base.nameZh"
+															 @updateIsNmOk="updateIsNmOk"
+															 v-if="movieDetails"/>
+			</div>
+		</vue-lazy-component>
 	</div>
 </template>
 <script>
@@ -34,6 +53,7 @@
 	import movieZhihuComponent from '../components/movie/Zhihu'
 	import domain from '../request/domain'
 	import {mapActions, mapState} from 'vuex'
+	import {component as vueLazyComponent} from '@xunlei/vue-lazy-component'
 
 	export default {
 		name: 'subject-view',
@@ -43,12 +63,15 @@
 			movieCelebrityComponent,
 			movieResourceComponent,
 			movieMusicComponent,
-			movieZhihuComponent
+			movieZhihuComponent,
+			vueLazyComponent,
 		},
 		data() {
 			return {
 				isDetailsOk: false,
 				isZhihuOk: false,
+				isResourceOk: false,
+				isNmOk: false,
 				// 电影ID
 				movieId: null,
 				// 电影详情
@@ -78,11 +101,12 @@
 				return true
 			},
 			...mapState({
-				// 随机电影台词
-				randomMovieLine: state => {
-					return state.movieLines[Math.floor(Math.random() * state.movieLines.length)]
+					movieLinesShort: 'movieLinesShort',
+					randomMovieLineLong: state => {
+						return state.movieLinesLong[Math.floor(Math.random() * state.movieLinesLong.length)]
+					}
 				}
-			})
+			)
 		},
 		methods: {
 			// 数据初始化
@@ -247,6 +271,20 @@
 					}
 				}
 			},
+			// 子组件骨架
+			skeleton(isOk, minHeight) {
+				return isOk ? 'border-bottom: 2px solid rgba(255, 255, 255, 0.2);' : 'min-height:' + minHeight + 'px;'
+			},
+			updateIsResourceOk(isResourceOk) {
+				this.isResourceOk = isResourceOk
+			},
+			updateIsNmOk(isNmOk) {
+				this.isNmOk = isNmOk
+			},
+			// 随机电影台词
+			randomMovieLineShort() {
+				return this.movieLinesShort[Math.floor(Math.random() * this.movieLinesShort.length)]
+			},
 			...mapActions(['update'])
 		},
 		filters: {},
@@ -261,6 +299,7 @@
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+		min-height: 500px;
 	}
 
 	/* subject */
@@ -279,15 +318,6 @@
 		padding-bottom: 12px;
 	}
 
-	#subject-view .resource-list {
-		flex: 0 0 auto;
-		display: flex;
-		flex-direction: row;
-		padding-top: 10px;
-		padding-bottom: 5px;
-		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-	}
-
 	#subject-view .zhihu-base {
 		flex: 0 0 auto;
 		display: flex;
@@ -296,6 +326,15 @@
 		padding-bottom: 10px;
 		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 	}
+
+	#subject-view .resource-list {
+		flex: 0 0 auto;
+		display: flex;
+		flex-direction: row;
+		padding-top: 10px;
+		padding-bottom: 5px;
+	}
+
 
 	#subject-view .netease-music {
 		flex: 0 0 auto;
@@ -313,5 +352,27 @@
 	#subject-view .detail .right {
 		flex: 0 0 300px;
 		padding-left: 10px;
+	}
+
+	/*其他*/
+	.el-loading-mask.is-fullscreen .el-loading-spinner .circular {
+		height: 100px;
+		width: 100px;
+	}
+
+	.el-loading-spinner .path {
+		stroke-width: 3;
+		stroke: #054ebd;
+	}
+
+	.is-fullscreen .el-loading-spinner .el-loading-text {
+		color: #054ebd;
+		margin: 10px auto;
+		font-size: 18px;
+		font-weight: 500;
+		width: max-content;
+		background-color: rgba(255, 255, 255, 0.4);
+		border-radius: 8px;
+		padding: 5px 10px;
 	}
 </style>

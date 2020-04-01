@@ -27,7 +27,7 @@
 				// 当前背景图id
 				nowBgId: 0,
 				// 背景切换时间间隔 /s 第一次以后减去2s
-				turnBgSecond: 30,
+				turnBgSecond: 300,
 				// 是否正在切换背景
 				isChangingBg: false,
 				// 切换背景计时器
