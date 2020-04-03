@@ -261,7 +261,7 @@
 
 	/* 遮罩不透明 */
 	.bg-img-color-opacity {
-		opacity: 0.2;
+		opacity: 0.3;
 	}
 
 	/* 遮罩透明 */

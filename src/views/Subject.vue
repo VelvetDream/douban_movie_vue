@@ -16,12 +16,22 @@
 		</div>
 		<div :style="skeleton(isDetailsOk,150)"
 				 class="celebrity-list">
-			<movie-celebrity-component :celebrity-list="celebrityList" v-if="isDetailsOk"/>
+			<movie-celebrity-component
+				:celebrity-list="celebrityList"
+				v-if="isDetailsOk"/>
+		</div>
+		<div :style="skeleton(isDetailsOk,300)"
+				 class="douban-disscuss">
+			<movie-disscuss-component
+				:comment-list="movieDetails.douban.commentList"
+				:review-list="movieDetails.douban.reviewList"
+				v-if="movieDetails && movieDetails.douban && (movieDetails.douban.commentList.length!==0 || movieDetails.douban.reviewList.length!==0)"/>
 		</div>
 		<div :style="skeleton(isDetailsOk,100)"
 				 class="zhihu-base">
 			<movie-zhihu-component :update-is-nm-ok="updateIsNmOk"
 														 :zhihu-bases="zhihuBases"
+														 class="animated zoomIn"
 														 v-if="zhihuBases && zhihuBases.questionList && zhihuBases.questionList.length!==0"/>
 		</div>
 		<vue-lazy-component>
@@ -32,6 +42,7 @@
 					 v-loading="!isResourceOk">
 				<movie-resource-component :movie-id="parseInt(movieId)"
 																	@updateIsResourceOk="updateIsResourceOk"
+																	class="animated zoomIn"
 																	v-if="movieId"/>
 			</div>
 		</vue-lazy-component>
@@ -51,6 +62,7 @@
 	import movieMusicComponent from '../components/movie/Music'
 	import movieResourceComponent from '../components/movie/Resource'
 	import movieZhihuComponent from '../components/movie/Zhihu'
+	import movieDisscussComponent from '../components/movie/Disscuss'
 	import domain from '../request/domain'
 	import {mapActions, mapState} from 'vuex'
 	import {component as vueLazyComponent} from '@xunlei/vue-lazy-component'
@@ -65,6 +77,7 @@
 			movieMusicComponent,
 			movieZhihuComponent,
 			vueLazyComponent,
+			movieDisscussComponent
 		},
 		data() {
 			return {
@@ -122,7 +135,7 @@
 						// this.isDetailsOk = true
 						setTimeout(() => {
 							this.isDetailsOk = true
-						}, 5000)
+						}, 3000)
 					})
 					this.$api.movie.zhihuBases({id: this.movieId}).then(res => {
 						this.zhihuBases = res
@@ -316,6 +329,14 @@
 		flex-direction: row;
 		padding-top: 10px;
 		padding-bottom: 12px;
+	}
+
+	#subject-view .douban-disscuss {
+		flex: 0 0 auto;
+		display: flex;
+		flex-direction: row;
+		padding-top: 10px;
+		padding-bottom: 10px;
 	}
 
 	#subject-view .zhihu-base {

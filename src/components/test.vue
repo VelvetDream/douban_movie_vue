@@ -1,17 +1,18 @@
 <template>
-  <div id></div>
+	<div id></div>
 </template>
 <script>
-export default {
-  name: '',
-  data() {
-    return {}
-  },
-  mounted() {},
-  methods: {},
-  computed: {},
-  watch: {}
-}
+	export default {
+		name: '',
+		data() {
+			return {}
+		},
+		computed: {},
+		watch: {},
+		mounted() {
+		},
+		methods: {},
+	}
 </script>
 <style>
 </style>

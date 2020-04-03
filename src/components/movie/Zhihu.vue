@@ -38,12 +38,17 @@
 	}
 
 	/*其他*/
+
 	.question-item.el-link.el-link--default {
 		color: #000;
+		background-color: rgba(255, 255, 255, 0.4);
+		border-radius: 10px;
+		padding: 0 10px;
+		margin-bottom: 5px;
 	}
 
 	.question-item.el-link.el-link--default:hover {
-		color: rgba(255, 255, 255, 1);
+		color: #f31919;
 	}
 
 	.question-item.el-link.is-underline:hover:after {

@@ -7,14 +7,22 @@
 					 v-loading="isGettingSongComent">
 				<swiper
 					:options="commentSwiperOption"
-					@mouseenter="stopSongSwiper()"
-					@mouseleave="startSongSwiper()"
 					class="swiper"
-					element-loading-background="rgba(0, 0, 0, 0)"
 					v-if="comments.hasOwnProperty(currentSongId)">
-					<swiper-slide :key="index" v-for="(item, index) in comments[currentSongId]" v-show="!isGettingSongComent">
+					<swiper-slide :key="item.commentId"
+												class="comment-detail"
+												v-for="item in comments[currentSongId]">
 						<span class="content">{{item.content}}</span>
-						<span class="author">{{'———'+item.user.nickname}}</span>
+						<span class="comment-footer">
+							<span class="like">
+								<span class="symbol">👍</span>
+								<span class="vote">{{item.likedCount}}</span>
+							</span>
+							<span class="author">
+								<span>———</span>
+								<span>{{item.user.nickname}}</span>
+							</span>
+						</span>
 					</swiper-slide>
 				</swiper>
 			</div>
@@ -31,13 +39,22 @@
 					 element-loading-background="rgba(0, 0, 0, 0)"
 					 v-loading="isGettingPlaylistSongComent">
 				<swiper :options="commentSwiperOption"
-								@mouseenter="stopPlaylistSwiper()"
-								@mouseleave="startPlaylistSwiper()"
 								class="swiper"
 								v-if="comments.hasOwnProperty(currentPlaylistSongId)">
-					<swiper-slide :key="index" v-for="(item, index) in comments[currentPlaylistSongId]">
+					<swiper-slide :key="item.commentId"
+												class="comment-detail"
+												v-for="item in comments[currentPlaylistSongId]">
 						<span class="content">{{item.content}}</span>
-						<span class="author">{{'———'+item.user.nickname}}</span>
+						<span class="comment-footer">
+							<span class="like">
+								<span class="symbol">👍</span>
+								<span class="vote">{{item.likedCount}}</span>
+							</span>
+							<span class="author">
+								<span>———</span>
+								<span>{{item.user.nickname}}</span>
+							</span>
+						</span>
 					</swiper-slide>
 				</swiper>
 			</div>
@@ -55,13 +72,22 @@
 					 element-loading-background="rgba(0, 0, 0, 0)"
 					 v-loading="isGettingAlbumSongComent">
 				<swiper :options="commentSwiperOption"
-								@mouseenter="stopAlbumSwiper()"
-								@mouseleave="startAlbumSwiper()"
 								class="swiper"
 								v-if="comments.hasOwnProperty(currentAlbumSongId)">
-					<swiper-slide :key="index" v-for="(item, index) in comments[currentAlbumSongId]">
+					<swiper-slide :key="item.commentId"
+												class="comment-detail"
+												v-for="item in comments[currentAlbumSongId]">
 						<span class="content">{{item.content}}</span>
-						<span class="author">{{'———'+item.user.nickname}}</span>
+						<span class="comment-footer">
+							<span class="like">
+								<span class="symbol">👍</span>
+								<span class="vote">{{item.likedCount}}</span>
+							</span>
+							<span class="author">
+								<span>———</span>
+								<span>{{item.user.nickname}}</span>
+							</span>
+						</span>
 					</swiper-slide>
 				</swiper>
 			</div>
@@ -476,9 +502,8 @@
 
 	#movie-music-component .music-item .comment {
 		flex: 1;
-		min-height: 232px;
+		height: 240px;
 		padding-right: 10px;
-		border-right: 2px solid rgba(255, 255, 255, 0.2);
 		align-self: flex-start;
 	}
 
@@ -487,12 +512,13 @@
 		flex: 0 0 300px;
 		max-width: 300px;
 		align-self: flex-end;
+		border-left: 2px solid rgba(255, 255, 255, 0.2);
 	}
 
 	/*comment*/
 	.music-item .comment .swiper {
 		width: 714px;
-		height: 100%;
+		height: 240px;
 		background-color: rgba(255, 255, 255, 0);
 		display: flex;
 		flex-direction: row;
@@ -501,42 +527,87 @@
 	}
 
 	.music-item .comment .swiper .swiper-slide {
-		width: 250px;
-		height: 200px;
-		overflow: auto;
-		background-color: rgba(255, 255, 255, 0.5);
-		border-radius: 10px;
-		padding: 20px 0 12px 15px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		overflow: -moz-scrollbars-none;
-		-ms-overflow-style: none;
+
 	}
 
-	.music-item .comment .swiper .swiper-slide::-webkit-scrollbar {
+	.comment-detail {
+		width: 260px;
+		min-height: 240px;
+		border-radius: 10px;
+		background-color: rgba(255, 255, 255, 0.5);
+		overflow: auto;
+		overflow: -moz-scrollbars-none;
+		-ms-overflow-style: none;
+		display: flex;
+		flex-direction: column;
+		/* 当子容器大于父容器,且使用justify-content,顶部超出部分不可见 */
+		/*justify-content: center;*/
+		align-items: center;
+	}
+
+	.comment-detail::-webkit-scrollbar {
 		display: none;
 	}
 
-	.music-item .comment .swiper .swiper-slide .content {
-		padding-top: 20px;
+
+	.comment-detail .content {
+		/* 垂直居中效果 */
+		margin-top: auto;
+		padding: 10px 15px 0 15px;
 		font-weight: 500;
 		font-size: 16px;
+		line-height: 1.4;
 	}
 
-	.music-item .comment .swiper .swiper-slide .author {
-		align-self: flex-end;
-		padding-right: 15px;
+	.comment-detail .comment-footer {
+		width: 230px;
+		margin-bottom: auto;
+		padding: 20px 15px 0 15px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	.comment-detail .comment-footer .like {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+		flex-wrap: nowrap;
+		padding-right: 40px;
+	}
+
+	.comment-detail .comment-footer .like .symbol {
+		font-size: 24px;
+		font-weight: 500;
+	}
+
+	.comment-detail .comment-footer .like .vote {
 		font-size: 14px;
 		font-weight: 500;
+		padding-bottom: 5px;
+	}
+
+	.comment-detail .comment-footer .author {
+		align-self: flex-end;
+		font-size: 14px;
+		font-weight: 500;
+		padding-bottom: 3px;
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+	}
+
+	.comment-detail .comment-footer .author span {
+		padding-right: 5px;
 	}
 
 	/*	其他 */
 	.player .aplayer {
 		background-color: rgba(255, 255, 255, 0.5);
 		border-radius: 10px;
-		margin-left: 10px;
+		margin: 0 10px;
+		height: 240px;
+		width: 280px;
 	}
 
 	.player .aplayer-list ol li {
@@ -549,16 +620,17 @@
 
 	.player .aplayer .aplayer-body .aplayer-info .aplayer-music .aplayer-title {
 		font-size: 16px;
-		font-weight: 500;
+		font-weight: 600;
 	}
 
 	.player .aplayer-list ol li {
-		font-weight: 500;
+		font-weight: 600;
+		font-size: 13px;
 	}
 
 	.player .aplayer .aplayer-body .aplayer-info .aplayer-music .aplayer-author {
 		font-size: 12px;
-		font-weight: 500;
+		font-weight: 600;
 		color: #2c2c2c;
 	}
 

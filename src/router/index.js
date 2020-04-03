@@ -9,11 +9,12 @@ import Scene from '../views/Scene'
 
 Vue.use(VueRouter)
 
-const routes = [{
-	path: '/',
-	name: 'Home',
-	component: Home
-},
+const routes = [
+	{
+		path: '/',
+		name: 'Home',
+		component: Home
+	},
 	{
 		path: '/subject/:movieId',
 		component: Subject,
@@ -38,7 +39,14 @@ const routes = [{
 const router = new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,
-	routes
+	routes,
+	scrollBehavior(to, from, savedPosition) {
+		return {
+			x: 0,
+			y: 0
+		}
+	}
 })
+
 
 export default router

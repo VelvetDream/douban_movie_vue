@@ -9,10 +9,10 @@
 		<div :class="doubanClass" id="douban" v-show="isDoubanView">
 			<div class="title">
 				<span class="name-zh">{{bases.douban.base.nameZh}}</span>
-				<!-- <span
+				<span
 					class="name-origin"
-					v-show="bases.douban.base.nameOrigin"
-				>{{bases.douban.base.nameOrigin}}</span>-->
+					v-show="bases.douban.base.nameOrigin && bases.douban.base.nameZh.length+bases.douban.base.nameZh.length<=12"
+				>{{bases.douban.base.nameOrigin}}</span>
 				<span
 					class="year"
 					v-show="bases.douban.base.startYear!==0"
@@ -350,7 +350,7 @@
 	}
 
 	.title .name-origin {
-		font-size: 30px;
+		font-size: 36px;
 		font-weight: 500;
 		color: #2b2727;
 		padding-right: 10px;
