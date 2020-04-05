@@ -18,9 +18,11 @@
 								<span class="symbol">👍</span>
 								<span class="vote">{{item.likedCount}}</span>
 							</span>
-							<span class="author">
+								<span class="author">
 								<span>———</span>
+								<el-link :href="neteaseMusic+'/#/user/home?id='+item.user.userId" target="_blank">
 								<span>{{item.user.nickname}}</span>
+								</el-link>
 							</span>
 						</span>
 					</swiper-slide>
@@ -52,7 +54,9 @@
 							</span>
 							<span class="author">
 								<span>———</span>
+								<el-link :href="neteaseMusic+'/#/user/home?id='+item.user.userId" target="_blank">
 								<span>{{item.user.nickname}}</span>
+								</el-link>
 							</span>
 						</span>
 					</swiper-slide>
@@ -83,9 +87,11 @@
 								<span class="symbol">👍</span>
 								<span class="vote">{{item.likedCount}}</span>
 							</span>
-							<span class="author">
+								<span class="author">
 								<span>———</span>
+								<el-link :href="neteaseMusic+'/#/user/home?id='+item.user.userId" target="_blank">
 								<span>{{item.user.nickname}}</span>
+								</el-link>
 							</span>
 						</span>
 					</swiper-slide>
@@ -121,6 +127,7 @@
 		},
 		data() {
 			return {
+				neteaseMusic: domain.neteaseMusic,
 				// 是否正在获取评论
 				isGettingSongComent: false,
 				isGettingAlbumSongComent: false,
@@ -231,13 +238,13 @@
 								song.artists.length !== 0 ? song.artists[0].img1v1Url : null
 							))
 						})
-						this.isSongPlayerOk = true
-						this.updateIsNmOkNow()
 						//  定时刷新当前歌曲评论
 						this.commentFlush('song')
 					}
-				}).catch(error => {
 					this.isSongPlayerOk = true
+					this.updateIsNmOkNow()
+				}).catch(error => {
+					this.isSongPlayerNone = tr
 					this.updateIsNmOkNow()
 				})
 			},
@@ -264,17 +271,20 @@
 											detailRes.album.picUrl
 										))
 									}
-									this.isAlbumPlayerOk = true
-									this.updateIsNmOkNow()
 									//  定时刷新当前歌曲评论
 									this.commentFlush('album')
 								}
+								this.isAlbumPlayerOk = true
+								this.updateIsNmOkNow()
 							}).catch(error => {
 								this.isAlbumPlayerOk = true
 								this.updateIsNmOkNow()
 							})
 						})
 					}
+				}).catch(error => {
+					this.isAlbumPlayerOk = true
+					this.updateIsNmOkNow()
 				})
 			},
 			// 初始化歌单
@@ -300,17 +310,20 @@
 											detailRes.playlist.coverImgUrl
 										))
 									}
-									this.isPlaylistPlayerOk = true
-									this.updateIsNmOkNow()
 									//  定时刷新当前歌曲评论
 									this.commentFlush('playlist')
 								}
+								this.isPlaylistPlayerOk = true
+								this.updateIsNmOkNow()
 							}).catch(error => {
 								this.isPlaylistPlayerOk = true
 								this.updateIsNmOkNow()
 							})
 						})
 					}
+				}).catch(error => {
+					this.isPlaylistPlayerOk = true
+					this.updateIsNmOkNow()
 				})
 			},
 			// 定时刷新当前歌曲评论
@@ -468,7 +481,7 @@
 			},
 			// 更新isNmOk
 			updateIsNmOkNow() {
-				if (!this.isLoading) {
+				if (this.isSongPlayerOk && this.isAlbumPlayerOk && this.isPlaylistPlayerOk) {
 					this.$emit('updateIsNmOk', true)
 				}
 			},
@@ -556,7 +569,7 @@
 		padding: 10px 15px 0 15px;
 		font-weight: 500;
 		font-size: 16px;
-		line-height: 1.4;
+		line-height: 1.45;
 	}
 
 	.comment-detail .comment-footer {
@@ -573,7 +586,7 @@
 		flex-direction: row;
 		align-items: flex-end;
 		flex-wrap: nowrap;
-		padding-right: 40px;
+		padding-right: 20px;
 	}
 
 	.comment-detail .comment-footer .like .symbol {
@@ -588,13 +601,12 @@
 	}
 
 	.comment-detail .comment-footer .author {
-		align-self: flex-end;
 		font-size: 14px;
 		font-weight: 500;
-		padding-bottom: 3px;
 		display: flex;
 		flex-direction: row;
 		align-items: flex-end;
+		align-self: center;
 	}
 
 	.comment-detail .comment-footer .author span {
@@ -650,5 +662,13 @@
 		color: #054ebd;
 		font-size: 18px;
 		font-weight: 500;
+	}
+
+	.swiper .swiper-slide .el-link.el-link--default {
+		color: #000;
+	}
+
+	.swiper .swiper-slide .el-link.el-link--default:hover {
+		color: #f31919;
 	}
 </style>

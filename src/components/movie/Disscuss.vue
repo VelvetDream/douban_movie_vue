@@ -16,7 +16,7 @@
 						<span class="title">{{item.title}}</span>
 					</el-link>
 					<span class="content">{{item.content}}</span>
-					<span class="review-footer">
+					<span class="disscuss-footer">
 						<span class="like">
 						<span class="vote">
 							<span class="symbol">👍</span>
@@ -27,8 +27,17 @@
 							{{item.againstVote}}
 						</span>
 						</span>
-						<span class="date">
-							{{item.createDatetime}}
+						<span class="user">
+							<span class="name">
+								<span class="symbol">
+									———
+								</span>
+								<span>
+								<el-link :href="item.urlUserDouban" target="_blank">
+									{{item.nameUserDouban}}
+								</el-link>
+									</span>
+							</span>
 						</span>
 					</span>
 				</swiper-slide>
@@ -46,6 +55,26 @@
 				ref="commentSwiper">
 				<swiper-slide :key="index" v-for="(item, index) in commentList">
 					<span class="content">{{item.content}}</span>
+					<span class="disscuss-footer">
+						<span class="like">
+						<span class="vote">
+							<span class="symbol">👍</span>
+							{{item.agreeVote}}
+						</span>
+						</span>
+						<span class="user">
+							<span class="name">
+								<span class="symbol">
+									———
+								</span>
+								<span>
+								<el-link :href="item.urlUserDouban" target="_blank">
+									{{item.nameUserDouban}}
+								</el-link>
+									</span>
+							</span>
+						</span>
+					</span>
 				</swiper-slide>
 			</swiper>
 		</div>
@@ -201,21 +230,21 @@
 		font-weight: 600;
 	}
 
-	.review-list .swiper .swiper-slide .el-link.el-link--default {
+	#movie-disscuss-component .swiper .swiper-slide .el-link.el-link--default {
 		color: #000;
 	}
 
-	.review-list .swiper .swiper-slide .el-link.el-link--default:hover {
+	#movie-disscuss-component .swiper .swiper-slide .el-link.el-link--default:hover {
 		color: #f31919;
 	}
 
 	.review-list .swiper .swiper-slide .content {
 		font-size: 16px;
 		font-weight: 500;
-		padding: 20px;
+		padding: 10px 20px 20px 20px;
 	}
 
-	.review-footer {
+	.disscuss-footer {
 		flex: 0 0 20px;
 		width: 100%;
 		display: flex;
@@ -223,31 +252,45 @@
 		justify-content: space-between;
 	}
 
-	.review-footer .like {
+	.disscuss-footer .like {
 		padding-left: 20px;
 	}
 
-	.review-footer .like .vote {
+	.disscuss-footer .like .vote {
 		padding-right: 20px;
 		align-self: flex-start;
 		font-size: 14px;
 		font-weight: 500;
 	}
 
-	.review-footer .like .symbol {
+	.disscuss-footer .like .symbol {
 		font-size: 24px;
 		font-weight: 500;
 	}
 
 
-	.review-footer .date {
+	.disscuss-footer .user {
 		padding-right: 25px;
-		font-size: 14px;
+		font-size: 15px;
 		font-weight: 500;
 		align-self: flex-end;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
 		padding-bottom: 3px;
 	}
 
+	.disscuss-footer .user .name {
+		flex: 0 0 auto;
+		padding-right: 5px;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+
+	.disscuss-footer .user .name .symbol {
+		padding-right: 5px;
+	}
 
 	.swiper .swiper-slide::-webkit-scrollbar {
 		display: none;
@@ -269,7 +312,7 @@
 		border-radius: 10px;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		/*justify-content: center;*/
 		align-items: center;
 		overflow: -moz-scrollbars-none;
 		-ms-overflow-style: none;
@@ -280,12 +323,15 @@
 	}
 
 	.comment-list .swiper .swiper-slide .content {
+		margin-top: auto;
 		padding: 10px 15px 15px 15px;
 		max-width: 275px;
-		max-height: 225px;
 		font-size: 16px;
 		font-weight: 500;
 		line-height: 1.46;
 	}
 
+	.comment-list .swiper .swiper-slide .disscuss-footer {
+		margin-bottom: auto;
+	}
 </style>

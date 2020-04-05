@@ -39,15 +39,32 @@
 					 :style="skeleton(isResourceOk,300)"
 					 class="resource-list"
 					 element-loading-background="rgba(0, 0, 0, 0)"
+					 v-if="!isResourceNone"
 					 v-loading="!isResourceOk">
 				<movie-resource-component :movie-id="parseInt(movieId)"
+																	@updateIsResourceNone="updateIsResourceNone"
 																	@updateIsResourceOk="updateIsResourceOk"
 																	class="animated zoomIn"
 																	v-if="movieId"/>
 			</div>
 		</vue-lazy-component>
 		<vue-lazy-component>
-			<div :style="skeleton(isNmOk,830)" class="netease-music">
+			<div :element-loading-text="randomMovieLineShort()"
+					 :style="skeleton(isSceneOk,300)"
+					 class="scene-base"
+					 element-loading-background="rgba(0, 0, 0, 0)"
+					 v-if="!isSceneNone"
+					 v-loading="!isSceneOk">
+				<movie-scene-component :movie-id="parseInt(movieId)"
+															 @updateIsSceneNone="updateIsSceneNone"
+															 @updateIsSceneOk="updateIsSceneOk"
+															 class="animated zoomIn"
+															 v-if="movieId"/>
+			</div>
+		</vue-lazy-component>
+		<vue-lazy-component>
+			<div :style="skeleton(isNmOk,830)"
+					 class="netease-music">
 				<movie-music-component :keyword="movieDetails.douban.base.nameZh"
 															 @updateIsNmOk="updateIsNmOk"
 															 v-if="movieDetails"/>
@@ -63,6 +80,7 @@
 	import movieResourceComponent from '../components/movie/Resource'
 	import movieZhihuComponent from '../components/movie/Zhihu'
 	import movieDisscussComponent from '../components/movie/Disscuss'
+	import movieSceneComponent from '../components/movie/Scene'
 	import domain from '../request/domain'
 	import {mapActions, mapState} from 'vuex'
 	import {component as vueLazyComponent} from '@xunlei/vue-lazy-component'
@@ -77,20 +95,23 @@
 			movieMusicComponent,
 			movieZhihuComponent,
 			vueLazyComponent,
-			movieDisscussComponent
+			movieDisscussComponent,
+			movieSceneComponent
 		},
 		data() {
 			return {
+				// 子组件状态
 				isDetailsOk: false,
 				isZhihuOk: false,
 				isResourceOk: false,
+				isResourceNone: false,
 				isNmOk: false,
+				isSceneOk: false,
+				isSceneNone: false,
 				// 电影ID
 				movieId: null,
 				// 电影详情
 				movieDetails: null,
-				// 场景基础
-				sceneBases: null,
 				// 知乎基础
 				zhihuBases: null,
 				// 豆瓣电影API详情
@@ -143,10 +164,6 @@
 						this.isZhihuOk = true
 					}).catch(error => {
 						this.isZhihuOk = true
-					})
-					// this.$api.movie.sceneBases({ id: this.movieId }).then(res => {
-					this.$api.scene.sceneBases({id: 26728669}).then(res => {
-						this.sceneBases = res
 					})
 					// this.$api.movie.doubanApiDetails(this.movieId).then(res => {
 					//   this.doubanApiDetails = res
@@ -291,6 +308,15 @@
 			updateIsResourceOk(isResourceOk) {
 				this.isResourceOk = isResourceOk
 			},
+			updateIsResourceNone(isResourceNone) {
+				this.isResourceNone = isResourceNone
+			},
+			updateIsSceneOk(isSceneOk) {
+				this.isSceneOk = isSceneOk
+			},
+			updateIsSceneNone(isSceneNone) {
+				this.isSceneNone = isSceneNone
+			},
 			updateIsNmOk(isNmOk) {
 				this.isNmOk = isNmOk
 			},
@@ -351,11 +377,18 @@
 	#subject-view .resource-list {
 		flex: 0 0 auto;
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
 		padding-top: 10px;
 		padding-bottom: 5px;
 	}
 
+	#subject-view .scene-base {
+		flex: 0 0 auto;
+		display: flex;
+		flex-direction: row;
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
 
 	#subject-view .netease-music {
 		flex: 0 0 auto;

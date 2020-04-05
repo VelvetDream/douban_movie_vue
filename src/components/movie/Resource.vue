@@ -39,6 +39,8 @@
 				if (this.movieId) {
 					this.$api.movie.resourceBases({id: this.movieId}).then(res => {
 						this.resourceList = res
+					}).catch(error => {
+						this.$emit('updateIsResourceNone', true)
 					})
 				}
 			}

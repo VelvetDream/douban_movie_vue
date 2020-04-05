@@ -20,7 +20,9 @@ const domain = {
 	// 知乎官网
 	zhihu: 'https://www.zhihu.com',
 	// 猫眼官网
-	maoyan: 'https://maoyan.com'
+	maoyan: 'https://maoyan.com',
+	// 百度地图
+	baiduMap: 'https://api.map.baidu.com'
 }
 
 export default domain
