@@ -1,33 +1,53 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
+// 第三方组件
+import vuex from 'vuex'
+import elementUi from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import animate from 'animate.css'
+// 自定义组件
+import App from './App.vue'
+import api from './request/api'
+import store from './store'
 import router from './router'
 
-// // axios
-// import axios from 'axios'
-// import VueAxios from 'vue-axios'
-// Vue.use(VueAxios,axios);
+// 第三方组件全局注册
+Vue.use(vuex)
+Vue.use(elementUi)
+Vue.use(animate)
 
-// jsonp
-import VueJsonp from 'vue-jsonp'
-Vue.use(VueJsonp);
+// 开发环境控制台相关
+Vue.config.productionTip = process.env.NODE_ENV !== 'pro'
 
-// 瀑布流加载数据
-import infiniteScroll from 'vue-infinite-scroll';
-Vue.use(infiniteScroll);
+// api挂载到原型
+Vue.prototype.$api = api
 
-Vue.config.productionTip = false;
-// element-ui
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(ElementUI);
-/* eslint-disable no-new */
+// 切换路由之前拦截
+router.beforeEach((to, from, next) => {
+  // 当前路由需要token
+  if (to.meta.requireAuth) {
+    // 当前用户已登陆
+    if (store.state.userInfo) {
+      next()
+    } else if (localStorage.getItem('userInfo')) {
+      store.dispatch('update', {
+        key: 'userInfo',
+        value: localStorage.getItem('userInfo')
+      })
+      next()
+    } else {
+      // 需要登录
+      store.dispatch('updatePopups', {
+        key: 'isLogining',
+        value: true
+      })
+    }
+  } else {
+    next()
+  }
+})
+
 new Vue({
-  el: '#app',
   router,
-  components: {
-    "App":App
-  },
-  template: "<App/>"
-});
+  store,
+  render: h => h(App)
+}).$mount('#app')
