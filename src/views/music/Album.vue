@@ -1,13 +1,13 @@
 <template>
-	<div id="home-view">
+	<div id="music-album-view">
 		<welcome-component/>
 	</div>
 </template>
 <script>
-	import WelcomeComponent from "../components/Welcome";
+	import WelcomeComponent from "../../components/Welcome";
 
 	export default {
-		name: 'home-view',
+		name: 'music-album-view',
 		components: {WelcomeComponent},
 		data() {
 			return {}

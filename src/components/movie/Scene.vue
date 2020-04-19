@@ -16,19 +16,46 @@
 							<span class="scene-place">
 								{{item.base.nameZh}} ➜
 							</span>
+							<span class="real-place" v-if="item.place.base.nameZh!==''">
 								<el-link
 									:href="baiduMap+'/place/search?query='+item.place.base.nameZh+'&location='+item.place.base.latitude+','+item.place.base.longitude+'&radius=1000&output=html&src=www.doubans.com'"
 									target="_blank">
-							<span class="real-place">
 								{{item.place.base.nameZh}}
-							</span>
 								</el-link>
+							</span>
+							<span class="real-place" v-if="item.place.base.nameZh==='' && item.place.base.nameEn!=='' ">
+								<el-link
+									:href="baiduMap+'/place/search?query='+item.place.base.nameEn+'&location='+item.place.base.latitude+','+item.place.base.longitude+'&radius=1000&output=html&src=www.doubans.com'"
+									target="_blank">
+								{{item.place.base.nameEn}}
+								</el-link>
+							</span>
 						</span>
 						<span class="place-des-content">
 								{{item.place.base.description}}
 							</span>
-						<span class="place-address">
-								地址: {{item.place.base.addressZh}}
+
+						<span class="place-address-zh"
+									v-if="item.place.base.addressZh!==''">
+							地址:
+							<el-link
+								:href="baiduMap+'/place/search?query='+item.place.base.nameZh+'&location='+item.place.base.latitude+','+item.place.base.longitude+'&radius=1000&output=html&src=www.doubans.com'"
+								target="_blank">
+								{{item.place.base.addressZh}}
+							</el-link>
+						</span>
+
+						<span class="place-address-en"
+									v-if="item.place.base.addressEn!==''">
+							address:
+							<el-link
+								:href="baiduMap+'/place/search?query='+item.place.base.nameEn+'&location='+item.place.base.latitude+','+item.place.base.longitude+'&radius=1000&output=html&src=www.doubans.com'"
+								target="_blank">
+								{{item.place.base.addressEn}}
+								</el-link>
+						</span>
+						<span class="place-phone" v-if="item.place.base.phone!==''">
+								电话: {{item.place.base.phone}}
 						</span>
 					</div>
 				</el-carousel-item>
@@ -130,6 +157,12 @@
 	}
 
 	#movie-scene-component .place-list .scene-title .real-place {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
+
+	#movie-scene-component .place-list .scene-title .real-place a {
 		font-size: 18px;
 		font-weight: 600;
 	}
@@ -145,8 +178,22 @@
 	#movie-scene-component .place-list .place-des-content {
 	}
 
-	#movie-scene-component .place-list .place-address {
-		padding-top: 10px;
+	#movie-scene-component .place-list .place-address-zh {
+		font-weight: 500;
+		font-size: 14px;
+		margin-top: 10px;
+	}
+
+
+	#movie-scene-component .place-list .place-address-en {
+		font-weight: 500;
+		font-size: 14px;
+		margin-top: 10px;
+	}
+
+	#movie-scene-component .place-list .place-phone {
+		font-weight: 500;
+		font-size: 14px;
 	}
 
 	#movie-scene-component .scene-detail {

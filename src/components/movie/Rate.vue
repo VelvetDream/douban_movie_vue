@@ -266,7 +266,7 @@
 						'star-base star-' + rate.type + ' star-' + parseInt(rate.score) * 5
 					result += `
         <tr>
-        <td style="text-align:center;color:${rate.color};padding:2px 5px">${
+        <td style="text-align:center;color:${rate.color};padding:2px 5px;font-weight: 600">${
 						rate.type
 					}</td>
         <td style="color:${

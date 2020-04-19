@@ -1,22 +1,19 @@
 <template>
-	<div id="home-view">
+	<div id="music-playlist-view">
 		<welcome-component/>
 	</div>
 </template>
 <script>
-	import WelcomeComponent from "../components/Welcome";
+	import WelcomeComponent from "../../components/Welcome";
 
 	export default {
-		name: 'home-view',
+		name: 'music-playlist-view',
 		components: {WelcomeComponent},
 		data() {
 			return {}
 		},
-		computed: {},
-		watch: {},
-		mounted() {
-		},
 		methods: {},
+		computed: {}
 	}
 </script>
 <style>

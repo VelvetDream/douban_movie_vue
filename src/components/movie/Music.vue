@@ -244,7 +244,7 @@
 					this.isSongPlayerOk = true
 					this.updateIsNmOkNow()
 				}).catch(error => {
-					this.isSongPlayerNone = tr
+					this.isSongPlayerNone = true
 					this.updateIsNmOkNow()
 				})
 			},

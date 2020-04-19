@@ -1,9 +1,9 @@
 /** 域名统一管理 */
 const domain = {
 	// plus后端网关
-	plus: process.env.NODE_ENV === 'pro' ? 'http://localhost:8081/v2' : 'http://localhost:8080/v2',
+	plus: process.env.NODE_ENV === 'pro' ? 'https://api.doubans.com/v2' : 'https://api.doubans.com/v2',
 	// neteaseMusicApi
-	neteaseMusicApi: 'http://localhost:10102',
+	// neteaseMusicApi: 'http://localhost:10102',
 	// neteaseMusicApi: 'https://movie.doubans.com/neteaseThirdApi',
 	// 豆瓣电影v2
 	doubanV2: 'https://api.douban.com/v2',
@@ -22,7 +22,9 @@ const domain = {
 	// 猫眼官网
 	maoyan: 'https://maoyan.com',
 	// 百度地图
-	baiduMap: 'https://api.map.baidu.com'
+	baiduMap: 'https://api.map.baidu.com',
+	// github
+	github: 'https://github.com'
 }
 
 export default domain

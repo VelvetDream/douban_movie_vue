@@ -148,51 +148,51 @@
               </span>
             </span>
 					</div>
-					<div v-show="bases.douban.typeList.length!==0">
-						<span class="head">类型</span>
-						<span class="msg">
-              <span :key="index" v-for="(item, index) in bases.douban.typeList">
-                <el-link :href="'/tag/#/?tags='+item" target="_black">{{item}}</el-link>
-                {{index+1===bases.douban.typeList.length?'':'/'}}
-              </span>
-            </span>
-					</div>
-					<div v-show="bases.douban.tagList.length!==0">
-						<span class="head">标签</span>
-						<span class="msg">
-              <span :key="index" v-for="(item, index) in bases.douban.tagList">
-                <el-link :href="'/tag/#/?tags='+item" target="_black">{{item}}</el-link>
-                {{index+1===bases.douban.tagList.length?'':'/'}}
-              </span>
-            </span>
-					</div>
-					<div v-show="bases.douban.aliasList.length!==0">
-						<span class="head">别名</span>
-						<span class="msg">
-              <span :key="index" v-for="(item, index) in bases.douban.aliasList">
-                {{item}}
-                {{index+1===bases.douban.aliasList.length?'':'/'}}
-              </span>
-            </span>
-					</div>
-					<div v-show="bases.douban.base.summary!==''">
-						<span class="head">简介</span>
-						<span class="msg">
-              <span>
-                {{bases.douban.base.summary.substr(0,48)}}
-                <el-tooltip
-									:content="bases.douban.base.summary"
-									class="item"
-									effect="light"
-									placement="top"
-									popper-class="summary-tips"
-									v-if="bases.douban.base.summary.length>=48"
-								>
-                  <span>{{'......(more)'}}</span>
-                </el-tooltip>
-              </span>
-            </span>
-					</div>
+					<!--					<div v-show="bases.douban.typeList.length!==0">-->
+					<!--						<span class="head">类型</span>-->
+					<!--						<span class="msg">-->
+					<!--              <span :key="index" v-for="(item, index) in bases.douban.typeList">-->
+					<!--                <el-link :href="'/tag/#/?tags='+item" target="_black">{{item}}</el-link>-->
+					<!--                {{index+1===bases.douban.typeList.length?'':'/'}}-->
+					<!--              </span>-->
+					<!--            </span>-->
+					<!--					</div>-->
+					<!--					<div v-show="bases.douban.tagList.length!==0">-->
+					<!--						<span class="head">标签</span>-->
+					<!--						<span class="msg">-->
+					<!--              <span :key="index" v-for="(item, index) in bases.douban.tagList">-->
+					<!--                <el-link :href="'/tag/#/?tags='+item" target="_black">{{item}}</el-link>-->
+					<!--                {{index+1===bases.douban.tagList.length?'':'/'}}-->
+					<!--              </span>-->
+					<!--            </span>-->
+					<!--					</div>-->
+					<!--					<div v-show="bases.douban.aliasList.length!==0">-->
+					<!--						<span class="head">别名</span>-->
+					<!--						<span class="msg">-->
+					<!--              <span :key="index" v-for="(item, index) in bases.douban.aliasList">-->
+					<!--                {{item}}-->
+					<!--                {{index+1===bases.douban.aliasList.length?'':'/'}}-->
+					<!--              </span>-->
+					<!--            </span>-->
+					<!--					</div>-->
+					<!--					<div v-show="bases.douban.base.summary!==''">-->
+					<!--						<span class="head">简介</span>-->
+					<!--						<span class="msg">-->
+					<!--              <span>-->
+					<!--                {{bases.douban.base.summary.substr(0,48)}}-->
+					<!--                <el-tooltip-->
+					<!--									:content="bases.douban.base.summary"-->
+					<!--									class="item"-->
+					<!--									effect="light"-->
+					<!--									placement="top"-->
+					<!--									popper-class="summary-tips"-->
+					<!--									v-if="bases.douban.base.summary.length>=48"-->
+					<!--								>-->
+					<!--                  <span>{{'......(more)'}}</span>-->
+					<!--                </el-tooltip>-->
+					<!--              </span>-->
+					<!--            </span>-->
+					<!--					</div>-->
 				</div>
 			</div>
 		</div>

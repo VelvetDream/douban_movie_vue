@@ -1,5 +1,5 @@
 <template>
-	<div id="home-view">
+	<div id="about-view">
 		<welcome-component/>
 	</div>
 </template>
@@ -7,7 +7,7 @@
 	import WelcomeComponent from "../components/Welcome";
 
 	export default {
-		name: 'home-view',
+		name: 'about-view',
 		components: {WelcomeComponent},
 		data() {
 			return {}

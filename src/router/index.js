@@ -1,23 +1,34 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // view
-import Home from '../views/Home.vue'
+import HomeMovie from '../views/Home'
 import Subject from '../views/Subject'
 import People from '../views/People'
 import Celebrity from '../views/Celebrity'
-import Scene from '../views/Scene'
+import Scene from '../views/mocation/Scene'
+import About from '../views/About'
+import Place from '../views/mocation/Place'
+import Song from '../views/music/Song'
+import Playlist from '../views/music/Playlist'
+import Album from '../views/music/Album'
+import Tag from "../views/Tag";
+import HomeMocation from "../views/mocation/Home";
+import HomeMusic from "../views/music/Home";
 
 Vue.use(VueRouter)
 
 const routes = [
 	{
 		path: '/',
-		name: 'Home',
-		component: Home
+		component: HomeMovie
+	},
+	{
+		path: '/about',
+		component: About
 	},
 	{
 		path: '/subject/:movieId',
-		component: Subject,
+		component: Subject
 	},
 	{
 		path: '/celebrity/:celebrityId',
@@ -33,7 +44,41 @@ const routes = [
 		meta: {
 			requireAuth: true
 		}
-	}
+	},
+	{
+		path: '/tag',
+		component: Tag
+	},
+	// scene
+	{
+		path: '/mocation',
+		component: HomeMocation
+	},
+	{
+		path: '/scene/:sceneId',
+		component: Scene
+	},
+	{
+		path: '/place/:placeId',
+		component: Place
+	},
+	// music
+	{
+		path: '/music',
+		component: HomeMusic
+	},
+	{
+		path: '/song/:songId',
+		component: Song
+	},
+	{
+		path: '/playlist/:playlistId',
+		component: Playlist
+	},
+	{
+		path: '/album/:albumId',
+		component: Album
+	},
 ]
 
 const router = new VueRouter({

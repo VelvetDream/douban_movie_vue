@@ -1,6 +1,0 @@
-.idea/**
-dist/**
-build/**
-node_modules/**
-test/**
-package-lock.json

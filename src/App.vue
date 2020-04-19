@@ -11,7 +11,9 @@
 			<router-view/>
 		</div>
 		<div class="enjoy"/>
-		<div class="footer"/>
+		<div class="footer">
+			<footer-component/>
+		</div>
 	</div>
 </template>
 
@@ -21,6 +23,7 @@
 	import navComponent from './components/Nav'
 	import backgroundComponent from './components/Background'
 	import backTopComponent from './components/BackTop'
+	import footerComponent from "./components/Footer";
 
 	export default {
 		name: 'App',
@@ -29,7 +32,8 @@
 			registerComponent,
 			navComponent,
 			backgroundComponent,
-			backTopComponent
+			backTopComponent,
+			footerComponent
 		},
 		provide() {
 			return {
@@ -96,27 +100,12 @@
 
 	#app .enjoy {
 		flex: 0 0 500px;
+		width: 100%;
 	}
 
 	#app .footer {
 		flex: 0 0 120px;
-		background-color: rgba(255, 255, 255, 0.2);
-		background: linear-gradient(
-			to bottom,
-			rgba(255, 255, 255, 0.01),
-			rgba(255, 255, 255, 0.02),
-			rgba(255, 255, 255, 0.04),
-			rgba(255, 255, 255, 0.06),
-			rgba(255, 255, 255, 0.09),
-			rgba(255, 255, 255, 0.12),
-			rgba(255, 255, 255, 0.15),
-			rgba(255, 255, 255, 0.18),
-			rgba(255, 255, 255, 0.21),
-			rgba(255, 255, 255, 0.24),
-			rgba(255, 255, 255, 0.27),
-			rgba(255, 255, 255, 0.29),
-			rgba(255, 255, 255, 0.3)
-		);
+		width: 100%;
 	}
 
 	/* 其他样式---------------- */

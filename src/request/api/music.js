@@ -14,8 +14,8 @@ const music = {
 	 * @returns
 	 */
 	neteaseMusicTips(params) {
-		// return myAxios.get(domain.plus + '/music/search', {
-		return myAxios.get(domain.neteaseMusicApi + '/search', {
+		return myAxios.get(domain.plus + '/music/search', {
+			// return myAxios.get(domain.neteaseMusicApi + '/search', {
 			params: params
 		})
 	},
@@ -26,8 +26,8 @@ const music = {
 	 * @returns
 	 */
 	neteaseMusicSuggest(params) {
-		// return myAxios.get(domain.plus + '/music/search/suggest', {
-		return myAxios.get(domain.neteaseMusicApi + '/search/suggest', {
+		return myAxios.get(domain.plus + '/music/search/suggest', {
+			// return myAxios.get(domain.neteaseMusicApi + '/search/suggest', {
 			params: params
 		})
 	},
@@ -38,8 +38,8 @@ const music = {
 	 * @returns
 	 */
 	neteaseMusicSongDetails(params) {
-		// return myAxios.get(domain.plus + '/music/song/detail', {
-		return myAxios.get(domain.neteaseMusicApi + '/song/detail', {
+		return myAxios.get(domain.plus + '/music/song/detail', {
+			// return myAxios.get(domain.neteaseMusicApi + '/song/detail', {
 			params: params
 		})
 	},
@@ -50,8 +50,8 @@ const music = {
 	 * @returns
 	 */
 	neteaseMusicPlaylistDetails(params) {
-		// return myAxios.get(domain.plus + '/music/playlist/detail', {
-		return myAxios.get(domain.neteaseMusicApi + '/playlist/detail', {
+		return myAxios.get(domain.plus + '/music/playlist/detail', {
+			// return myAxios.get(domain.neteaseMusicApi + '/playlist/detail', {
 			params: params
 		})
 	},
@@ -62,8 +62,8 @@ const music = {
 	 * @returns
 	 */
 	neteaseMusicAlbum(params) {
-		// return myAxios.get(domain.plus + '/music/album', {
-		return myAxios.get(domain.neteaseMusicApi + '/album', {
+		return myAxios.get(domain.plus + '/music/album', {
+			// return myAxios.get(domain.neteaseMusicApi + '/album', {
 			params: params
 		})
 	},
@@ -78,8 +78,8 @@ const music = {
 	 * @returns
 	 */
 	neteaseMusicHotComment(params) {
-		// return myAxios.get(domain.plus + '/music/comment/hot', {
-		return myAxios.get(domain.neteaseMusicApi + '/comment/hot', {
+		return myAxios.get(domain.plus + '/music/comment/hot', {
+			// return myAxios.get(domain.neteaseMusicApi + '/comment/hot', {
 			params: params
 		})
 	},
@@ -93,8 +93,8 @@ const music = {
 	 * @returns
 	 */
 	neteaseMusicSongComment(params) {
-		// return myAxios.get(domain.plus + '/music/comment/music', {
-		return myAxios.get(domain.neteaseMusicApi + '/comment/music', {
+		return myAxios.get(domain.plus + '/music/comment/music', {
+			// return myAxios.get(domain.neteaseMusicApi + '/comment/music', {
 			params: params
 		})
 	},
@@ -108,8 +108,8 @@ const music = {
 	 * @returns
 	 */
 	neteaseMusicAlbumComment(params) {
-		// return myAxios.get(domain.plus + '/music/comment/album', {
-		return myAxios.get(domain.neteaseMusicApi + '/comment/album', {
+		return myAxios.get(domain.plus + '/music/comment/album', {
+			// return myAxios.get(domain.neteaseMusicApi + '/comment/album', {
 			params: params
 		})
 	},
@@ -125,8 +125,8 @@ const music = {
 	 * @returns
 	 */
 	neteaseMusicPlaylistComment(params) {
-		// return myAxios.get(domain.plus + '/music/comment/playlist', {
-		return myAxios.get(domain.neteaseMusicApi + '/comment/playlist', {
+		return myAxios.get(domain.plus + '/music/comment/playlist', {
+			// return myAxios.get(domain.neteaseMusicApi + '/comment/playlist', {
 			params: params
 		})
 	},
