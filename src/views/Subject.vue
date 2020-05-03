@@ -3,7 +3,8 @@
 			 element-loading-background="rgba(0, 0, 0, 0)"
 			 id="subject-view"
 			 v-loading.fullscreen.lock="isLoading">
-		<div :style="skeleton(isDetailsOk,300)" class="detail">
+		<div style="min-height: 500px" v-show="!isDetailsOk"/>
+		<div class="detail">
 			<div class="left" v-show="isDetailsOk">
 				<movie-base-component :bases="bases"/>
 			</div>
@@ -14,29 +15,32 @@
 					v-show="rateList.length!==0"/>
 			</div>
 		</div>
-		<div :style="skeleton(isDetailsOk,150)"
-				 class="celebrity-list">
+		<div class="celebrity-list">
 			<movie-celebrity-component
-				:celebrity-list="celebrityList"
-				v-if="isDetailsOk"/>
+				:celebrity-list="celebrityList" v-if="isDetailsOk && celebrityList.length!==0"/>
 		</div>
-		<div :style="skeleton(isDetailsOk,300)"
-				 class="douban-disscuss">
+		<div
+			:style="skeleton(isDetailsOk && movieDetails && movieDetails.douban && (movieDetails.douban.commentList.length!==0 || movieDetails.douban.reviewList.length!==0))"
+			class="douban-disscuss"
+			v-if="isDetailsOk && movieDetails && movieDetails.douban && (movieDetails.douban.commentList.length!==0 || movieDetails.douban.reviewList.length!==0)"
+		>
 			<movie-disscuss-component
 				:comment-list="movieDetails.douban.commentList"
 				:review-list="movieDetails.douban.reviewList"
-				v-if="movieDetails && movieDetails.douban && (movieDetails.douban.commentList.length!==0 || movieDetails.douban.reviewList.length!==0)"/>
+			/>
 		</div>
-		<div :style="skeleton(isDetailsOk,100)"
-				 class="zhihu-base">
+		<div
+			:style="skeleton(isDetailsOk && zhihuBases && zhihuBases.questionList && zhihuBases.questionList.length!==0)"
+			class="zhihu-base"
+			v-if="isDetailsOk && zhihuBases && zhihuBases.questionList && zhihuBases.questionList.length!==0">
 			<movie-zhihu-component :update-is-nm-ok="updateIsNmOk"
 														 :zhihu-bases="zhihuBases"
 														 class="animated zoomIn"
-														 v-if="zhihuBases && zhihuBases.questionList && zhihuBases.questionList.length!==0"/>
+			/>
 		</div>
 		<vue-lazy-component>
 			<div :element-loading-text="randomMovieLineShort()"
-					 :style="skeleton(isResourceOk,300)"
+					 :style="skeleton(isResourceOk)"
 					 class="resource-list"
 					 element-loading-background="rgba(0, 0, 0, 0)"
 					 v-if="!isResourceNone"
@@ -50,7 +54,7 @@
 		</vue-lazy-component>
 		<vue-lazy-component>
 			<div :element-loading-text="randomMovieLineShort()"
-					 :style="skeleton(isSceneOk,300)"
+					 :style="skeleton(isSceneOk)"
 					 class="scene-base"
 					 element-loading-background="rgba(0, 0, 0, 0)"
 					 v-if="!isSceneNone"
@@ -63,7 +67,7 @@
 			</div>
 		</vue-lazy-component>
 		<vue-lazy-component>
-			<div :style="skeleton(isNmOk,830)"
+			<div :style="skeleton(isNmOk)"
 					 class="netease-music">
 				<movie-music-component :keyword="movieDetails.douban.base.nameZh"
 															 @updateIsNmOk="updateIsNmOk"
@@ -149,14 +153,12 @@
 				if (this.movieId) {
 					this.$api.movie.movieDetails({id: this.movieId}).then(res => {
 						this.movieDetails = res
+						this.parseDoubanImageList(this.movieDetails)
 						this.parseDoubanMovieBases(this.movieDetails)
 						this.parseDoubanCelebrityList(this.movieDetails)
 						this.parseRate(this.movieDetails.douban.rate, 'douban')
 						this.parseRate(this.movieDetails.imdb.rate, 'imdbs')
-						// this.isDetailsOk = true
-						setTimeout(() => {
-							this.isDetailsOk = true
-						}, 3000)
+						this.isDetailsOk = true
 					})
 					this.$api.movie.zhihuBases({id: this.movieId}).then(res => {
 						this.zhihuBases = res
@@ -165,9 +167,6 @@
 					}).catch(error => {
 						this.isZhihuOk = true
 					})
-					// this.$api.movie.doubanApiDetails(this.movieId).then(res => {
-					//   this.doubanApiDetails = res
-					// })
 				}
 			},
 			// 解析电影基础信息
@@ -181,6 +180,19 @@
 						celebrityList: movieDetails.douban.celebrityList
 					},
 					imdb: movieDetails.imdb
+				}
+				if (this.bases.douban.base) {
+					this.update({key: 'nameZh', value: this.bases.douban.base.nameZh})
+				}
+			},
+			// 解析背景图片列表
+			parseDoubanImageList(movieDetails) {
+				if (this.movieDetails.douban.imageList.length !== 0) {
+					let specialBgList = []
+					movieDetails.douban.imageList.forEach(image => {
+						specialBgList.push(image.urlImageL)
+					})
+					this.update({key: 'specialBgList', value: specialBgList})
 				}
 			},
 			// 解析豆瓣影人列表信息
@@ -197,8 +209,7 @@
 									type: '豆瓣',
 									score: rate.score,
 									vote: rate.vote,
-									// color: '#ffac2d',
-									color: '#d68509',
+									color: 'rgb(' + rate.rateColor + ')',
 									url:
 										domain.doubanMovie +
 										'/subject/' +
@@ -214,64 +225,37 @@
 									type: 'IMDB',
 									score: rate.imdbScore,
 									vote: rate.imdbVote,
-									color: '#00a2e8',
+									color: 'rgb(' + rate.imdbColor + ')',
 									url: domain.imdb + '/title/' + this.movieDetails.imdb.id + '/',
 									des: `更全面的互联网电影数据库`
 								})
 							}
 							if (rate.tomatoScore !== 0) {
-								// this.rateList.push({
-								//   type: '烂番茄',
-								//   score: rate.tomatoScore,
-								//   vote: 0,
-								// color: rate.tomatoScore > 6 ? '#fa3008' : '#09c754',
-								//   url:
-								//     domain.tomato +
-								//     '/m/' +
-								//     this.movieDetails.imdb.base.nameEn.replace(/\s/, '_'),
-								// des: `烂番茄的新鲜度来源于认证影评人的评价,若好评超过60%,则认为新鲜,否则为腐烂`
-								// })
+								this.rateList.push({
+									type: '烂番茄',
+									score: rate.tomatoScore,
+									vote: 0,
+									color: 'rgb(' + rate.tomatoColor + ')',
+									url:
+										domain.tomato +
+										'/m/' +
+										this.movieDetails.imdb.base.nameEn.replace(/\s/, '_'),
+									des: `新鲜度来自认证影评人评价`
+								})
 							}
-							this.rateList.push({
-								type: '烂番茄',
-								score: 9.7,
-								vote: 0,
-								color: '#fa3008',
-								url:
-									domain.tomato +
-									'/m/' +
-									this.movieDetails.imdb.base.nameEn.replace(/\s/, '_'),
-								des: `新鲜度来自认证影评人评价`
-							})
 							if (rate.mtcScore !== 0) {
-								// this.rateList.push({
-								//   type: 'MTC',
-								//   score: rate.mtcScore,
-								//   vote: 0,
-								//             color:
-								// rate.mtcScore >= 8
-								//   ? '#6c3'
-								//   : rate.mtcScore > 4
-								//   ? '#fc3'
-								//   : '#f00',
-								//   url:
-								//     domain.tomato +
-								//     '/movie/' +
-								//     this.movieDetails.imdb.base.nameEn.replace(/\s/, '-'),
-								// des:`Metacritic以专业影评人的评价为主`
-								// })
+								this.rateList.push({
+									type: 'MTC',
+									score: rate.mtcScore,
+									vote: 0,
+									color: 'rgb(' + rate.mtcColor + ')',
+									url:
+										domain.tomato +
+										'/movie/' +
+										this.movieDetails.imdb.base.nameEn.replace(/\s/, '-'),
+									des: `主要收集专业影评人的评价`
+								})
 							}
-							this.rateList.push({
-								type: 'MTC',
-								score: 9.6,
-								vote: 0,
-								color: '#6c3',
-								url:
-									domain.tomato +
-									'/movie/' +
-									this.movieDetails.imdb.base.nameEn.replace(/\s/, '-'),
-								des: `主要收集专业影评人的评价`
-							})
 							break
 						case 'zhihus':
 							// 解析评分
@@ -280,7 +264,7 @@
 									type: '知乎',
 									score: rate.zhihuScore,
 									vote: rate.zhihuVote,
-									color: '#0084ff',
+									color: 'rgb(' + rate.zhihuColor + ')',
 									url: domain.zhihu + '/topic/' + rate.id,
 									des: `知乎电影话题的知友推荐度`
 								})
@@ -290,7 +274,7 @@
 									type: '猫眼',
 									score: rate.maoyanScore,
 									vote: 0,
-									color: '#e53329',
+									color: 'rgb(' + rate.maoyanColor + ')',
 									url: domain.maoyan + '/query?kw=' + rate.nameZh,
 									des: `普通观众买票观影后的评价`
 								})
@@ -302,8 +286,8 @@
 				}
 			},
 			// 子组件骨架
-			skeleton(isOk, minHeight) {
-				return isOk ? 'border-bottom: 2px solid rgba(255, 255, 255, 0.2);' : 'min-height:' + minHeight + 'px;'
+			skeleton(isOk) {
+				return isOk ? 'border-bottom: 2px solid rgba(255, 255, 255, 0.2);' : ''
 			},
 			updateIsResourceOk(isResourceOk) {
 				this.isResourceOk = isResourceOk
@@ -347,14 +331,18 @@
 		display: flex;
 		flex-direction: row;
 		padding-bottom: 10px;
+		min-height: 300px;
+		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 	}
 
 	#subject-view .celebrity-list {
 		flex: 0 0 150px;
+		min-height: 150px;
 		display: flex;
 		flex-direction: row;
 		padding-top: 10px;
 		padding-bottom: 12px;
+		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 	}
 
 	#subject-view .douban-disscuss {

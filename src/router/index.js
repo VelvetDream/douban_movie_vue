@@ -27,6 +27,10 @@ const routes = [
 		component: About
 	},
 	{
+		path: '/search',
+		component: About
+	},
+	{
 		path: '/subject/:movieId',
 		component: Subject
 	},

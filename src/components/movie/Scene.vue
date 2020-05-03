@@ -18,14 +18,14 @@
 							</span>
 							<span class="real-place" v-if="item.place.base.nameZh!==''">
 								<el-link
-									:href="baiduMap+'/place/search?query='+item.place.base.nameZh+'&location='+item.place.base.latitude+','+item.place.base.longitude+'&radius=1000&output=html&src=www.doubans.com'"
+									:href="getGoogleMap(item)"
 									target="_blank">
 								{{item.place.base.nameZh}}
 								</el-link>
 							</span>
 							<span class="real-place" v-if="item.place.base.nameZh==='' && item.place.base.nameEn!=='' ">
 								<el-link
-									:href="baiduMap+'/place/search?query='+item.place.base.nameEn+'&location='+item.place.base.latitude+','+item.place.base.longitude+'&radius=1000&output=html&src=www.doubans.com'"
+									:href="getGoogleMap(item)"
 									target="_blank">
 								{{item.place.base.nameEn}}
 								</el-link>
@@ -38,21 +38,13 @@
 						<span class="place-address-zh"
 									v-if="item.place.base.addressZh!==''">
 							地址:
-							<el-link
-								:href="baiduMap+'/place/search?query='+item.place.base.nameZh+'&location='+item.place.base.latitude+','+item.place.base.longitude+'&radius=1000&output=html&src=www.doubans.com'"
-								target="_blank">
 								{{item.place.base.addressZh}}
-							</el-link>
 						</span>
 
 						<span class="place-address-en"
 									v-if="item.place.base.addressEn!==''">
 							address:
-							<el-link
-								:href="baiduMap+'/place/search?query='+item.place.base.nameEn+'&location='+item.place.base.latitude+','+item.place.base.longitude+'&radius=1000&output=html&src=www.doubans.com'"
-								target="_blank">
 								{{item.place.base.addressEn}}
-								</el-link>
 						</span>
 						<span class="place-phone" v-if="item.place.base.phone!==''">
 								电话: {{item.place.base.phone}}
@@ -81,7 +73,7 @@
 		},
 		data() {
 			return {
-				baiduMap: domain.baiduMap,
+				google: domain.google,
 				sceneBases: null
 			}
 		},
@@ -93,14 +85,16 @@
 		methods: {
 			init() {
 				if (this.movieId) {
-					// this.$api.movie.sceneBases({ id: this.movieId }).then(res => {
-					this.$api.scene.sceneBases({id: 26728669}).then(res => {
+					this.$api.scene.sceneBases({id: this.movieId}).then(res => {
 						this.sceneBases = res
 						this.$emit('updateIsSceneOk', true)
 					}).catch(error => {
 						this.$emit('updateIsSceneNone', true)
 					})
 				}
+			},
+			getGoogleMap(item) {
+				return this.google + '/maps/search/?api=1&query=' + item.place.base.latitude + ',' + item.place.base.longitude
 			}
 		},
 	}

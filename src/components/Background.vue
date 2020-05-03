@@ -25,7 +25,7 @@
 		data() {
 			return {
 				// 当前背景图id
-				nowBgId: 0,
+				nowBgId: Math.round(Math.random() * 50),
 				// 背景切换时间间隔 /s 第一次以后减去2s
 				turnBgSecond: 300,
 				// 是否正在切换背景
@@ -47,18 +47,20 @@
 			}
 		},
 		computed: {
+			// 当前页面背景列表
+			nowBgList() {
+				// 优先采用特定页面背景列表
+				if (this.specialBgList && this.specialBgList.length !== 0) {
+					return this.specialBgList
+				} else {
+					return this.defaultBgList
+				}
+			},
 			...mapState({
-				// 当前页面背景列表
-				nowBgList: state => {
-					// 优先采用特定页面背景列表
-					if (state.specialBgList.length !== 0) {
-						return state.specialBgList
-					} else {
-						return state.defaultBgList
-					}
-				},
 				// 背景图是否需要模糊
-				isBgClear: 'isBgClear'
+				isBgClear: 'isBgClear',
+				specialBgList: 'specialBgList',
+				defaultBgList: 'defaultBgList',
 			})
 		},
 		watch: {
@@ -89,7 +91,8 @@
 							// 切换锚归位
 							this.pullStyle = 'pullOn'
 						}
-					}, 1500)
+						this.update({key: 'currentMovieLinesLong', value: Math.round(Math.random() * 50)})
+					}, 2000)
 				}
 			},
 			// 手动切换背景
@@ -179,23 +182,6 @@
 		},
 		mounted() {
 			window.addEventListener('scroll', this.scroll)
-			// 更新defaultBgList
-			let defaultBgList = [
-				'https://img9.doubanio.com/view/photo/l/public/p2205392045.webp',
-				'https://img3.doubanio.com/view/photo/l/public/p1700166130.webp',
-				'https://img3.doubanio.com/view/photo/l/public/p2573277220.webp',
-				'https://img1.doubanio.com/view/photo/l/public/p2563780308.webp',
-				'https://img3.doubanio.com/view/photo/l/public/p2240299551.webp',
-				'https://img1.doubanio.com/view/photo/l/public/p2563778789.webp',
-				'https://img3.doubanio.com/view/photo/l/public/p2562775911.webp',
-				'https://img3.doubanio.com/view/photo/l/public/p2581352902.webp',
-				'https://img3.doubanio.com/view/photo/l/public/p2564789601.webp',
-				'https://img1.doubanio.com/view/photo/l/public/p2107663908.webp',
-				'https://img3.doubanio.com/view/photo/l/public/p2201817941.webp',
-				'https://img9.doubanio.com/view/photo/l/public/p2563777035.webp',
-				'https://img3.doubanio.com/view/photo/l/public/p2107662390.webp'
-			]
-			this.update({key: 'defaultBgList', value: defaultBgList})
 			this.turnBgTimer = setInterval(this.turnBg, 1000 * this.turnBgSecond)
 			// 默认清晰,加载后需手动模糊
 			this.turnClear()

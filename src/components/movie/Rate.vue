@@ -72,7 +72,7 @@
 						// 雷达形状
 						shape: 'polygon',
 						// 半径
-						radius: '50%',
+						radius: '45%',
 						// 位置
 						center: ['50%', '50%'],
 						// 雷达图圈数设置
@@ -258,7 +258,7 @@
                     <th style="text-align:center;padding:2px 5px">评价数</th>
                     `
 				if (this.isRadarNow) {
-					result += `<th style="text-align:center">提示</th>`
+					result += `<th style="text-align:center">说明</th>`
 				}
 				result += `</tr>`
 				this.rateList.forEach(rate => {
@@ -343,10 +343,10 @@
 
 	#movie-rate-component .award-list {
 		border-top: 2px solid rgba(255, 255, 255, 0.2);
-		padding-top: 8px;
+		padding-top: 5px;
 		max-width: 290px;
 		overflow: hidden;
-		font-size: 14px;
+		font-size: 12px;
 		font-weight: 600;
 	}
 

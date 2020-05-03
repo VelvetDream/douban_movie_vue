@@ -7,11 +7,12 @@
 			</a>
 			<div class="bar-center">
 				<el-autocomplete
-					:debounce="0"
+					:debounce="300"
 					:fetch-suggestions="searchTipsAsync"
 					@select="handSelect"
 					class="search"
-					placeholder="豆瓣电影  丨  豆瓣影人  丨  电影场景  丨  拍摄地点  丨  电影配乐  丨  电影歌单  丨  原声大碟"
+					id="search-auto"
+					placeholder="            电影   丨   影人  丨   场景   丨   资源   丨   取景   丨   配乐   丨   歌单   丨   原声            "
 					trigger-on-focus
 					v-model="keyword"
 				>
@@ -19,6 +20,7 @@
 						<el-option label="电影" value="movie"></el-option>
 						<el-option label="影人" value="celebrity"></el-option>
 						<el-option label="场景" value="scene"></el-option>
+						<el-option label="资源" value="resource"></el-option>
 						<el-option label="地点" value="place"></el-option>
 						<el-option label="配乐" value="song"></el-option>
 						<el-option label="歌单" value="playlist"></el-option>
@@ -26,7 +28,7 @@
 					</el-select>
 					<el-button @click="searchPage" icon="el-icon-search" slot="append"></el-button>
 					<template slot-scope="{ item }" style="">
-						<div class="search-tips" v-show="searchSelect==='movie' && item.base">
+						<div class="search-tips" v-if="searchSelect==='movie' && item.base">
 							<el-image :src="item.base.urlPoster" class="poster" fit="fill" lazy>
 								<div class="image-slot" slot="error">
 									<i class="el-icon-picture-outline"></i>
@@ -38,7 +40,7 @@
                     <span>{{ item.base.nameZh }}</span>
                     {{item.base.startYear?" ("+item.base.startYear+")":"" }}
                   </span>
-									<span class="rate" v-show="item.rate">
+									<span class="rate" v-if="item.rate">
                     {{ Number.isInteger(item.rate.score)?item.rate.score+".0":item.rate.score }}
                     <el-image class="rate-from" fit="cover" src="/image/douban.ico"/>
                   </span>
@@ -96,6 +98,22 @@
 								<div class="description">
 									<span>{{ item.nameEn }}</span>
 									<span>{{item.description?"=> "+item.description:""}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="search-tips" v-if="searchSelect==='resource' && item.length!==0">
+							<div class="content">
+								<div class="title">
+							                  <span class="name-zh">
+							                    <span>{{ item.nameZh }}</span>
+							                    {{item.createYear && item.createYear!=0?" ("+item.createYear+")":""}}
+							                  </span>
+									<span :style="'background-color: rgba('+item.websiteColor+',0.7)'" class="rate resource">
+										{{item.typeResource}}
+							                  </span>
+								</div>
+								<div class="description">
+									<el-link :href="item.urlResource" target="_blank">{{ item.nameOrigin }}</el-link>
 								</div>
 							</div>
 						</div>
@@ -292,12 +310,8 @@
 		data() {
 			return {
 				githubPlus: domain.github + '/humingk/douban_movie_plus',
-				// 搜索选择器
-				searchSelect: 'movie',
 				offset: 0,
 				limit: 15,
-				// 当前搜索框关键字
-				keyword: '',
 				logoOverStyle: '',
 				isLogoOver: false,
 				githubOverClass: '',
@@ -323,6 +337,37 @@
 				]
 			}
 		},
+		computed: {
+			// 个人中心
+			personalCenter() {
+				if (this.userInfo) {
+					return this.userInfo.userId
+				} else {
+					return '登录/注册'
+				}
+			},
+			// 双向绑定 v-model
+			searchSelect: {
+				get() {
+					return this.$store.state.searchSelect
+				},
+				set(newValue) {
+					this.update({key: 'searchSelect', value: newValue})
+				}
+			},
+			// 双向绑定 v-model
+			keyword: {
+				get() {
+					return this.$store.state.keyword
+				},
+				set(newValue) {
+					this.update({key: 'keyword', value: newValue})
+				}
+			},
+			...mapState({
+				userInfo: 'userInfo'
+			})
+		},
 		methods: {
 			// 搜索提示
 			searchTipsAsync(keyword, callback) {
@@ -346,6 +391,11 @@
 							break
 						case 'scene':
 							this.$api.search.movieSceneTips(params).then(res => {
+								callback(res)
+							})
+							break
+						case 'resource':
+							this.$api.search.resourceDetails(params).then(res => {
 								callback(res)
 							})
 							break
@@ -385,7 +435,7 @@
 			// 跳转到搜索页面
 			searchPage() {
 				if (this.keyword !== '') {
-					window.open('/movie/subject_search?search_text=' + this.keyword)
+					window.open('/search?type=' + this.searchSelect + '&keyword=' + this.keyword)
 				}
 			},
 			// 跳转到选定条目
@@ -399,6 +449,9 @@
 						break
 					case 'scene':
 						window.open('/scene/' + item.id)
+						break
+					case 'resource':
+						window.open(item.urlResource)
 						break
 					case 'place':
 						window.open('/place/' + item.id)
@@ -441,19 +494,6 @@
 				}
 			},
 			...mapActions(['update', 'updatePopups'])
-		},
-		computed: {
-			// 个人中心
-			personalCenter() {
-				if (this.userInfo) {
-					return this.userInfo.userId
-				} else {
-					return '登录/注册'
-				}
-			},
-			...mapState({
-				userInfo: state => state.userInfo
-			})
 		}
 	}
 </script>
@@ -536,6 +576,11 @@
 		white-space: pre-wrap;
 	}
 
+	.el-autocomplete-suggestion__wrap ul li {
+		padding: 5px;
+		border-bottom: 1px solid snow;
+	}
+
 	/* router row排列 */
 	.nav-items {
 		flex: auto;
@@ -596,6 +641,12 @@
 		color: #f31919;
 	}
 
+	.search-tips .title .rate.resource {
+		border-radius: 5px;
+		font-size: 20px;
+		color: #000;
+	}
+
 	.search-tips .title .rate .rate-from {
 		width: 18px;
 		height: 18px;
@@ -607,6 +658,9 @@
 	}
 
 	/* 其他样式 --------------------------------------- */
+	.el-select-dropdown__wrap {
+		max-height: 290px;
+	}
 
 	.el-link.el-link--primary {
 		color: #054ebd;
@@ -697,11 +751,12 @@
 
 	/* ul 下拉框 */
 	.el-autocomplete-suggestion__wrap.el-scrollbar__wrap {
-		max-height: 470px;
+		max-height: 480px;
 	}
 
 	.el-select-dropdown {
 		background-color: rgba(255, 255, 255, 0.8);
+
 	}
 
 	/* li 选项 */
