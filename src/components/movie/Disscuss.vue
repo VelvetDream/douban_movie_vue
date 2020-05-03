@@ -179,7 +179,7 @@
 		height: 100%;
 		display: flex;
 		flex-direction: row;
-		justify-content: space-between;
+		justify-content: center;
 		align-items: center;
 	}
 
@@ -205,13 +205,13 @@
 	}
 
 	.review-list .swiper {
-		flex: 0 0 700px;
+		flex: 0 0 710px;
 		height: 240px;
 		background-color: rgba(255, 255, 255, 0);
 	}
 
 	.review-list .swiper .swiper-slide {
-		width: 700px;
+		width: 710px;
 		height: 240px;
 		overflow: auto;
 		background-color: rgba(255, 255, 255, 0.4);

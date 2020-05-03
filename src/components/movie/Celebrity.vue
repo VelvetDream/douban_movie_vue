@@ -9,7 +9,7 @@
 			<swiper-slide :key="index" v-for="(item, index) in celebrityList">
 				<a :href="item.urlCelebrityDouban" target="_blank">
 					<div class="portrait">
-						<img :src="item.urlPortrait" onerror="this.src='/image/celebrity/celebrity_1.jpg'"/>
+						<img :src="item.urlPortrait" class="portrait-img" onerror="this.src='/image/celebrity/celebrity_1.png'"/>
 					</div>
 					<span class="name">{{item.nameZh}}</span>
 				</a>
@@ -122,6 +122,11 @@
 		justify-content: center;
 		align-items: center;
 		border-radius: 5% / 100%;
+	}
+
+	#movie-celebrity-component .swiper .portrait-img {
+		/* 图片上下 居中 */
+		margin-top: -20px;
 	}
 
 	/* slide */

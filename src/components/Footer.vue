@@ -3,27 +3,31 @@
 		<div class="footer-left"/>
 		<div class="footer-classic">
 			<span class="classic-content">
-
+				{{movieLinesLong[currentMovieLinesLong]}}
 			</span>
 			<span class="classic-author">
 
 			</span>
 		</div>
-		<div class="footer-tool" v-show="isShowTool">
+		<div class="footer-tool">
+			<div v-show="isShowTool">
 			<span class="classic-add">
 				<el-link>
 					添加
 				</el-link>
 			</span>
-			<span class="classic-fix">
+				<span class="classic-fix">
 				<el-link>
 					纠错
 				</el-link>
 			</span>
+			</div>
 		</div>
 	</div>
 </template>
 <script>
+	import {mapState} from 'vuex'
+
 	export default {
 		name: 'footer-component',
 		data() {
@@ -31,7 +35,12 @@
 				isShowTool: false,
 			}
 		},
-		computed: {},
+		computed: {
+			...mapState({
+				movieLinesLong: 'movieLinesLong',
+				currentMovieLinesLong: 'currentMovieLinesLong'
+			})
+		},
 		watch: {},
 		mounted() {
 		},
@@ -44,17 +53,20 @@
 		height: 100%;
 		display: flex;
 		flex-direction: row;
-		justify-content: flex-end;
+		justify-content: center;
 		align-items: center;
 		background: linear-gradient(
 			to bottom,
 			rgba(255, 255, 255, 0.01),
 			rgba(255, 255, 255, 0.05),
 			rgba(255, 255, 255, 0.1),
-			rgba(255, 255, 255, 0.16),
-			rgba(255, 255, 255, 0.23),
-			rgba(255, 255, 255, 0.31),
+			rgba(255, 255, 255, 0.2),
+			rgba(255, 255, 255, 0.3),
 			rgba(255, 255, 255, 0.4),
+			rgba(255, 255, 255, 0.5),
+			rgba(255, 255, 255, 0.5),
+			rgba(255, 255, 255, 0.5),
+			rgba(255, 255, 255, 0.5),
 			rgba(255, 255, 255, 0.5)
 		);
 	}
@@ -65,12 +77,27 @@
 
 	#footer-component .footer-classic {
 		flex: 1;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+	}
 
+	#footer-component .footer-classic .classic-content {
+		padding-top: 40px;
+		font-size: 22px;
+		font-weight: 600;
 	}
 
 	#footer-component .footer-tool {
 		flex: 0 0 200px;
 		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	#footer-component .footer-tool div {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;

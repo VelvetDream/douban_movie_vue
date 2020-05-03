@@ -1,15 +1,33 @@
 <template>
 	<div id="welcome-component">
 			<span class="welcome-title">
-				此页面正在开发中...
+				使用方式
 			</span>
+		<span class="welcome-title way">
+				★ 豆瓣电影<span style="color: red">douban</span>后加一个<span style="color: red;font-weight: 800">S</span>
+		</span>
+		<span class="welcome-title arrow">
+				☟
+		</span>
+		<div class="welcome-content example">
+			<el-link href="/subject/1291561/" target="_blank">https://movie.douban<span
+				style="color:red;font-weight: 800;font-size: 20px">s</span>.com/subject/1291561/
+			</el-link>
+		</div>
+		<span class="welcome-title way">
+				★ 调用本项目API服务你的应用
+		</span>
+		<span class="welcome-title arrow">
+				☟
+		</span>
+		<div class="welcome-content example">
+			<el-link href="https://api.doubans.com" target="_blank">API文档
+			</el-link>
+		</div>
 		<div class="welcome-content">
-			本站开源，如果你喜欢本站，欢迎来改进它～
+			本站开源，如果你喜欢，欢迎来改进它～
 		</div>
 		<div class="welcome-github">
-			<div class="github-tips">
-				Github仓库地址
-			</div>
 			<div class="github-plus">
 				<span>
 				本站后端(Spring)
@@ -49,7 +67,7 @@
 </script>
 <style>
 	#welcome-component {
-		margin-top: 100px;
+		margin-top: 40px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -64,17 +82,34 @@
 	#welcome-component .welcome-title {
 		font-size: 30px;
 		font-weight: 600;
+		padding-bottom: 10px;
+	}
+
+	#welcome-component .way {
+		font-size: 22px;
+		padding-bottom: 0;
+	}
+
+	#welcome-component .arrow {
+		padding-bottom: 0;
 	}
 
 	#welcome-component .welcome-content {
-		padding-top: 30px;
+		padding-top: 5px;
+		font-weight: 600;
+	}
+
+	#welcome-component .welcome-content.example {
+		font-size: 18px;
+		padding-top: 0;
+		padding-bottom: 10px;
 	}
 
 	#welcome-component .welcome-github {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
-		padding-top: 30px;
+		padding-top: 10px;
 	}
 
 	.welcome-github .github-tips {
