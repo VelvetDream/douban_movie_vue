@@ -18,6 +18,7 @@
 	</div>
 </template>
 <script>
+	import 'animate.css'
 	import {mapActions, mapState} from 'vuex'
 
 	export default {
@@ -27,7 +28,7 @@
 				// 当前背景图id
 				nowBgId: Math.round(Math.random() * 50),
 				// 背景切换时间间隔 /s 第一次以后减去2s
-				turnBgSecond: 300,
+				turnBgSecond: 30,
 				// 是否正在切换背景
 				isChangingBg: false,
 				// 切换背景计时器
@@ -75,6 +76,12 @@
 				}
 			}
 		},
+		mounted() {
+			window.addEventListener('scroll', this.throttling(this.scroll, 300, 1000));
+			this.turnBgTimer = setInterval(this.turnBg, 1000 * this.turnBgSecond)
+			// 默认清晰,加载后需手动模糊
+			this.turnClear()
+		},
 		methods: {
 			// 轮流切换背景
 			turnBg() {
@@ -103,52 +110,58 @@
 						// 取消自动轮换
 						clearInterval(this.turnBgTimer)
 						// 切换锚下滑
-						this.pullStyle = 'pullOff animated slideOutDown'
+						this.pullStyle = 'pullOff animate__animated animate__slideOutDown'
 						// 下滑后切换打开
 						setTimeout(() => {
-							this.pullStyle = 'pullOn animated swing'
+							this.pullStyle = 'pullOn animate__animated animate__swing'
 							this.pullOnOff = 'on'
 						}, 350)
 					} else {
 						// 切换锚已打开
-						this.pullStyle = 'pullOn animated swing'
+						this.pullStyle = 'pullOn animate__animated animate__swing'
 					}
 					this.turnBg()
 				}
 			},
+			// 节流
+			throttling(fn, wait, maxTimelong) {
+				let timeout = null,
+					startTime = Date.parse(new Date);
+				return function () {
+					if (timeout !== null) clearTimeout(timeout);
+					let curTime = Date.parse(new Date);
+					if (curTime - startTime >= maxTimelong) {
+						fn();
+						startTime = curTime;
+					} else {
+						timeout = setTimeout(fn, wait);
+					}
+				}
+			},
 			// 监听滚动
 			scroll() {
-				if (!this.isScrolling) {
-					this.isScrolling = true
-					let that = this
-					window.onscroll = function () {
-						// 滚动条距离顶部的距离
-						var scrollTop =
-							document.documentElement.scrollTop || document.body.scrollTop
-						// 可视区的高度
-						var windowHeight =
-							document.documentElement.clientHeight || document.body.clientHeight
-						// 滚动条的总高度
-						var scrollHeight =
-							document.documentElement.scrollHeight || document.body.scrollHeight
-						// 接近底部
-						if (scrollTop + windowHeight > scrollHeight - 200) {
-							// 之前不在底部
-							if (!that.isBottom) {
-								that.isBottom = true
-								that.turnClear()
-							}
-						} else {
-							// 之前在底部
-							if (that.isBottom) {
-								that.isBottom = false
-								that.turnBlur()
-							}
-						}
+				// 滚动条距离顶部的距离
+				var scrollTop =
+					document.documentElement.scrollTop || document.body.scrollTop
+				// 可视区的高度
+				var windowHeight =
+					document.documentElement.clientHeight || document.body.clientHeight
+				// 滚动条的总高度
+				var scrollHeight =
+					document.documentElement.scrollHeight || document.body.scrollHeight
+				// 接近底部
+				if (scrollTop + windowHeight > scrollHeight - 300) {
+					// 之前不在底部
+					if (!this.isBottom) {
+						this.isBottom = true
+						this.turnClear()
 					}
-					setTimeout(() => {
-						that.isScrolling = false
-					}, 2000)
+				} else {
+					// 之前在底部
+					if (this.isBottom) {
+						this.isBottom = false
+						this.turnBlur()
+					}
 				}
 			},
 			// 背景清晰
@@ -180,12 +193,7 @@
 			},
 			...mapActions(['update'])
 		},
-		mounted() {
-			window.addEventListener('scroll', this.scroll)
-			this.turnBgTimer = setInterval(this.turnBg, 1000 * this.turnBgSecond)
-			// 默认清晰,加载后需手动模糊
-			this.turnClear()
-		},
+
 	}
 </script>
 <style>

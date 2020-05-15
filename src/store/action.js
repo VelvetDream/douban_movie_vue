@@ -27,4 +27,13 @@ export default {
 	updatePopups: function (context, keyValue) {
 		context.commit('updatePopups', keyValue)
 	},
+	/**
+	 * 异步更新state.subject
+	 *
+	 * @param {*} context
+	 * @param {*} keyValue subject键值对
+	 */
+	updateSubject: function (context, keyValue) {
+		context.commit('updateSubject', keyValue)
+	},
 }

@@ -2,7 +2,7 @@
 	<div @mouseenter="isShowTool=true" @mouseleave="isShowTool=false" id="footer-component">
 		<div class="footer-left"/>
 		<div class="footer-classic">
-			<span class="classic-content">
+			<span class="classic-content animate__animated animate__zoomIn">
 				{{movieLinesLong[currentMovieLinesLong]}}
 			</span>
 			<span class="classic-author">

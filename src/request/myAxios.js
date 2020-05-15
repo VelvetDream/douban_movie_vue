@@ -8,7 +8,7 @@ import {Notification} from 'element-ui'
 
 // 创建axios实例，超时5s
 var instance = axios.create({
-	timeout: 5000
+	timeout: 20000
 })
 // axios的post请求的默认请求头
 instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'

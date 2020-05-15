@@ -26,6 +26,18 @@ export default new Vuex.Store({
 		keyword: '',
 		// 当前中文名（电影、影人）
 		nameZh: '',
+		// subject页面子组件加载状态
+		subject: {
+			// 获取数据是否结束
+			isDetailsDone: false,
+			isZhihuDone: false,
+			isResourceDone: false,
+			isSceneDone: false,
+			isNmDone: false,
+			// 获取数据是否成功
+			isResourceGot: false,
+			isSceneGot: false,
+		},
 		// 特定页面背景图片列表
 		specialBgList: [],
 		// 默认页面背景图片列表

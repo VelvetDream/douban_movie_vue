@@ -1,7 +1,8 @@
 /** 域名统一管理 */
 const domain = {
 	// plus后端网关
-	plus: process.env.NODE_ENV === 'pro' ? 'https://api.doubans.com/v2' : 'http://39.96.113.116:9527/v2',
+	plus: process.env.VUE_APP_API,
+	// plus: 'http://localhost:9527/v2',
 	// neteaseMusicApi
 	// neteaseMusicApi: 'http://localhost:10102',
 	// neteaseMusicApi: 'https://movie.doubans.com/neteaseThirdApi',

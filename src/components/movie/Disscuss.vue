@@ -49,11 +49,11 @@
 				 @mouseleave="startCommentSwiper()"
 				 class="comment-list"
 				 v-if="commentList.length!==0">
-			<swiper
+			<Swiper
 				:options="commentSwiperOption"
 				class="swiper"
 				ref="commentSwiper">
-				<swiper-slide :key="index" v-for="(item, index) in commentList">
+				<SwiperSlide :key="index" v-for="(item, index) in commentList">
 					<span class="content">{{item.content}}</span>
 					<span class="disscuss-footer">
 						<span class="like">
@@ -75,20 +75,20 @@
 							</span>
 						</span>
 					</span>
-				</swiper-slide>
-			</swiper>
+				</SwiperSlide>
+			</Swiper>
 		</div>
 	</div>
 </template>
 <script>
-	import 'swiper/dist/css/swiper.css'
-	import {swiper, swiperSlide} from 'vue-awesome-swiper'
+	import 'swiper/css/swiper.css'
+	import {Swiper, SwiperSlide} from 'vue-awesome-swiper'
 
 	export default {
 		name: 'movieDisscussComponent',
 		components: {
-			swiper,
-			swiperSlide
+			Swiper,
+			SwiperSlide
 		},
 		props: {
 			commentList: Array,
@@ -140,35 +140,40 @@
 				},
 			}
 		},
-		computed: {
-			reviewSwiper() {
-				return this.$refs.reviewSwiper.swiper
-			},
-			commentSwiper() {
-				return this.$refs.commentSwiper.swiper
-			},
-		},
+		computed: {},
 		watch: {},
 		mounted() {
 		},
 		methods: {
 			nextReviewSwiper() {
-				this.reviewSwiper.slideNext()
+				if (this.$refs.reviewSwiper.$swiper) {
+					this.$refs.reviewSwiper.$swiper.slideNext()
+				}
 			},
 			startReviewSwiper() {
-				this.reviewSwiper.autoplay.start()
+				if (this.$refs.reviewSwiper.$swiper) {
+					this.$refs.reviewSwiper.$swiper.autoplay.start()
+				}
 			},
 			stopReviewSwiper() {
-				this.reviewSwiper.autoplay.stop()
+				if (this.$refs.reviewSwiper.$swiper) {
+					this.$refs.reviewSwiper.$swiper.autoplay.stop()
+				}
 			},
 			nextCommentSwiper() {
-				this.commentSwiper.slideNext()
+				if (this.$refs.commentSwiper.$swiper) {
+					this.$refs.commentSwiper.$swiper.slideNext()
+				}
 			},
 			startCommentSwiper() {
-				this.commentSwiper.autoplay.start()
+				if (this.$refs.commentSwiper.$swiper) {
+					this.$refs.commentSwiper.$swiper.autoplay.start()
+				}
 			},
 			stopCommentSwiper() {
-				this.commentSwiper.autoplay.stop()
+				if (this.$refs.commentSwiper.$swiper) {
+					this.$refs.commentSwiper.$swiper.autoplay.stop()
+				}
 			},
 		},
 	}

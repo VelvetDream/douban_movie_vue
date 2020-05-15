@@ -5,15 +5,15 @@
 				<path d="M0 22L22 0l2.1 2.1L4.2 22l19.9 19.9L22 44 0 22z" fill="rgba(255, 255, 255, 0.5)"/>
 			</svg>
 		</div>
-		<swiper :options="swiperOption" class="swiper">
-			<swiper-slide :key="index" v-for="(item, index) in celebrityList">
+		<Swiper :options="swiperOption" class="swiper">
+			<SwiperSlide :key="index" v-for="(item, index) in celebrityList">
 				<a :href="item.urlCelebrityDouban" target="_blank">
 					<div class="portrait">
 						<img :src="item.urlPortrait" class="portrait-img" onerror="this.src='/image/celebrity/celebrity_1.png'"/>
 					</div>
 					<span class="name">{{item.nameZh}}</span>
 				</a>
-			</swiper-slide>
+			</SwiperSlide>
 		</swiper>
 		<div class="celebrity-list-next" slot="button-next">
 			<svg class="next" viewBox="0 0 27 44" xmlns="http://www.w3.org/2000/svg">
@@ -23,15 +23,14 @@
 	</div>
 </template>
 <script>
-	import 'swiper/dist/css/swiper.css'
-
-	import {swiper, swiperSlide} from 'vue-awesome-swiper'
+	import 'swiper/css/swiper.css';
+	import {Swiper, SwiperSlide} from 'vue-awesome-swiper'
 
 	export default {
 		name: 'movieCelebrityComponent',
 		components: {
-			swiper,
-			swiperSlide
+			Swiper,
+			SwiperSlide
 		},
 		data() {
 			return {
@@ -157,7 +156,7 @@
 
 	.swiper-slide a .name {
 		flex: 1;
-		font-size: 18px;
+		font-size: 16px;
 		font-weight: 500;
 		color: #000;
 	}

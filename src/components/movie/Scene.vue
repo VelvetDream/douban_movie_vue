@@ -65,6 +65,7 @@
 </template>
 <script>
 	import domain from "../../request/domain";
+	import {mapActions} from "vuex";
 
 	export default {
 		name: 'movieSceneComponent',
@@ -73,7 +74,6 @@
 		},
 		data() {
 			return {
-				google: domain.google,
 				sceneBases: null
 			}
 		},
@@ -86,16 +86,20 @@
 			init() {
 				if (this.movieId) {
 					this.$api.scene.sceneBases({id: this.movieId}).then(res => {
-						this.sceneBases = res
-						this.$emit('updateIsSceneOk', true)
+						setTimeout(() => {
+							this.sceneBases = res
+							this.updateSubject({key: 'isSceneGot', value: true})
+							this.updateSubject({key: 'isSceneDone', value: true})
+						}, 2000)
 					}).catch(error => {
-						this.$emit('updateIsSceneNone', true)
+						this.updateSubject({key: 'isSceneDone', value: true})
 					})
 				}
 			},
 			getGoogleMap(item) {
-				return this.google + '/maps/search/?api=1&query=' + item.place.base.latitude + ',' + item.place.base.longitude
-			}
+				return domain.google + '/maps/search/?api=1&query=' + item.place.base.latitude + ',' + item.place.base.longitude
+			},
+			...mapActions(['update', 'updateSubject'])
 		},
 	}
 </script>
