@@ -1,9 +1,9 @@
 <template>
 	<div id="movie-music-component">
 		<div class="music-item border" v-if="players.songList.length!==0 ">
-			<div :element-loading-text="randomMovieLineShort()"
+			<div :element-loading-background="loadingBg"
+					 :element-loading-text="randomMovieLineShort()"
 					 class="comment"
-					 element-loading-background="rgba(0, 0, 0, 0)"
 					 v-loading="isGettingSongComent">
 				<swiper
 					:options="commentSwiperOption"
@@ -36,9 +36,9 @@
 			</div>
 		</div>
 		<div class="music-item border" v-if="players.playlistSongList.length!==0 ">
-			<div :element-loading-text="randomMovieLineShort()"
+			<div :element-loading-background="loadingBg"
+					 :element-loading-text="randomMovieLineShort()"
 					 class="comment"
-					 element-loading-background="rgba(0, 0, 0, 0)"
 					 v-loading="isGettingPlaylistSongComent">
 				<swiper :options="commentSwiperOption"
 								class="swiper"
@@ -63,7 +63,8 @@
 				</swiper>
 			</div>
 			<div class="player">
-				<aPlayer :list="players.playlistSongList"
+				<aPlayer :autoplay="true"
+								 :list="players.playlistSongList"
 								 :music="players.playlistSongList[0]"
 								 preload="none"
 								 ref="playlist"
@@ -71,16 +72,16 @@
 			</div>
 		</div>
 		<div class="music-item" v-if="players.albumSongList.length!==0 ">
-			<div :element-loading-text="randomMovieLineShort()"
+			<div :element-loading-background="loadingBg"
+					 :element-loading-text="randomMovieLineShort()"
 					 class="comment"
-					 element-loading-background="rgba(0, 0, 0, 0)"
 					 v-loading="isGettingAlbumSongComent">
-				<swiper :options="commentSwiperOption"
+				<Swiper :options="commentSwiperOption"
 								class="swiper"
 								v-if="comments.hasOwnProperty(currentAlbumSongId)">
-					<swiper-slide :key="item.commentId"
-												class="comment-detail"
-												v-for="item in comments[currentAlbumSongId]">
+					<SwiperSlide :key="item.commentId"
+											 class="comment-detail"
+											 v-for="item in comments[currentAlbumSongId]">
 						<span class="content">{{item.content}}</span>
 						<span class="comment-footer">
 							<span class="like">
@@ -94,11 +95,12 @@
 								</el-link>
 							</span>
 						</span>
-					</swiper-slide>
-				</swiper>
+					</SwiperSlide>
+				</Swiper>
 			</div>
 			<div class="player">
-				<aPlayer :list="players.albumSongList"
+				<aPlayer :autoplay="true"
+								 :list="players.albumSongList"
 								 :music="players.albumSongList[0]"
 								 preload="none"
 								 ref="album"
@@ -109,18 +111,19 @@
 </template>
 <script>
 	import aPlayer from 'vue-aplayer'
-	import 'swiper/dist/css/swiper.css'
-	import {swiper, swiperSlide} from 'vue-awesome-swiper'
+	import 'swiper/css/swiper.css'
+	import {Swiper, SwiperSlide} from 'vue-awesome-swiper'
 	import domain from "../../request/domain";
-	import {mapState} from "vuex";
+	import {mapActions, mapState} from "vuex";
+
 
 	aPlayer.disableVersionBadge = true
 	export default {
 		name: 'movieMusicComponent',
 		components: {
 			aPlayer,
-			swiper,
-			swiperSlide
+			Swiper,
+			SwiperSlide
 		},
 		props: {
 			keyword: String
@@ -128,6 +131,8 @@
 		data() {
 			return {
 				neteaseMusic: domain.neteaseMusic,
+				// 加载动画背景
+				loadingBg: "rgba(0, 0, 0, 0)",
 				// 是否正在获取评论
 				isGettingSongComent: false,
 				isGettingAlbumSongComent: false,
@@ -482,13 +487,14 @@
 			// 更新isNmOk
 			updateIsNmOkNow() {
 				if (this.isSongPlayerOk && this.isAlbumPlayerOk && this.isPlaylistPlayerOk) {
-					this.$emit('updateIsNmOk', true)
+					this.updateSubject({key: 'isNmDone', value: true})
 				}
 			},
 			// 随机电影台词
 			randomMovieLineShort() {
 				return this.movieLinesShort[Math.floor(Math.random() * this.movieLinesShort.length)]
-			}
+			},
+			...mapActions(['updateSubject'])
 		},
 	}
 </script>

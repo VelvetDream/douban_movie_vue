@@ -34,4 +34,13 @@ export default {
 	updatePopups: function (state, keyValue) {
 		state.popups[keyValue.key] = keyValue.value
 	},
+	/**
+	 * 更新state.subject
+	 *
+	 * @param {*} state
+	 * @param {*} keyValue subject键值对
+	 */
+	updateSubject: function (state, keyValue) {
+		state.subject[keyValue.key] = keyValue.value
+	},
 }

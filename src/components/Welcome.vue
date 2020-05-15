@@ -21,7 +21,7 @@
 				☟
 		</span>
 		<div class="welcome-content example">
-			<el-link href="https://api.doubans.com" target="_blank">API文档
+			<el-link href="https://api.doubans.com" style="color:red;" target="_blank">API文档
 			</el-link>
 		</div>
 		<div class="welcome-content">
@@ -101,9 +101,11 @@
 
 	#welcome-component .welcome-content.example {
 		font-size: 18px;
+		font-weight: 600;
 		padding-top: 0;
 		padding-bottom: 10px;
 	}
+
 
 	#welcome-component .welcome-github {
 		display: flex;

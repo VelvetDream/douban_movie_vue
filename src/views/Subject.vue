@@ -1,77 +1,66 @@
 <template>
-	<div :element-loading-text="randomMovieLineLong"
-			 element-loading-background="rgba(0, 0, 0, 0)"
+	<div :element-loading-background="loadingBg"
+			 :element-loading-text="randomMovieLineLong"
 			 id="subject-view"
 			 v-loading.fullscreen.lock="isLoading">
-		<div style="min-height: 500px" v-show="!isDetailsOk"/>
-		<div class="detail">
-			<div class="left" v-show="isDetailsOk">
-				<movie-base-component :bases="bases"/>
+		<div style="min-height: 500px" v-if="isLoading"/>
+		<div v-if="isMovieNone">
+			<movie-none-component/>
+		</div>
+		<div class="detail" v-if="isMovieGot">
+			<div class="left" v-if="movieBases">
+				<movie-base-component :movieBases="movieBases"/>
 			</div>
-			<div class="right" v-show="isDetailsOk">
+			<div class="right" v-if="rateList.length!==0">
 				<movie-rate-component
-					:award-list="movieDetails && movieDetails.douban && movieDetails.douban.awardList.length!==0?movieDetails.douban.awardList:[]"
-					:rate-list="rateList"
-					v-show="rateList.length!==0"/>
+					:award-list="awardList"
+					:rate-list="rateList"/>
 			</div>
 		</div>
-		<div class="celebrity-list">
+		<div class="celebrity-list"
+				 v-if="celebrityList.length!==0">
 			<movie-celebrity-component
-				:celebrity-list="celebrityList" v-if="isDetailsOk && celebrityList.length!==0"/>
+				:celebrity-list="celebrityList"/>
 		</div>
-		<div
-			:style="skeleton(isDetailsOk && movieDetails && movieDetails.douban && (movieDetails.douban.commentList.length!==0 || movieDetails.douban.reviewList.length!==0))"
-			class="douban-disscuss"
-			v-if="isDetailsOk && movieDetails && movieDetails.douban && (movieDetails.douban.commentList.length!==0 || movieDetails.douban.reviewList.length!==0)"
-		>
+		<div class="douban-disscuss"
+				 v-if="commentList.length!==0 || reviewList.length!==0">
 			<movie-disscuss-component
-				:comment-list="movieDetails.douban.commentList"
-				:review-list="movieDetails.douban.reviewList"
-			/>
+				:comment-list="commentList"
+				:review-list="reviewList"/>
 		</div>
 		<div
-			:style="skeleton(isDetailsOk && zhihuBases && zhihuBases.questionList && zhihuBases.questionList.length!==0)"
 			class="zhihu-base"
-			v-if="isDetailsOk && zhihuBases && zhihuBases.questionList && zhihuBases.questionList.length!==0">
-			<movie-zhihu-component :update-is-nm-ok="updateIsNmOk"
-														 :zhihu-bases="zhihuBases"
+			v-if="zhihuBases && zhihuBases.questionList && zhihuBases.questionList.length!==0">
+			<movie-zhihu-component :zhihu-bases="zhihuBases"
 														 class="animated zoomIn"
 			/>
 		</div>
 		<vue-lazy-component>
-			<div :element-loading-text="randomMovieLineShort()"
-					 :style="skeleton(isResourceOk)"
+			<div :element-loading-background="loadingBg"
+					 :element-loading-text="randomMovieLineShort()"
+					 :style="isBorder(subjectState.isResourceGot)+minHeightOfResource"
 					 class="resource-list"
-					 element-loading-background="rgba(0, 0, 0, 0)"
-					 v-if="!isResourceNone"
-					 v-loading="!isResourceOk">
+					 v-loading="!subjectState.isResourceDone">
 				<movie-resource-component :movie-id="parseInt(movieId)"
-																	@updateIsResourceNone="updateIsResourceNone"
-																	@updateIsResourceOk="updateIsResourceOk"
-																	class="animated zoomIn"
-																	v-if="movieId"/>
+																	:name-zh="nameZh"
+																	class="animated zoomIn"/>
 			</div>
 		</vue-lazy-component>
 		<vue-lazy-component>
-			<div :element-loading-text="randomMovieLineShort()"
-					 :style="skeleton(isSceneOk)"
+			<div :element-loading-background="loadingBg"
+					 :element-loading-text="randomMovieLineShort()"
+					 :style="isBorder(subjectState.isSceneGot)+minHeightOfScene"
 					 class="scene-base"
-					 element-loading-background="rgba(0, 0, 0, 0)"
-					 v-if="!isSceneNone"
-					 v-loading="!isSceneOk">
+					 v-loading="!subjectState.isSceneDone">
 				<movie-scene-component :movie-id="parseInt(movieId)"
-															 @updateIsSceneNone="updateIsSceneNone"
-															 @updateIsSceneOk="updateIsSceneOk"
-															 class="animated zoomIn"
-															 v-if="movieId"/>
+															 class="animated zoomIn"/>
 			</div>
 		</vue-lazy-component>
 		<vue-lazy-component>
-			<div :style="skeleton(isNmOk)"
+			<div :style="isBorder(subjectState.isNmGot)"
 					 class="netease-music">
-				<movie-music-component :keyword="movieDetails.douban.base.nameZh"
-															 @updateIsNmOk="updateIsNmOk"
-															 v-if="movieDetails"/>
+				<movie-music-component :keyword="nameZh"
+															 class="animated zoomIn"/>
 			</div>
 		</vue-lazy-component>
 	</div>
@@ -85,6 +74,7 @@
 	import movieZhihuComponent from '../components/movie/Zhihu'
 	import movieDisscussComponent from '../components/movie/Disscuss'
 	import movieSceneComponent from '../components/movie/Scene'
+	import movieNoneComponent from '../components/movie/None'
 	import domain from '../request/domain'
 	import {mapActions, mapState} from 'vuex'
 	import {component as vueLazyComponent} from '@xunlei/vue-lazy-component'
@@ -100,46 +90,108 @@
 			movieZhihuComponent,
 			vueLazyComponent,
 			movieDisscussComponent,
-			movieSceneComponent
+			movieSceneComponent,
+			movieNoneComponent
 		},
 		data() {
 			return {
-				// 子组件状态
-				isDetailsOk: false,
-				isZhihuOk: false,
-				isResourceOk: false,
-				isResourceNone: false,
-				isNmOk: false,
-				isSceneOk: false,
-				isSceneNone: false,
 				// 电影ID
 				movieId: null,
 				// 电影详情
 				movieDetails: null,
-				// 知乎基础
+				// 知乎基础信息
 				zhihuBases: null,
-				// 豆瓣电影API详情
-				doubanApiDetails: null,
-				// ---------
-				// 组件prop数据
-				bases: null,
-				rateList: [],
-				celebrityList: [],
+				// 已加载评分列表
+				rateListNow: [],
+				// 加载动画背景
+				loadingBg: "rgba(0, 0, 0, 0)",
 			}
 		},
 		created() {
 		},
+		mounted() {
+			this.init()
+		},
 		computed: {
+			// 主页面加载动画是否加载
 			isLoading() {
-				if (this.isDetailsOk && this.isZhihuOk) {
+				if (this.subjectState.isDetailsDone && this.subjectState.isZhihuDone) {
 					// 模糊背景
 					this.update({key: 'isBgClear', value: false})
 					return false
 				}
 				return true
 			},
+			// true->获取电影为空
+			isMovieNone() {
+				return (this.subjectState.isDetailsDone && this.subjectState.isZhihuDone && this.movieDetails === null)
+			},
+			// true->成功获取电影
+			isMovieGot() {
+				return (this.subjectState.isDetailsDone && this.subjectState.isZhihuDone && this.movieDetails !== null)
+			},
+			// 资源组件最小高度
+			minHeightOfResource() {
+				return (this.subjectState.isResourceDone) ? "" : "min-height:300px"
+			},
+			// 场景组件最小高度
+			minHeightOfScene() {
+				return (this.subjectState.isSceneDone) ? "" : "min-height:300px"
+			},
+			// 电影基础信息
+			movieBases: function () {
+				if (this.movieDetails) {
+					return {
+						douban: {
+							base: this.movieDetails.douban.base,
+							aliasList: this.movieDetails.douban.aliasList,
+							typeList: this.movieDetails.douban.typeList,
+							tagList: this.movieDetails.douban.tagList,
+							celebrityList: this.movieDetails.douban.celebrityList
+						},
+						imdb: this.movieDetails.imdb
+					}
+				}
+				return null
+			},
+			// 评论列表
+			commentList: function () {
+				return (this.movieDetails && this.movieDetails.douban && this.movieDetails.douban.commentList.length !== 0) ? this.movieDetails.douban.commentList : []
+			},
+			// 评论列表
+			reviewList: function () {
+				return (this.movieDetails && this.movieDetails.douban && this.movieDetails.douban.reviewList.length !== 0) ? this.movieDetails.douban.reviewList : []
+			},
+			// 电影获奖列表
+			awardList: function () {
+				return (this.movieDetails && this.movieDetails.douban && this.movieDetails.douban.awardList.length !== 0) ? this.movieDetails.douban.awardList : []
+			},
+			// 豆瓣影人列表
+			celebrityList: function () {
+				return (this.movieDetails && this.movieDetails.douban && this.movieDetails.douban.celebrityList.length !== 0) ? this.movieDetails.douban.celebrityList : []
+			},
+			// 评分列表
+			rateList: function () {
+				// 豆瓣+IMDB+知乎渲染就绪
+				if (this.isMovieGot) {
+					this.rateListNow = []
+					if (this.zhihuBases && this.zhihuBases.topic) {
+						this.parseRate(this.zhihuBases.topic, 'zhihus')
+					}
+					if (this.movieDetails.douban && this.movieDetails.douban.rate) {
+						this.parseRate(this.movieDetails.douban.rate, 'douban')
+					}
+					if (this.movieDetails.imdb && this.movieDetails.imdb.rate) {
+						this.parseRate(this.movieDetails.imdb.rate, 'imdbs')
+					}
+					return this.rateListNow
+				}
+				return []
+			},
 			...mapState({
 					movieLinesShort: 'movieLinesShort',
+					nameZh: 'nameZh',
+					subjectState: 'subject',
 					randomMovieLineLong: state => {
 						return state.movieLinesLong[Math.floor(Math.random() * state.movieLinesLong.length)]
 					}
@@ -151,53 +203,35 @@
 			init() {
 				this.movieId = this.$route.params.movieId
 				if (this.movieId) {
+					// 获取电影详细数据
 					this.$api.movie.movieDetails({id: this.movieId}).then(res => {
 						this.movieDetails = res
-						this.parseDoubanImageList(this.movieDetails)
-						this.parseDoubanMovieBases(this.movieDetails)
-						this.parseDoubanCelebrityList(this.movieDetails)
-						this.parseRate(this.movieDetails.douban.rate, 'douban')
-						this.parseRate(this.movieDetails.imdb.rate, 'imdbs')
-						this.isDetailsOk = true
+						// 标签页名
+						if (this.movieDetails.douban.base) {
+							let nameZh = this.movieDetails.douban.base.nameZh
+							this.update({key: 'nameZh', value: nameZh})
+							document.title = nameZh + ' (plus)'
+						}
+						// 背景图片
+						if (this.movieDetails.douban.imageList.length !== 0) {
+							let specialBgList = []
+							this.movieDetails.douban.imageList.forEach(image => {
+								specialBgList.push(image.urlImageL)
+							})
+							this.update({key: 'specialBgList', value: specialBgList})
+						}
+						this.updateSubject({key: 'isDetailsDone', value: true})
+					}).catch(error => {
+						this.updateSubject({key: 'isDetailsDone', value: true})
 					})
+					// 获取知乎详细数据
 					this.$api.movie.zhihuBases({id: this.movieId}).then(res => {
 						this.zhihuBases = res
-						this.parseRate(this.zhihuBases.topic, 'zhihus')
-						this.isZhihuOk = true
+						this.updateSubject({key: 'isZhihuDone', value: true})
 					}).catch(error => {
-						this.isZhihuOk = true
+						this.updateSubject({key: 'isZhihuDone', value: true})
 					})
 				}
-			},
-			// 解析电影基础信息
-			parseDoubanMovieBases(movieDetails) {
-				this.bases = {
-					douban: {
-						base: movieDetails.douban.base,
-						aliasList: movieDetails.douban.aliasList,
-						typeList: movieDetails.douban.typeList,
-						tagList: movieDetails.douban.tagList,
-						celebrityList: movieDetails.douban.celebrityList
-					},
-					imdb: movieDetails.imdb
-				}
-				if (this.bases.douban.base) {
-					this.update({key: 'nameZh', value: this.bases.douban.base.nameZh})
-				}
-			},
-			// 解析背景图片列表
-			parseDoubanImageList(movieDetails) {
-				if (this.movieDetails.douban.imageList.length !== 0) {
-					let specialBgList = []
-					movieDetails.douban.imageList.forEach(image => {
-						specialBgList.push(image.urlImageL)
-					})
-					this.update({key: 'specialBgList', value: specialBgList})
-				}
-			},
-			// 解析豆瓣影人列表信息
-			parseDoubanCelebrityList(movieDetails) {
-				this.celebrityList = movieDetails.douban.celebrityList
 			},
 			// 解析评分
 			parseRate(rate, type) {
@@ -205,7 +239,7 @@
 					switch (type) {
 						case 'douban':
 							if (rate.score !== 0) {
-								this.rateList.push({
+								this.rateListNow.push({
 									type: '豆瓣',
 									score: rate.score,
 									vote: rate.vote,
@@ -221,17 +255,17 @@
 							break
 						case 'imdbs':
 							if (rate.imdbScore !== 0) {
-								this.rateList.push({
+								this.rateListNow.push({
 									type: 'IMDB',
 									score: rate.imdbScore,
 									vote: rate.imdbVote,
 									color: 'rgb(' + rate.imdbColor + ')',
-									url: domain.imdb + '/title/' + this.movieDetails.imdb.id + '/',
+									url: domain.imdb + '/title/' + this.movieDetails.imdb.base.id + '/',
 									des: `更全面的互联网电影数据库`
 								})
 							}
 							if (rate.tomatoScore !== 0) {
-								this.rateList.push({
+								this.rateListNow.push({
 									type: '烂番茄',
 									score: rate.tomatoScore,
 									vote: 0,
@@ -244,7 +278,7 @@
 								})
 							}
 							if (rate.mtcScore !== 0) {
-								this.rateList.push({
+								this.rateListNow.push({
 									type: 'MTC',
 									score: rate.mtcScore,
 									vote: 0,
@@ -260,7 +294,7 @@
 						case 'zhihus':
 							// 解析评分
 							if (rate.zhihuScore !== 0) {
-								this.rateList.push({
+								this.rateListNow.push({
 									type: '知乎',
 									score: rate.zhihuScore,
 									vote: rate.zhihuVote,
@@ -270,7 +304,7 @@
 								})
 							}
 							if (rate.maoyanScore !== 0) {
-								this.rateList.push({
+								this.rateListNow.push({
 									type: '猫眼',
 									score: rate.maoyanScore,
 									vote: 0,
@@ -285,35 +319,17 @@
 					}
 				}
 			},
-			// 子组件骨架
-			skeleton(isOk) {
+			// 下边界线style
+			isBorder(isOk) {
 				return isOk ? 'border-bottom: 2px solid rgba(255, 255, 255, 0.2);' : ''
-			},
-			updateIsResourceOk(isResourceOk) {
-				this.isResourceOk = isResourceOk
-			},
-			updateIsResourceNone(isResourceNone) {
-				this.isResourceNone = isResourceNone
-			},
-			updateIsSceneOk(isSceneOk) {
-				this.isSceneOk = isSceneOk
-			},
-			updateIsSceneNone(isSceneNone) {
-				this.isSceneNone = isSceneNone
-			},
-			updateIsNmOk(isNmOk) {
-				this.isNmOk = isNmOk
 			},
 			// 随机电影台词
 			randomMovieLineShort() {
 				return this.movieLinesShort[Math.floor(Math.random() * this.movieLinesShort.length)]
 			},
-			...mapActions(['update'])
+			...mapActions(['update', 'updateSubject'])
 		},
-		filters: {},
-		mounted() {
-			this.init()
-		}
+		filters: {}
 	}
 </script>
 <style>
@@ -351,6 +367,7 @@
 		flex-direction: row;
 		padding-top: 10px;
 		padding-bottom: 10px;
+		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 	}
 
 	#subject-view .zhihu-base {
@@ -368,6 +385,7 @@
 		flex-direction: column;
 		padding-top: 10px;
 		padding-bottom: 5px;
+		border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 	}
 
 	#subject-view .scene-base {
@@ -386,14 +404,14 @@
 
 	/* detail */
 	#subject-view .detail .left {
-		flex: 1 0 714px;
+		flex: 1 0 712px;
 		padding-right: 10px;
-		border-right: 2px solid rgba(255, 255, 255, 0.2);
 	}
 
 	#subject-view .detail .right {
 		flex: 0 0 300px;
 		padding-left: 10px;
+		border-left: 2px solid rgba(255, 255, 255, 0.2);
 	}
 
 	/*其他*/
@@ -413,7 +431,7 @@
 		font-size: 18px;
 		font-weight: 500;
 		width: max-content;
-		background-color: rgba(255, 255, 255, 0.4);
+		background-color: rgba(255, 255, 255, 0.6);
 		border-radius: 8px;
 		padding: 5px 10px;
 	}

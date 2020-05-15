@@ -1,5 +1,5 @@
 <template>
-	<div id="movie-resource-component" v-show="resourceList && resourceList.length!==0">
+	<div id="movie-resource-component" v-if="resourceList.length!==0">
 		<span @click="searchResource()" class="resource-item resource-search hvr-grow"><el-link class="content">没有你想要的资源？点击这里手动搜索 <span
 			class="el-icon-search"></span></el-link></span>
 		<div :key="index" class="classify" v-for="(rList,index) in classify">
@@ -8,9 +8,8 @@
 						<span class="type" v-if="resource.typeResource!==''">{{resource.typeResource}}</span>
 			<el-link :href="resource.urlResource"
 							 class="content"
-							 target="_blank"
-							 v-if="resource.nameOrigin!==''">
-				<span>{{resource.nameOrigin}}</span>
+							 target="_blank">
+				<span>{{(resource.nameOrigin && resource.nameOrigin.trim()!=='')?resource.nameOrigin:nameZh}}</span>
 			</el-link>
 			</span>
 		</div>
@@ -21,7 +20,10 @@
 
 	export default {
 		name: 'movieResourceComponent',
-		props: {movieId: Number},
+		props: {
+			movieId: Number,
+			nameZh: String
+		},
 		data() {
 			return {
 				resourceList: [],
@@ -43,9 +45,12 @@
 			init() {
 				if (this.movieId) {
 					this.$api.movie.resourceBases({id: this.movieId}).then(res => {
-						this.resourceList = res
+						setTimeout(() => {
+							this.resourceList = res
+							this.updateSubject({key: 'isResourceDone', value: true})
+						}, 2000)
 					}).catch(error => {
-						this.$emit('updateIsResourceNone', true)
+						this.updateSubject({key: 'isResourceDone', value: true})
 					})
 				}
 			},
@@ -57,21 +62,19 @@
 				document.body.scrollTop = 0
 				document.documentElement.scrollTop = 0
 			},
-			...mapActions(['update'])
+			...mapActions(['update', 'updateSubject'])
 		},
 		computed: {
-			...mapState({
-				nameZh: 'nameZh'
-			})
+			...mapState({})
 		},
 		watch: {
 			// 资源分类
 			resourceList() {
-				if (this.resourceList && this.resourceList.length !== 0) {
+				if (this.resourceList.length !== 0) {
 					this.resourceList.forEach(resource => {
 						resource['websiteColor'] = 'rgba(' + resource['websiteColor'] + ',' + this.resourceTransparency + ')'
 						// 资源类型分类
-						if (resource.idTypeResource === 0 || resource.idTypeResource === 100) {
+						if (resource.idTypeResource === 0 || resource.idTypeResource === 1000) {
 							this.classify.unknownList.push(resource)
 						} else if (resource.idTypeResource === 101) {
 							this.classify.priacyOnlineList.push(resource)
@@ -81,7 +84,7 @@
 							this.classify.piracyList.push(resource)
 						}
 					})
-					this.$emit('updateIsResourceOk', true)
+					this.updateSubject({key: 'isResourceGot', value: true})
 				}
 			},
 		}

@@ -10,7 +10,7 @@
 		<div class="main">
 			<router-view/>
 		</div>
-		<div class="enjoy"/>
+		<div :style="enjoyHeight" class="enjoy"/>
 		<div class="footer">
 			<footer-component/>
 		</div>
@@ -49,6 +49,12 @@
 				isBgClear: false
 			}
 		},
+		computed: {
+			// 壁纸欣赏高度
+			enjoyHeight() {
+				return "min-height:" + (document.body.clientHeight - 120) + "px;"
+			}
+		},
 		methods: {
 			/**
 			 * 刷新当前路由
@@ -63,7 +69,6 @@
 		},
 		mounted() {
 		},
-		computed: {}
 	}
 </script>
 
@@ -99,7 +104,6 @@
 	}
 
 	#app .enjoy {
-		flex: 0 0 500px;
 		width: 100%;
 	}
 

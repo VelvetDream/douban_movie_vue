@@ -31,6 +31,7 @@
 	</div>
 </template>
 <script>
+	import 'animate.css'
 	// ECharts
 	import echarts from 'echarts/lib/echarts'
 	// ECharts 雷达图
@@ -39,7 +40,6 @@
 	require('echarts/lib/component/tooltip')
 	// ECharts 工具盒
 	require('echarts/lib/component/toolbox')
-
 	export default {
 		name: 'movieRateComponent',
 		props: {
@@ -57,6 +57,31 @@
 			}
 		},
 		mounted() {
+			this.getRateRadar()
+			this.isRadarNow = this.rateList.length > 2
+		},
+		computed: {
+			// 雷达图的指示器，用来指定雷达图中的多个变量（维度）
+			indicatorList() {
+				let indicatorList = []
+				this.rateList.forEach(rate => {
+					indicatorList.push({
+						name: rate.type + ' ' + rate.score,
+						max: 10,
+						min: 0,
+						color: rate.color
+					})
+				})
+				return indicatorList
+			},
+			// 雷达图的多维度数据
+			dataList() {
+				let dataList = []
+				this.rateList.forEach(rate => {
+					dataList.push(rate.score)
+				})
+				return dataList
+			}
 		},
 		methods: {
 			// 评分雷达
@@ -234,17 +259,19 @@
 			// 视图切换
 			changeRateView() {
 				if (this.isRadarNow) {
-					this.rateRadarClass = 'animated flip'
+					this.rateRadarClass = 'animate__animated animate__zoomOut'
 					setTimeout(() => {
+						this.rateListClass = 'animate__animated animate__zoomIn'
 						this.rateRadarClass = ''
 						this.isRadarNow = false
-					}, 720)
+					}, 450)
 				} else {
-					this.rateListClass = 'animated flip'
+					this.rateListClass = 'animate__animated animate__zoomOut'
 					setTimeout(() => {
+						this.rateRadarClass = 'animate__animated animate__zoomIn'
 						this.isRadarNow = true
 						this.rateListClass = ''
-					}, 720)
+					}, 450)
 				}
 			},
 			// 评分详细信息 html
@@ -287,40 +314,6 @@
 					result += `</tr>`
 				})
 				return result + `</table>`
-			}
-		},
-		watch: {
-			// 若prop中的ratelist变化则会重新渲染此组件
-			rateList() {
-				if (this.rateList.length !== 0) {
-					// 重新绘制雷达图
-					this.getRateRadar()
-					// 默认显示选择
-					this.isRadarNow = this.rateList.length > 2
-				}
-			}
-		},
-		computed: {
-			// 雷达图的指示器，用来指定雷达图中的多个变量（维度）
-			indicatorList() {
-				let indicatorList = []
-				this.rateList.forEach(rate => {
-					indicatorList.push({
-						name: rate.type + ' ' + rate.score,
-						max: 10,
-						min: 0,
-						color: rate.color
-					})
-				})
-				return indicatorList
-			},
-			// 雷达图的多维度数据
-			dataList() {
-				let dataList = []
-				this.rateList.forEach(rate => {
-					dataList.push(rate.score)
-				})
-				return dataList
 			}
 		}
 	}

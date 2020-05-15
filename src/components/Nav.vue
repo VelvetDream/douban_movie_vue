@@ -1,7 +1,7 @@
 <template>
 	<div id="nav-component">
 		<div class="left"/>
-		<div class="bar animated flipInX">
+		<div class="bar animate__animated animate__flipInX">
 			<a :class="'logo '+logoOverStyle" @mouseenter="logoOver" href="/" target="_blank">
 				<img src="/image/logo.png"/>
 			</a>
@@ -14,9 +14,11 @@
 					id="search-auto"
 					placeholder="            电影   丨   影人  丨   场景   丨   资源   丨   取景   丨   配乐   丨   歌单   丨   原声            "
 					trigger-on-focus
-					v-model="keyword"
-				>
-					<el-select class="search-select" placeholder="电影" slot="prepend" v-model="searchSelect">
+					v-model="keyword">
+					<el-select class="search-select"
+										 placeholder="电影"
+										 slot="prepend"
+										 v-model="searchSelect">
 						<el-option label="电影" value="movie"></el-option>
 						<el-option label="影人" value="celebrity"></el-option>
 						<el-option label="场景" value="scene"></el-option>
@@ -268,7 +270,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="right animated bounceInDown">
+		<div class="right animate__animated animate__bounceInDown">
 			<a
 				:href="githubPlus"
 				aria-label="View source on GitHub"
@@ -306,7 +308,6 @@
 
 	export default {
 		name: 'nav-component',
-
 		data() {
 			return {
 				githubPlus: domain.github + '/humingk/douban_movie_plus',
@@ -316,6 +317,10 @@
 				isLogoOver: false,
 				githubOverClass: '',
 				isGithubOver: false,
+				// 返回值
+				res: null,
+				oldKeyword: '',
+				oldSearchSelect: 'movie',
 				// 导航栏
 				navItems: [
 					{
@@ -372,7 +377,10 @@
 			// 搜索提示
 			searchTipsAsync(keyword, callback) {
 				keyword = keyword || ''
-				if (keyword.trim() !== '') {
+				// 空字符串 or 重复上一次查询
+				if (keyword.trim() === '' || (keyword === this.oldKeyword && this.searchSelect === this.oldSearchSelect)) {
+					callback((this.res && this.res.length !== 0) ? this.res : [])
+				} else {
 					const params = {
 						keyword: keyword,
 						offset: this.offset,
@@ -381,56 +389,75 @@
 					switch (this.searchSelect) {
 						case 'movie':
 							this.$api.search.movieDoubanTips(params).then(res => {
-								callback(res)
+								this.updateOld()
+								this.res = res
+								callback(this.res)
 							})
 							break
 						case 'celebrity':
 							this.$api.search.celebrityDoubanTips(params).then(res => {
-								callback(res)
+								this.updateOld()
+								this.res = res
+								callback(this.res)
 							})
 							break
 						case 'scene':
 							this.$api.search.movieSceneTips(params).then(res => {
-								callback(res)
+								this.updateOld()
+								this.res = res
+								callback(this.res)
 							})
 							break
 						case 'resource':
 							this.$api.search.resourceDetails(params).then(res => {
-								callback(res)
+								this.updateOld()
+								this.res = res
+								callback(this.res)
 							})
 							break
 						case 'place':
 							this.$api.search.placeSceneTips(params).then(res => {
-								callback(res)
+								this.updateOld()
+								this.res = res
+								callback(this.res)
 							})
 							break
 						case 'song':
 							params['keywords'] = keyword
 							params['type'] = 1
 							this.$api.music.neteaseMusicTips(params).then(res => {
-								callback(res.result.songCount !== 0 ? res.result.songs : [])
+								this.updateOld()
+								this.res = res.result.songCount !== 0 ? res.result.songs : []
+								callback(this.res)
 							})
 							break
 						case 'playlist':
 							params['keywords'] = keyword
 							params['type'] = 1000
 							this.$api.music.neteaseMusicTips(params).then(res => {
-								callback(
-									res.result.playlistCount !== 0 ? res.result.playlists : []
-								)
+								this.updateOld()
+								this.res = res.result.playlistCount !== 0 ? res.result.playlists : []
+								callback(this.res)
 							})
 							break
 						case 'album':
 							params['keywords'] = keyword
 							params['type'] = 10
 							this.$api.music.neteaseMusicTips(params).then(res => {
-								callback(res.result.albumCount !== 0 ? res.result.albums : [])
+								this.updateOld()
+								this.res = res.result.albumCount !== 0 ? res.result.albums : []
+								callback(this.res)
 							})
 							break
 						default:
 							break
 					}
 				}
+			},
+			// 更新old
+			updateOld() {
+				this.oldKeyword = this.keyword
+				this.oldSearchSelect = this.searchSelect
 			},
 			// 跳转到搜索页面
 			searchPage() {
@@ -476,7 +503,7 @@
 			logoOver() {
 				if (!this.isLogoOver) {
 					this.isLogoOver = true
-					this.logoOverStyle = 'animated tada'
+					this.logoOverStyle = 'animate__animated animate__tada'
 					setTimeout(() => {
 						this.logoOverStyle = ''
 						this.isLogoOver = false
@@ -486,7 +513,7 @@
 			githubOver() {
 				if (!this.isGithubOver) {
 					this.isGithubOver = true
-					this.githubOverClass = 'animated heartBeat'
+					this.githubOverClass = 'animate__animated animate__heartBeat'
 					setTimeout(() => {
 						this.githubOverClass = ''
 						this.isGithubOver = false

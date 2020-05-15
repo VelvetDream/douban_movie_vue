@@ -4,20 +4,20 @@
 		@mouseenter="isChangeBaseView=true"
 		@mouseleave="isChangeBaseView=false"
 		id="movie-base-component"
-		v-if="bases"
+		v-if="movieBases"
 	>
 		<div :class="doubanClass" id="douban" v-show="isDoubanView">
 			<div class="title">
 				<span
-					class="name-zh">{{bases.douban.base.nameZh.slice(0,12)}}{{(bases.douban.base.nameZh.length>15)?"...":""}}</span>
+					class="name-zh">{{movieBases.douban.base.nameZh.slice(0,12)}}{{(movieBases.douban.base.nameZh.length>15)?"...":""}}</span>
 				<span
 					class="name-origin"
-					v-show="bases.douban.base.nameOrigin && (bases.douban.base.nameZh.length+bases.douban.base.nameOrigin.length<=10)"
-				>{{bases.douban.base.nameOrigin}}</span>
+					v-show="movieBases.douban.base.nameOrigin && (movieBases.douban.base.nameZh.length+movieBases.douban.base.nameOrigin.length<=10)"
+				>{{movieBases.douban.base.nameOrigin}}</span>
 				<span
 					class="year"
-					v-show="bases.douban.base.startYear!==0"
-				>{{"("+bases.douban.base.startYear+")"}}</span>
+					v-show="movieBases.douban.base.startYear!==0"
+				>{{"("+movieBases.douban.base.startYear+")"}}</span>
 				<el-button
 					@click="changeBaseView"
 					class="change-base"
@@ -27,8 +27,8 @@
 				</el-button>
 			</div>
 			<div class="base">
-				<img :src="bases.douban.base.urlPoster" fit="cover"
-						 v-show="bases.douban.base.urlPoster && bases.douban.base.urlPoster!=''"/>
+				<img :src="movieBases.douban.base.urlPoster" fit="cover"
+						 v-show="movieBases.douban.base.urlPoster && movieBases.douban.base.urlPoster!=''"/>
 				<div class="base-msgbox">
 					<div v-show="doubanCelebrityList.director.length!==0">
 						<span class="head">导演</span>
@@ -57,45 +57,45 @@
               </span>
             </span>
 					</div>
-					<div v-show="bases.douban.typeList.length!==0">
+					<div v-show="movieBases.douban.typeList.length!==0">
 						<span class="head">类型</span>
 						<span class="msg">
-              <span :key="index" v-for="(item, index) in bases.douban.typeList">
+              <span :key="index" v-for="(item, index) in movieBases.douban.typeList">
                 <el-link :href="'/tag/#/?tags='+item" target="_black">{{item}}</el-link>
-                {{index+1===bases.douban.typeList.length?'':'/'}}
+                {{index+1===movieBases.douban.typeList.length?'':'/'}}
               </span>
             </span>
 					</div>
-					<div v-show="bases.douban.tagList.length!==0">
+					<div v-show="movieBases.douban.tagList.length!==0">
 						<span class="head">标签</span>
 						<span class="msg">
-              <span :key="index" v-for="(item, index) in bases.douban.tagList">
+              <span :key="index" v-for="(item, index) in movieBases.douban.tagList">
                 <el-link :href="'/tag/#/?tags='+item" target="_black">{{item}}</el-link>
-                {{index+1===bases.douban.tagList.length?'':'/'}}
+                {{index+1===movieBases.douban.tagList.length?'':'/'}}
               </span>
             </span>
 					</div>
-					<div v-show="bases.douban.aliasList.length!==0">
+					<div v-show="movieBases.douban.aliasList.length!==0">
 						<span class="head">别名</span>
 						<span class="msg">
-              <span :key="index" v-for="(item, index) in bases.douban.aliasList.slice(0,5)">
+              <span :key="index" v-for="(item, index) in movieBases.douban.aliasList.slice(0,5)">
                 {{item}}
-                {{index+1===bases.douban.aliasList.length?'':'/'}}
+                {{index+1===movieBases.douban.aliasList.length?'':'/'}}
               </span>
             </span>
 					</div>
-					<div v-show="bases.douban.base.summary!==''">
+					<div v-show="movieBases.douban.base.summary!==''">
 						<span class="head">简介</span>
 						<span class="msg">
               <span>
-                {{bases.douban.base.summary.substr(0,47)}}
+                {{movieBases.douban.base.summary.substr(0,47)}}
                 <el-tooltip
-									:content="bases.douban.base.summary"
+									:content="movieBases.douban.base.summary"
 									class="item"
 									effect="light"
 									placement="top"
 									popper-class="summary-tips"
-									v-if="bases.douban.base.summary.length>=47"
+									v-if="movieBases.douban.base.summary.length>=47"
 								>
                   <span>{{'......(more)'}}</span>
                 </el-tooltip>
@@ -108,11 +108,11 @@
 		<div :class="imdbClass" id="imdb" v-show="!isDoubanView">
 			<div class="title">
 				<span
-					class="name-zh">{{bases.imdb.base.nameEn.slice(0,25)}}{{(bases.imdb.base.nameEn.length>15)?"...":""}}</span>
+					class="name-zh">{{movieBases.imdb.base.nameEn.slice(0,25)}}{{(movieBases.imdb.base.nameEn.length>15)?"...":""}}</span>
 				<span
 					class="year"
-					v-show="bases.imdb.base.startYear!==0"
-				>{{"("+bases.imdb.base.startYear+")"}}</span>
+					v-show="movieBases.imdb.base.startYear!==0"
+				>{{"("+movieBases.imdb.base.startYear+")"}}</span>
 				<el-button
 					@click="changeBaseView"
 					class="change-base"
@@ -123,8 +123,8 @@
 			</div>
 			<div class="base">
 				<!--			暂时 删除jpg	-->
-				<img :src="bases.imdb.base.urlPoster+'.jpg'" fit="cover"
-						 v-show="bases.imdb.base.urlPoster && bases.imdb.base.urlPoster!=''"/>
+				<img :src="movieBases.imdb.base.urlPoster+'.jpg'" fit="cover"
+						 v-show="movieBases.imdb.base.urlPoster && movieBases.imdb.base.urlPoster!=''"/>
 				<div class="base-msgbox">
 					<div v-show="imdbCelebrityList.director.length!==0">
 						<span class="head imdb-header">Directors</span>
@@ -153,45 +153,18 @@
               </span>
             </span>
 					</div>
-					<!--					<div v-show="bases.douban.typeList.length!==0">-->
-					<!--						<span class="head">类型</span>-->
-					<!--						<span class="msg">-->
-					<!--              <span :key="index" v-for="(item, index) in bases.douban.typeList">-->
-					<!--                <el-link :href="'/tag/#/?tags='+item" target="_black">{{item}}</el-link>-->
-					<!--                {{index+1===bases.douban.typeList.length?'':'/'}}-->
-					<!--              </span>-->
-					<!--            </span>-->
-					<!--					</div>-->
-					<!--					<div v-show="bases.douban.tagList.length!==0">-->
-					<!--						<span class="head">标签</span>-->
-					<!--						<span class="msg">-->
-					<!--              <span :key="index" v-for="(item, index) in bases.douban.tagList">-->
-					<!--                <el-link :href="'/tag/#/?tags='+item" target="_black">{{item}}</el-link>-->
-					<!--                {{index+1===bases.douban.tagList.length?'':'/'}}-->
-					<!--              </span>-->
-					<!--            </span>-->
-					<!--					</div>-->
-					<!--					<div v-show="bases.douban.aliasList.length!==0">-->
-					<!--						<span class="head">别名</span>-->
-					<!--						<span class="msg">-->
-					<!--              <span :key="index" v-for="(item, index) in bases.douban.aliasList">-->
-					<!--                {{item}}-->
-					<!--                {{index+1===bases.douban.aliasList.length?'':'/'}}-->
-					<!--              </span>-->
-					<!--            </span>-->
-					<!--					</div>-->
-					<div v-show="bases.imdb.base.summary!==''">
+					<div v-show="movieBases.imdb.base.summary!==''">
 						<span class="head imdb-header">summary</span>
 						<span class="msg imdb-msg">
 					              <span>
-					                {{bases.imdb.base.summary.substr(0,200)}}
+					                {{movieBases.imdb.base.summary.substr(0,200)}}
 					                <el-tooltip
-														:content="bases.imdb.base.summary"
+														:content="movieBases.imdb.base.summary"
 														class="item"
 														effect="light"
 														placement="top"
 														popper-class="summary-tips"
-														v-if="bases.imdb.base.summary.length>=48"
+														v-if="movieBases.imdb.base.summary.length>=48"
 													>
 					                  <span>{{'......(more)'}}</span>
 					                </el-tooltip>
@@ -205,9 +178,11 @@
 </template>
 <script>
 
+	import 'animate.css'
+
 	export default {
 		name: 'movieBaseComponent',
-		props: ['bases'],
+		props: ['movieBases'],
 		data() {
 			return {
 				// 默认显示豆瓣板块
@@ -230,17 +205,25 @@
 			}
 		},
 		mounted() {
-			if (this.bases) {
-				this.parseDoubanCelebrityList(this.bases.douban.celebrityList)
-				this.parseImdbCelebrityList(this.bases.imdb.celebrityList)
+			if (this.movieBases) {
+				this.parseDoubanCelebrityList(this.movieBases.douban.celebrityList)
+				this.parseImdbCelebrityList(this.movieBases.imdb.celebrityList)
+			}
+		},
+		watch: {
+			movieBases() {
+				if (this.movieBases) {
+					this.parseDoubanCelebrityList(this.movieBases.douban.celebrityList)
+					this.parseImdbCelebrityList(this.movieBases.imdb.celebrityList)
+				}
 			}
 		},
 		methods: {
 			// 解析豆瓣电影影人列表
 			parseDoubanCelebrityList(celebrityList) {
-				if (this.bases.douban.base.startYear === 0
-					&& this.bases.douban.base.summary === ''
-					&& this.bases.douban.base.urlPoster === '') {
+				if (this.movieBases.douban.base.startYear === 0
+					&& this.movieBases.douban.base.summary === ''
+					&& this.movieBases.douban.base.urlPoster === '') {
 					this.isDoubanView = false
 				}
 				if (celebrityList.length !== 0) {
@@ -287,21 +270,21 @@
 			// 更换base
 			changeBaseView() {
 				if (this.isDoubanView) {
-					this.doubanClass = 'animated zoomOut'
+					this.doubanClass = 'animate__animated animate__zoomOut'
 					setTimeout(() => {
 						this.doubanClass = ''
 						this.isDoubanView = false
-						this.imdbClass = 'animated zoomIn'
+						this.imdbClass = 'animate__animated animate__zoomIn'
 						setTimeout(() => {
 							this.imdbClass = ''
 						}, 1000)
 					}, 450)
 				} else {
-					this.imdbClass = 'animated zoomOut'
+					this.imdbClass = 'animate__animated animate__zoomOut'
 					setTimeout(() => {
 						this.imdbClass = ''
 						this.isDoubanView = true
-						this.doubanClass = 'animated zoomIn'
+						this.doubanClass = 'animate__animated animate__zoomIn'
 						setTimeout(() => {
 							this.doubanClass = ''
 						}, 1000)
@@ -309,14 +292,6 @@
 				}
 			}
 		},
-		watch: {
-			bases() {
-				if (this.bases) {
-					this.parseDoubanCelebrityList(this.bases.douban.celebrityList)
-					this.parseImdbCelebrityList(this.bases.imdb.celebrityList)
-				}
-			}
-		}
 	}
 </script>
 <style>
@@ -378,6 +353,7 @@
 		height: 240px;
 		flex: 0 0 165px;
 		border-radius: 10px;
+		max-width: 170px;
 	}
 
 	.base-msgbox {

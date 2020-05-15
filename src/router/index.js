@@ -35,6 +35,10 @@ const routes = [
 		component: Subject
 	},
 	{
+		path: '/subject/:movieId/**',
+		component: Subject
+	},
+	{
 		path: '/celebrity/:celebrityId',
 		component: Celebrity
 	},
