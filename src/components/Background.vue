@@ -43,8 +43,6 @@
 				opacityColorBg: 'bg-img-color-opacity',
 				// 是否正在滚动等待
 				isScrolling: false,
-				// 是否正在底部
-				isBottom: false
 			}
 		},
 		computed: {
@@ -62,10 +60,12 @@
 				isBgClear: 'isBgClear',
 				specialBgList: 'specialBgList',
 				defaultBgList: 'defaultBgList',
+				// 是否正在底部
+				isBottom: 'isBottom'
 			})
 		},
 		watch: {
-			isBgClear() {
+			'isBgClear': function () {
 				// 需要临时变清晰
 				if (this.isBgClear) {
 					this.turnClear()
@@ -141,25 +141,25 @@
 			// 监听滚动
 			scroll() {
 				// 滚动条距离顶部的距离
-				var scrollTop =
+				let scrollTop =
 					document.documentElement.scrollTop || document.body.scrollTop
 				// 可视区的高度
-				var windowHeight =
+				let windowHeight =
 					document.documentElement.clientHeight || document.body.clientHeight
 				// 滚动条的总高度
-				var scrollHeight =
+				let scrollHeight =
 					document.documentElement.scrollHeight || document.body.scrollHeight
 				// 接近底部
 				if (scrollTop + windowHeight > scrollHeight - 300) {
 					// 之前不在底部
 					if (!this.isBottom) {
-						this.isBottom = true
+						this.update({key: 'isBottom', value: true})
 						this.turnClear()
 					}
 				} else {
 					// 之前在底部
 					if (this.isBottom) {
-						this.isBottom = false
+						this.update({key: 'isBottom', value: false})
 						this.turnBlur()
 					}
 				}

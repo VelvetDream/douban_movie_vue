@@ -7,11 +7,11 @@
 				★ 豆瓣电影<span style="color: red">douban</span>后加一个<span style="color: red;font-weight: 800">S</span>
 		</span>
 		<span class="welcome-title arrow">
-				☟
-		</span>
+						☟
+				</span>
 		<div class="welcome-content example">
-			<el-link href="/subject/1291561/" target="_blank">https://movie.douban<span
-				style="color:red;font-weight: 800;font-size: 20px">s</span>.com/subject/1291561/
+			<el-link class="hvr-grow" href="/subject/1291561/">https://movie.douban<span
+				style="color:red;font-weight: 800;font-size: 20px">s</span>.com/subject/1291561
 			</el-link>
 		</div>
 		<span class="welcome-title way">
@@ -21,48 +21,33 @@
 				☟
 		</span>
 		<div class="welcome-content example">
-			<el-link href="https://api.doubans.com" style="color:red;" target="_blank">API文档
+			<el-link class="hvr-grow" href="https://api.doubans.com" style="color:red;padding-right: 10px" target="_blank">
+				API文档
 			</el-link>
-		</div>
-		<div class="welcome-content">
-			本站开源，如果你喜欢，欢迎来改进它～
-		</div>
-		<div class="welcome-github">
-			<div class="github-plus">
-				<span>
-				本站后端(Spring)
-				</span>
-				<el-link :href="githubPlus" target="_blank">
-					{{githubPlus}}
-				</el-link>
-			</div>
-			<div class="github-vue">
-				<span>
-				本站前端(Vue)
-				</span>
-				<el-link :href="githubVue" target="_blank">
-					{{githubVue}}
-				</el-link>
-			</div>
+			<el-link :href="githubPlus" class="hvr-grow" style="color:red;" target="_blank">Github
+			</el-link>
 		</div>
 	</div>
 </template>
 <script>
 	import domain from "../request/domain";
+	import {mapActions} from "vuex";
 
 	export default {
 		name: 'welcome-component',
 		data() {
 			return {
-				githubVue: domain.github + '/humingk/douban_movie_vue',
 				githubPlus: domain.github + '/humingk/douban_movie_plus',
 			}
 		},
 		computed: {},
 		watch: {},
 		mounted() {
+			this.update({key: 'isBgClear', value: false})
 		},
-		methods: {},
+		methods: {
+			...mapActions(['update'])
+		},
 	}
 </script>
 <style>
@@ -80,18 +65,17 @@
 	}
 
 	#welcome-component .welcome-title {
-		font-size: 30px;
+		font-size: 36px;
 		font-weight: 600;
 		padding-bottom: 10px;
 	}
 
 	#welcome-component .way {
-		font-size: 22px;
-		padding-bottom: 0;
+		font-size: 20px;
+		padding-top: 10px;
 	}
 
 	#welcome-component .arrow {
-		padding-bottom: 0;
 	}
 
 	#welcome-component .welcome-content {
@@ -102,8 +86,7 @@
 	#welcome-component .welcome-content.example {
 		font-size: 18px;
 		font-weight: 600;
-		padding-top: 0;
-		padding-bottom: 10px;
+		padding-bottom: 20px;
 	}
 
 
@@ -134,4 +117,24 @@
 	#welcome-component .el-link.el-link--default:hover {
 		color: #f31919;
 	}
+
+	/* Grow */
+	#welcome-component .hvr-grow {
+		display: inline-block;
+		vertical-align: middle;
+		-webkit-transform: perspective(1px) translateZ(0);
+		transform: perspective(1px) translateZ(0);
+		box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+		-webkit-transition-duration: 0.3s;
+		transition-duration: 0.3s;
+		-webkit-transition-property: transform;
+		transition-property: transform;
+	}
+
+	#welcome-component .hvr-grow:hover, .hvr-grow:focus, .hvr-grow:active {
+		-webkit-transform: scale(1.1);
+		transform: scale(1.1);
+		z-index: 3;
+	}
+
 </style>

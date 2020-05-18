@@ -2,7 +2,7 @@
 	<div id="nav-component">
 		<div class="left"/>
 		<div class="bar animate__animated animate__flipInX">
-			<a :class="'logo '+logoOverStyle" @mouseenter="logoOver" href="/" target="_blank">
+			<a :class="'logo '+logoOverStyle" @mouseenter="logoOver" href="/">
 				<img src="/image/logo.png"/>
 			</a>
 			<div class="bar-center">
@@ -236,7 +236,6 @@
 						:key="index"
 						:underline="false"
 						class="nav-items"
-						target="_blank"
 						type="primary"
 						v-for="(item, index) in navItems"
 					>{{item.name}}
@@ -245,7 +244,6 @@
 						:href="'/people/'+personalCenter"
 						:underline="false"
 						class="nav-items"
-						target="_blank"
 						type="primary"
 						v-if="this.userInfo"
 					>个人中心
@@ -254,7 +252,6 @@
 						:underline="false"
 						@click="login"
 						class="nav-items"
-						target="_blank"
 						type="primary"
 						v-if="!this.userInfo"
 					>登录/注册
@@ -262,10 +259,9 @@
 					<el-link
 						:underline="false"
 						class="nav-items"
-						href="/about"
-						target="_blank"
+						href="/message"
 						type="primary"
-					>关于本站
+					>留言板
 					</el-link>
 				</div>
 			</div>
@@ -328,15 +324,15 @@
 						url: '/'
 					},
 					{
-						name: '分类',
+						name: '--',
 						url: '/tag'
 					},
 					{
-						name: '场景',
+						name: '--',
 						url: '/mocation'
 					},
 					{
-						name: '配乐',
+						name: '--',
 						url: '/music'
 					},
 				]
@@ -834,5 +830,9 @@
 		/* Internet Explorer 10+  适配ie*/
 		color: #606266;
 		font-weight: bold;
+	}
+
+	.el-scrollbar__wrap {
+		overflow: hidden;
 	}
 </style>

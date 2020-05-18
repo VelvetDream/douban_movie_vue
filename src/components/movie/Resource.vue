@@ -35,7 +35,7 @@
 					unknownList: []
 				},
 				// 资源背景透明度
-				resourceTransparency: 0.7
+				resourceTransparency: 0.6
 			}
 		},
 		mounted() {
