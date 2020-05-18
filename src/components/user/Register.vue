@@ -1,5 +1,5 @@
 <template>
-	<el-dialog :visible="isRegistering" id="register-component" title="注册(不好意思，暂不开放注册)">
+	<el-dialog :visible="isRegistering" @close="close" id="register-component" title="注册(不好意思，暂不开放)">
 		<el-form :model="registerForm" :rules="registerFormRules" ref="registerForm">
 			<el-form-item prop="email">
 				<el-input placeholder="请输入邮箱" type="email" v-model="registerForm.email"/>
@@ -25,7 +25,8 @@
 			</el-form-item>
 			<el-form-item>
 				<el-button :loading="isLoading" @click="submitRegisterForm" type="primary">注册</el-button>
-				<el-button @click="resetForm('registerForm')" type="primary">重置</el-button>
+				<el-button @click="login()" type="primary">去登录</el-button>
+				<el-button @click="resetForm('registerForm')" type="primary">清空</el-button>
 			</el-form-item>
 		</el-form>
 	</el-dialog>
@@ -136,6 +137,13 @@
 					}
 				})
 			},
+			// 登录
+			login() {
+				// 隐藏注册弹窗
+				this.updatePopups({key: 'isRegistering', value: false})
+				// 显示弹窗
+				this.updatePopups({key: 'isLogining', value: true})
+			},
 			// 表单重置
 			resetForm(form) {
 				// 重置内容
@@ -144,6 +152,9 @@
 				this.$refs[form].clearValidate()
 				// 重置请求错误
 				this.serverError = null
+			},
+			close() {
+				this.updatePopups({key: 'isRegistering', value: false})
 			},
 			...mapActions(['update', 'updatePopups'])
 		},

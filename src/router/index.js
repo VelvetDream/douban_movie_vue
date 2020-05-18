@@ -14,6 +14,7 @@ import Album from '../views/music/Album'
 import Tag from "../views/Tag";
 import HomeMocation from "../views/mocation/Home";
 import HomeMusic from "../views/music/Home";
+import Message from "../views/Message"
 
 Vue.use(VueRouter)
 
@@ -25,6 +26,10 @@ const routes = [
 	{
 		path: '/about',
 		component: About
+	},
+	{
+		path: '/message',
+		component: Message
 	},
 	{
 		path: '/search',

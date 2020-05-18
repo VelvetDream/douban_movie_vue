@@ -98,7 +98,10 @@ module.exports = {
 				minRatio: 0.8
 			}),
 			// Webpack包文件分析器
-			new BundleAnalyzerPlugin(),
+			new BundleAnalyzerPlugin({
+				// 不启动展示打包报告的http服务器
+				analyzerMode: 'disabled',
+			}),
 			// 代码压缩
 			new UglifyJsPlugin({
 				uglifyOptions: {

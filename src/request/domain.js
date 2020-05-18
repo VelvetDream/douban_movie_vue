@@ -8,6 +8,8 @@ const domain = {
 	// neteaseMusicApi: 'https://movie.doubans.com/neteaseThirdApi',
 	// 豆瓣电影v2
 	doubanV2: 'https://api.douban.com/v2',
+	// 豆瓣官网
+	douban: 'https://www.douban.com',
 	// 豆瓣电影官网
 	doubanMovie: 'https://movie.douban.com',
 	// 网易云音乐官网

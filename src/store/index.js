@@ -20,6 +20,8 @@ export default new Vuex.Store({
 		},
 		// 背景图是否清晰
 		isBgClear: true,
+		// 是否正在底部
+		isBottom: false,
 		// 搜索框选中
 		searchSelect: 'movie',
 		// 搜索框关键字
@@ -122,6 +124,7 @@ export default new Vuex.Store({
 			'风华绝代的石榴姐',
 			'算了吧，都烧焦了',
 			'喔你个头啊！',
+			'叶师傅！切他中路!',
 		],
 		currentMovieLinesLong: Math.round(Math.random() * 70),
 		movieLinesLong: [
@@ -151,6 +154,7 @@ export default new Vuex.Store({
 			'风华绝代的石榴姐',
 			'算了吧，都烧焦了',
 			'喔你个头啊！',
+			'叶师傅！切他中路!',
 
 			'每个人都有一个习惯，我的习惯是在这里等阿may下班',
 			'人和妖精都是妈生的，人是人他妈生的，妖是妖它妈生的',
